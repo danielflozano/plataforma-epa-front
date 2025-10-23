@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-epaColor1: #09356e;
+  --color-epaColor2: #466793;
+  --color-epaColor3: #8298B7;
+  --color-epaColor4: #A0B1C9;
+  --color-epaColor5: #BEC9DB;
+  --color-epaColor6: #DCE2ED;
+  --color-epaColor7: #FAFAFF;
+}
