@@ -1,8 +1,8 @@
-import { apiClient } from '@/api/axios';
+import { apiClient } from '@/api';
 import { handleAxiosError } from '@/utils';
 
 export const overtimesService = {
-  crearExtras: async (extrasData) => {
+  createOvertimes: async (extrasData) => {
     try {
       const response = await apiClient.post('/extras/crear', extrasData);
       console.log(response.data.message);
@@ -12,7 +12,7 @@ export const overtimesService = {
     }
   },
 
-  listarExtras: async () => {
+  getAllOvertimes: async () => {
     try {
       const response = await apiClient.get('/extras/listar');
       console.log(response.data.success);
@@ -22,7 +22,7 @@ export const overtimesService = {
     }
   },
 
-  listarExtrasPorFuncionarios: async (identificacion) => {
+  getOvertimesByWorker: async (identificacion) => {
     try {
       const response = await apiClient.get(`/extras/funcionario/${identificacion}`);
       console.log(response.data.success);
@@ -32,7 +32,7 @@ export const overtimesService = {
     }
   },
 
-  listarExtrasPorFechas: async (fechaInicio, fechaFin) => {
+  getOvertimesByDate: async (fechaInicio, fechaFin) => {
     try {
       const response = await apiClient.get(`/extras/fechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
       console.log(response.data.success);
@@ -42,7 +42,7 @@ export const overtimesService = {
     }
   },
 
-  actualizarExtras: async () => {
+  updateOvertimes: async () => {
     try {
       const response = await apiClient.put(`/extras/update/${id}`, data);
       console.log(response.data.message);
@@ -52,7 +52,7 @@ export const overtimesService = {
     }
   },
 
-  eliminarExtras: async (id) => {
+  deleteOvertimes: async (id) => {
     try {
       const response = await apiClient.delete(`/extras/delete/${id}`);
       console.log(response.data.message);
@@ -64,7 +64,7 @@ export const overtimesService = {
     }
   },
 
-  importarExtras: async (formData) => {
+  importOvertimesFromExcel: async (formData) => {
     try {
       const response = await apiClient.post('/extras/importar', formData, {
         headers: {
@@ -78,7 +78,7 @@ export const overtimesService = {
     }
   },
 
-  obtenerNombreHorasExtra: async (formData) => {
+  getExcelSheetNames: async (formData) => {
     try {
       const response = await apiClient.post('/extras/sheets', formData, {
         headers: {

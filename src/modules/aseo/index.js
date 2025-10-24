@@ -1,2 +1,2 @@
 export * from './features';
-export * from './routes/AseoRoutes';
+export * from './routes';

@@ -1,4 +1,4 @@
-import { authClient } from '@/api/axios';
+import { authClient } from '@/api';
 import { handleAxiosError } from '@/utils';
 
 export const authService = {
