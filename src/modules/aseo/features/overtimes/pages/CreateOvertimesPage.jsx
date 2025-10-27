@@ -6,9 +6,10 @@ import {
   DialogDescription,
   GlobalButton,
   GlobalInput,
+  LoadSpinner,
 } from '@/components';
-import { useCreateOvertimes } from '../hooks/useCreateOvertimes';
-import { InputForExcel } from '../components';
+import { useCreateOvertimes } from '../hooks';
+import { ExcelImportForm, RegisteredOvertimeTable } from '../components';
 
 export const CreateOvertimesPage = () => {
   const {
@@ -31,10 +32,12 @@ export const CreateOvertimesPage = () => {
     getExcelSheetNames,
     onClickBack,
     onCloseModal,
+    onDeleteOvertimeRegister,
   } = useCreateOvertimes();
 
   return (
     <>
+      {loading && ( <LoadSpinner styles='fixed bg-gray-200/95' name='Importando Excel' /> )}
       <GlobalButton variant="back" className="p-1.5 w-30" onClick={onClickBack}>
         Regresar
       </GlobalButton>
@@ -44,7 +47,7 @@ export const CreateOvertimesPage = () => {
         </h2>
         <form
           onSubmit={handleSubmitHoras(onSubmit)}
-          className="flex flex-col gap-4 bg-white p-5 w-1/2 rounded-xl shadow-2xl"
+          className="flex flex-col gap-4 bg-white p-4 w-1/2 rounded-xl shadow-2xl"
         >
           <GlobalInput
             as="select"
@@ -169,46 +172,15 @@ export const CreateOvertimesPage = () => {
         <h3 className="text-epaColor1 text-center text-2xl font-extrabold">
           Importar Excel de Horas Extra
         </h3>
-        <form
+        <ExcelImportForm
           onSubmit={handleSubmitExcel(onSubmitExcel)}
-          className="flex flex-col gap-5 bg-white p-5 w-1/2 rounded-xl shadow-2xl"
-        >
-          <InputForExcel
-            label="Archivo Excel"
-            name="file"
-            control={controlExcel}
-            rules={{
-              required: 'Debe adjuntar un archivo de Excel',
-            }}
-            errors={errorsExcel}
-            accept=".xlsx, .xls, .csv"
-            fileInputRef={fileInputRef}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) getExcelSheetNames(file);
-            }}
-          />
-          <InputForExcel
-            as="select"
-            label="Hoja de Excel"
-            name="sheetName"
-            control={controlExcel}
-            rules={{
-              required: 'Debe seleccionar la hoja de Excel que desea subir',
-            }}
-            errors={errorsExcel}
-          >
-            <option value="">Seleccione la hoja que desea importar</option>
-            {sheetNames.map((sheetName, index) => (
-              <option key={index} value={sheetName}>
-                {sheetName}
-              </option>
-            ))}
-          </InputForExcel>
-          <GlobalButton type="submit" className="p-1.5 w-1/2 block mx-auto">
-            Subir Archivo
-          </GlobalButton>
-        </form>
+          control={controlExcel}
+          errors={errorsExcel}
+          ref={fileInputRef}
+          sheetNamesProp={sheetNames}
+          getExcelSheetNamesProp={getExcelSheetNames}
+        />
+        <RegisteredOvertimeTable data={overtimeRegister} onDeleteSuccess={onDeleteOvertimeRegister} />
       </div>
       <Dialog open={openModal} onOpenChange={onCloseModal}>
         <DialogContent>
