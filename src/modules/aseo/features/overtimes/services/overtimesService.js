@@ -74,7 +74,7 @@ export const overtimesService = {
       console.log(response.data.message);
       return response.data      
     } catch (error) {
-      throw new Error(handleAxiosError(error, 'Error importando horas extra ❌'));      
+      throw new Error(handleAxiosError(error, 'Error importando horas extra ❌'));
     }
   },
 

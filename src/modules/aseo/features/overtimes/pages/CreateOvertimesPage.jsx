@@ -205,6 +205,9 @@ export const CreateOvertimesPage = () => {
               </option>
             ))}
           </InputForExcel>
+          <GlobalButton type="submit" className="p-1.5 w-1/2 block mx-auto">
+            Subir Archivo
+          </GlobalButton>
         </form>
       </div>
       <Dialog open={openModal} onOpenChange={onCloseModal}>

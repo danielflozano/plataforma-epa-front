@@ -78,7 +78,7 @@ export const useCreateOvertimes = () => {
       setIsError(true);
       setModalMessage(error.message || 'Error al importar el archivo');      
     } finally {
-      resetExcel({ file: null, sheetName: '' });
+      resetExcel({ sheetName: '' });
       if (fileInputRef.current) fileInputRef.current.value= '';
       setLoading(false);
       setSheetNames([]);
