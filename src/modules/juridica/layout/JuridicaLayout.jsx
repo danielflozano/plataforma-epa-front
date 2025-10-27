@@ -1,14 +1,24 @@
 import { Link, Outlet } from 'react-router-dom';
-import { UserCheck, House, ClipboardClock, Users, NotebookPen } from 'lucide-react';
+import {
+  UserCheck,
+  House,
+  Folders,
+  Users,
+  NotebookPen,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
 import { GlobalButton } from '@/components';
 import { useAuth } from '@/context/AuthContext';
-import logo from '../features';
-import { juridicaRoutesList } from '@/routes'
+import logo from '@/assets/logoepa.png';
+import { juridicaRoutesList } from '@/routes';
+import { useState } from 'react';
 
 const currentYear = new Date().getFullYear();
 
 export const JuridicaLayout = () => {
   const { auth, logout } = useAuth();
+  const [openContracts, setOpenContracts] = useState(false);
 
   return (
     <div className="flex h-screen">
@@ -19,35 +29,66 @@ export const JuridicaLayout = () => {
           <h4 className="font-medium">Version 1.0</h4>
         </div>
         <nav className="space-y-4 pb-10">
+          {/* Inicio */}
           <div className="text-epaColor1 font-medium">
             <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-2"
               to={juridicaRoutesList.juridicaDashboard}
             >
               <House size={20} />
               Inicio
             </Link>
           </div>
+
+          {/* Contratos con hijos */}
           <div className="text-epaColor1 font-medium">
-            <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={juridicaRoutesList.contracts}
-            >
-              <ClipboardClock size={20} />
-              Contratos
-            </Link>
-          </div>
-          <div className="text-epaColor1 font-medium">
-            <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={juridicaRoutesList.historical}
-            >
-              <Users size={20} />
-              Historico
-            </Link>
+            <div className="flex items-center justify-between">
+              <Link
+                className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-2"
+                to={juridicaRoutesList.contracts}
+              >
+                <NotebookPen size={20} />
+                Contratos
+              </Link>
+
+              <button
+                onClick={() => setOpenContracts(!openContracts)}
+                className="text-epaColor1 hover:text-epaColor2 transition-colors"
+              >
+                {openContracts ? (
+                  <ChevronUp size={18} />
+                ) : (
+                  <ChevronDown size={18} />
+                )}
+              </button>
+            </div>
+
+            {/* Submenú */}
+            {openContracts && (
+              <div className="ml-8 mt-2 space-y-2 text-epaColor1/80">
+                <Link
+                  to={juridicaRoutesList.historical}
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-1"
+                >
+                  <Folders size={18} />
+                  Histórico
+                </Link>
+                <Link
+                  to={juridicaRoutesList.lawyers}
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-1"
+                >
+                  <Users size={18} />
+                  Abogados
+                </Link>
+              </div>
+            )}
           </div>
         </nav>
-        <GlobalButton variant="danger" onClick={logout} className="p-1.5 w-3/4 block mx-auto">
+        <GlobalButton
+          variant="danger"
+          onClick={logout}
+          className="p-1.5 w-3/4 block mx-auto"
+        >
           Cerrar Sesión
         </GlobalButton>
       </div>
@@ -56,7 +97,7 @@ export const JuridicaLayout = () => {
         <header className="bg-epaColor1 grid grid-cols-3 px-6 py-6">
           <div></div>
           <h2 className="text-white text-center font-bold text-3xl">
-            Plataforma Horas Extra - EPA
+            Plataforma Contratos - EPA
           </h2>
           <div className="flex text-white text-sm items-center justify-end gap-2">
             <UserCheck />
@@ -72,7 +113,7 @@ export const JuridicaLayout = () => {
 
         <footer className="bg-epaColor1 text-white flex justify-between items-center p-4">
           <div>© {currentYear} Empresas Publicas de Armenia E.S.P.</div>
-          <div>Plataforma de Horas Extra Aseo - EPA</div>
+          <div>Plataforma de Contratos - EPA</div>
           <div>
             Contacto de Soporte:{' '}
             <a href="mailto:redes.tic@epa.gov.co">redes.tic&#64;epa.gov.co</a>

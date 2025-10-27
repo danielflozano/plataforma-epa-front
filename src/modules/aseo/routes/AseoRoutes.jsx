@@ -1,11 +1,11 @@
 import { aseoRoutesList } from '@/routes';
 import { AseoDashboardPage, CreateOvertimesPage, GetOvertimesPage, OvertimesPage, ReportsPage, WorkersPage } from '../features';
-import { DashboardLayout } from '@/layouts';
+import { AseoLayout } from '../aseoLayout';
 
 export const AseoRoutes = [
   {
     path: aseoRoutesList.aseoDashboard,
-    element: <DashboardLayout />,
+    element: <AseoLayout />,
     children: [
       {
         index: true,

@@ -1,1 +1,2 @@
-export * from './pages/WorkersPage';
+export * from './pages';
+export * from './services'

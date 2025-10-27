@@ -8,11 +8,13 @@ export const AppRouter = createBrowserRouter([
   {
     element: <PublicRoutes />,
     children: AuthRoutes,
-
   },
   {
     element: <ProtectedRoutes />,
-    children: [AseoRoutes, JuridicaRoutes]
+    children: [
+      ...AseoRoutes,
+      ...JuridicaRoutes,
+    ]
   },
   { path: '*', element: <Navigate to={ authRoutesList.login } /> },
 ]);

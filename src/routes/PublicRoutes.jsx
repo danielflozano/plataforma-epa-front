@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Outlet } from 'react-router-dom';
-import { aseoRoutesList } from './list';
+import { /*aseoRoutesList*/ juridicaRoutesList } from './list';
 
 export const PublicRoutes = () => {
   const { auth, loading } = useAuth();
@@ -13,5 +13,5 @@ export const PublicRoutes = () => {
     );
   }
 
-  return !auth ? <Outlet /> : <Navigate to={ aseoRoutesList.aseoDashboard } replace />;
+  return !auth ? <Outlet /> : <Navigate to={ /* aseoRoutesList.aseoDashboard*/ juridicaRoutesList.juridicaDashboard } replace />;
 };

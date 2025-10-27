@@ -1,5 +1,7 @@
 export const JuridicaDashboardPage = () => {
   return (
-    <div>JuridicaDashboardPage</div>
+   <>
+      <h1>Juridica Dashboard Page</h1>
+   </> 
   )
 }

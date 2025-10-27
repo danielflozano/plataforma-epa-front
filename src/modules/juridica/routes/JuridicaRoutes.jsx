@@ -2,7 +2,7 @@ import { JuridicaDashboardPage, CreateContractsPage, ListContractsPage, Historic
 import { JuridicaLayout } from "../layout/JuridicaLayout";
 import { juridicaRoutesList } from "@/routes";
 
-export const JuridicaRoutes = () => [
+export const JuridicaRoutes = [
     {
     path: juridicaRoutesList.juridicaDashboard,
     element: <JuridicaLayout />,
