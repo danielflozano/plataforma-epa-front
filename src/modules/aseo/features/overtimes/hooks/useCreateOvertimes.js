@@ -1,19 +1,17 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAseo } from '@/modules/aseo/context';
 import { overtimesService } from '../services';
 
 
 export const useCreateOvertimes = () => {
-  const { workers } = useAseo();
-  const navigate = useNavigate();
   const [overtimeRegister, setOvertimeRegister] = useState({});
   const [sheetNames, setSheetNames] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const { workers } = useAseo();
   
   const fileInputRef = useRef(null);
   
@@ -102,10 +100,6 @@ export const useCreateOvertimes = () => {
       setOpenModal(true);
     }
   };
-  
-  const onClickBack = () => {
-    navigate(-1);
-  };
 
   const onCloseModal = () => {
     setOpenModal(false);
@@ -133,7 +127,6 @@ export const useCreateOvertimes = () => {
     onSubmit,
     onSubmitExcel,
     getExcelSheetNames,
-    onClickBack,
     onCloseModal,
     onDeleteOvertimeRegister,
   };
