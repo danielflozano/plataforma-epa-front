@@ -8,8 +8,7 @@ import { overtimesService } from '../services';
 export const useCreateOvertimes = () => {
   const { workers } = useAseo();
   const navigate = useNavigate();
-
-  const [overtimeRegister, setOvertimeRegister] = useState(null);
+  const [overtimeRegister, setOvertimeRegister] = useState({});
   const [sheetNames, setSheetNames] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -68,7 +67,7 @@ export const useCreateOvertimes = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('nombreHoja', sheetName) // TODO: Voy a cambiar esto a ver que pasa
+    formData.append('nombreHoja', sheetName)
 
     try {
       const response = await overtimesService.importOvertimesFromExcel(formData)
@@ -78,7 +77,7 @@ export const useCreateOvertimes = () => {
       setIsError(true);
       setModalMessage(error.message || 'Error al importar el archivo');      
     } finally {
-      resetExcel({ file: null, sheetName: '' });
+      resetExcel({ sheetName: '' });
       if (fileInputRef.current) fileInputRef.current.value= '';
       setLoading(false);
       setSheetNames([]);
@@ -111,6 +110,10 @@ export const useCreateOvertimes = () => {
   const onCloseModal = () => {
     setOpenModal(false);
   }
+
+  const onDeleteOvertimeRegister = () =>{
+    setOvertimeRegister({});
+  }
   
   return {
     workers,
@@ -132,5 +135,6 @@ export const useCreateOvertimes = () => {
     getExcelSheetNames,
     onClickBack,
     onCloseModal,
+    onDeleteOvertimeRegister,
   };
 };

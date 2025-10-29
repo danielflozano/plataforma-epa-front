@@ -1,9 +1,22 @@
 import { FilePlus, EyeClosed, Eye, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { GlobalInput } from '@/components';
+import { GlobalFilter } from '@/components';
 
 export const ListContractsPage = () => {
+  // const [filteredData, setFilteredData] = useState(data);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 3;
+
+  // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  // const startIndex = (currentPage - 1) * itemsPerPage;
+  // const endIndex = startIndex + itemsPerPage;
+  // const currentItems = filteredData.slice(startIndex, endIndex);
+
   const [hover, setHover] = useState(false);
+
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  // }, [filteredData]);
 
   return (
     <>
@@ -33,9 +46,12 @@ export const ListContractsPage = () => {
         </div>
 
         {/*Filtros*/}
-        <div>
-          <input type="text" name="" id="" />
-        </div>
+        {/* <GlobalFilter
+          data={data}
+          setFilteredData={setFilteredData}
+          keys={['nombre', 'identificacion', 'ciudad']}
+          placeholder="Buscar usuario..."
+        /> */}
 
         {/*Tabla de Contratos*/}
         <section className="">
@@ -101,8 +117,6 @@ export const ListContractsPage = () => {
             </table>
           </div>
         </section>
-
-        
       </div>
     </>
   );
