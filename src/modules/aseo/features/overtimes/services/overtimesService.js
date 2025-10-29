@@ -15,7 +15,6 @@ export const overtimesService = {
   getAllOvertimes: async () => {
     try {
       const response = await apiClient.get('/extras/listar');
-      console.log(response.data.success);
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error listando horas extra ❌'));

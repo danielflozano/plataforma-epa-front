@@ -16,7 +16,6 @@ export const workersService = {
   getAllWorkers: async () => {
     try {
       const response = await apiClient.get('/funcionario');
-      console.log(response.data.message || 'Lista de funcionarios exitosa');
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error listando los funcionarios ❌'));

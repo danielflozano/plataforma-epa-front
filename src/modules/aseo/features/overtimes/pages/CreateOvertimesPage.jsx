@@ -10,8 +10,10 @@ import {
 } from '@/components';
 import { useCreateOvertimes } from '../hooks';
 import { ExcelImportForm, RegisteredOvertimeTable } from '../components';
+import { useBackNavigation } from '@/hooks';
 
 export const CreateOvertimesPage = () => {
+  const { onClickBack } = useBackNavigation();
   const {
     workers,
     overtimeRegister,
@@ -30,7 +32,6 @@ export const CreateOvertimesPage = () => {
     onSubmit,
     onSubmitExcel,
     getExcelSheetNames,
-    onClickBack,
     onCloseModal,
     onDeleteOvertimeRegister,
   } = useCreateOvertimes();
