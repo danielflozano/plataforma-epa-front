@@ -4,21 +4,17 @@ import {
   House,
   Folders,
   Users,
-  NotebookPen,
-  ChevronUp,
-  ChevronDown,
+  NotebookPen
 } from 'lucide-react';
 import { GlobalButton } from '@/components';
 import { useAuth } from '@/context/AuthContext';
 import logo from '@/assets/logoepa.png';
 import { juridicaRoutesList } from '@/routes';
-import { useState } from 'react';
 
 const currentYear = new Date().getFullYear();
 
 export const JuridicaLayout = () => {
   const { auth, logout } = useAuth();
-  const [openContracts, setOpenContracts] = useState(false);
 
   return (
     <div className="flex h-screen">
@@ -40,49 +36,36 @@ export const JuridicaLayout = () => {
             </Link>
           </div>
 
-          {/* Contratos con hijos */}
           <div className="text-epaColor1 font-medium">
-            <div className="flex items-center justify-between">
-              <Link
-                className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-2"
-                to={juridicaRoutesList.contracts}
-              >
-                <NotebookPen size={20} />
-                Contratos
-              </Link>
-
-              <button
-                onClick={() => setOpenContracts(!openContracts)}
-                className="text-epaColor1 hover:text-epaColor2 transition-colors"
-              >
-                {openContracts ? (
-                  <ChevronUp size={18} />
-                ) : (
-                  <ChevronDown size={18} />
-                )}
-              </button>
-            </div>
-
-            {/* Submenú */}
-            {openContracts && (
-              <div className="ml-8 mt-2 space-y-2 text-epaColor1/80">
-                <Link
-                  to={juridicaRoutesList.historical}
-                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-1"
-                >
-                  <Folders size={18} />
-                  Histórico
-                </Link>
-                <Link
-                  to={juridicaRoutesList.lawyers}
-                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-1"
-                >
-                  <Users size={18} />
-                  Abogados
-                </Link>
-              </div>
-            )}
+            <Link
+              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-2"
+              to={juridicaRoutesList.contracts}
+            >
+              <NotebookPen size={20} />
+              Contratos
+            </Link>
           </div>
+
+          <div className="text-epaColor1 font-medium">
+            <Link
+              to={juridicaRoutesList.lawyers}
+              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-1"
+            >
+              <Users size={18} />
+              Abogados
+            </Link>
+          </div>
+
+          <div className="text-epaColor1 font-medium">
+            <Link
+              to={juridicaRoutesList.historical}
+              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-1"
+            >
+              <Folders size={18} />
+              Histórico
+            </Link>
+          </div>
+          
         </nav>
         <GlobalButton
           variant="danger"

@@ -1,8 +1,7 @@
-import { FilePlus, EyeClosed, Eye, Pencil, Trash2 } from 'lucide-react';
+import { EyeClosed, Eye, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { GlobalFilter } from '@/components';
 
-export const ListContractsPage = () => {
+export const GetContractsPage = () => {
   // const [filteredData, setFilteredData] = useState(data);
   // const [currentPage, setCurrentPage] = useState(1);
   // const itemsPerPage = 3;
@@ -37,14 +36,6 @@ export const ListContractsPage = () => {
           </div>
         </div>
 
-        {/*Crear contrato*/}
-        <div className=" mt-7 content-center ">
-          <button className="flex flex-row ml-3 items-center gap-3 bg-epaColor1 text-white px-5 py-3 rounded-md hover:bg-epaColor2 transition-colors">
-            <FilePlus />
-            Crear Contrato
-          </button>
-        </div>
-
         {/*Filtros*/}
         {/* <GlobalFilter
           data={data}
@@ -62,24 +53,24 @@ export const ListContractsPage = () => {
                   <th className="py-4 text-center border border-white">
                     Proceso/Dependencia <br /> del contrato
                   </th>
-                  <th className="text-center border border-white">
+                  <th className="text-center border">
                     Consecutivo
                   </th>
-                  <th className="text-center border border-white">
+                  <th className="text-center border">
                     Tipo de <br />
                     Contrato
                   </th>
-                  <th className="text-center border border-white">Objeto</th>
-                  <th className="text-center border border-white">
+                  <th className="text-center border">Objeto</th>
+                  <th className="text-center border">
                     Valor <br /> Contrato
                   </th>
-                  <th className="text-center border border-white">
+                  <th className="text-center border">
                     Nombre del <br /> Contratista
                   </th>
-                  <th className="text-center border border-white">
+                  <th className="text-center border">
                     Abogado <br /> Asignado
                   </th>
-                  <th className="text-center border border-white">
+                  <th className="text-center border">
                     Fecha de <br /> Inicio
                   </th>
                   <th className="text-center ">Acciones</th>

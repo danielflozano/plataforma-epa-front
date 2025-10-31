@@ -41,7 +41,7 @@ export const overtimesService = {
     }
   },
 
-  updateOvertimes: async () => {
+  updateOvertimes: async (id, data) => {
     try {
       const response = await apiClient.put(`/extras/update/${id}`, data);
       console.log(response.data.message);

@@ -1,4 +1,4 @@
-import { JuridicaDashboardPage, CreateContractsPage, ListContractsPage, HistoricalPage } from "../features";
+import { JuridicaDashboardPage, HistoricalPage, ContractsPage, CreateContractsPage, GetContractsPage, LawyersPage } from "../features";
 import { JuridicaLayout } from "../layout/JuridicaLayout";
 import { juridicaRoutesList } from "@/routes";
 
@@ -13,16 +13,25 @@ export const JuridicaRoutes = [
         },
         {
             path: juridicaRoutesList.contracts,
-            element: <ListContractsPage />,
+            element: <ContractsPage/>
         },
         {
-            path: juridicaRoutesList.create,
+            path: juridicaRoutesList.createContracts,
             element: <CreateContractsPage />,
+        },
+        {
+            path: juridicaRoutesList.listContracts,
+            element: <GetContractsPage />,
+        },
+        {
+            path: juridicaRoutesList.lawyers,
+            element: <LawyersPage />,
         },
         {
             path: juridicaRoutesList.historical,
             element: <HistoricalPage />,
         },
+
     ],
   },
 ]
