@@ -1,5 +1,10 @@
 import { authRoutesList } from '@/routes';
-import { LoginPage, RecoverPasswordPage, ResetPasswordPage, VerifyCodePage, } from '../pages';
+import {
+  LoginPage,
+  RecoverPasswordPage,
+  ResetPasswordPage,
+  VerifyCodePage,
+} from '../pages';
 
 export const AuthRoutes = [
   { path: authRoutesList.login, element: <LoginPage /> },

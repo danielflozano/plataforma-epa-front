@@ -1,10 +1,12 @@
-import { useAseo } from "@/modules/aseo/context";
 import { useOvertimesRecordsSection } from "../hooks";
-import { GlobalButton } from "@/components";
+import { GlobalButton, GlobalInput } from "@/components";
 
 export const OvertimesRecordsSection = ({
+  errors,
   overtimes = [],
-  onClickOpenUpdateModal = () => {}
+  handleSubmit,
+  onClickOpenUpdateModal = () => {},
+  register, 
 }) => {
 
   const {
@@ -14,13 +16,16 @@ export const OvertimesRecordsSection = ({
 
   return (
     <>
-      <input
-        type="text"
-        placeholder="Buscar por identificación, nombre o fecha"
-        // value={busqueda}
-        // onChange={(e) => setBusqueda(e.target.value)}
-        className="w-sm bg-white text-epaColor1 p-1 border-2 border-epaColor1 rounded-md"
-      />
+    <GlobalInput
+      label='Filtro'
+      data='identificacion'
+      classNameComponent="bg-white w-100 p-1 border-2 border-epaColor1 rounded-md text-epaColor1"
+      register={register}
+      errors={''}
+      rules={{
+        required: true
+      }}
+    />
       <div className="bg-white shadow-md rounded-lg p-4 mx-auto">
         <table className="w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-epaColor1 text-white">

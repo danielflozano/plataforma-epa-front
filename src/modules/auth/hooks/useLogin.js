@@ -6,10 +6,11 @@ import { authService } from '../services/authService';
 import { aseoRoutesList } from '@/routes';
 
 export const useLogin = () => {
+  const [apiError, setApiError] = useState('');
+  const [loading, setLoading] = useState(false);
+  
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
 
   const {
     register,
@@ -33,11 +34,14 @@ export const useLogin = () => {
   };
 
   return {
-    register,
-    handleSubmit,
+    // Properties
+    apiError,
     errors,
     loading,
-    apiError,
+
+    // Methods
+    handleSubmit,
     onSubmit,
+    register,
   };
 };

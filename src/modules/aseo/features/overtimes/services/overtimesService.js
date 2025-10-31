@@ -12,9 +12,13 @@ export const overtimesService = {
     }
   },
 
-  getAllOvertimes: async () => {
+  getAllOvertimes: async (page = 1, limit = 15) => {
     try {
-      const response = await apiClient.get('/extras/listar');
+      const params = new URLSearchParams({
+        page: page,
+        limit: limit,
+      });
+      const response = await apiClient.get(`/extras/listar?${params.toString()}`);
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error listando horas extra ❌'));
@@ -41,7 +45,7 @@ export const overtimesService = {
     }
   },
 
-  updateOvertimes: async () => {
+  updateOvertimes: async (id, data) => {
     try {
       const response = await apiClient.put(`/extras/update/${id}`, data);
       console.log(response.data.message);

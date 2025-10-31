@@ -5,11 +5,11 @@ import { useRecoverPassword } from '../hooks/useRecoverPassword';
 export const RecoverPasswordPage = () => {
   const {
     accessErrorMessages,
-    register,
-    handleSubmit,
     errors,
-    onSubmitRecoverPassword,
+    handleSubmit,
     onClickBack,
+    onSubmitRecoverPassword,
+    register,
   } = useRecoverPassword();
 
   return (

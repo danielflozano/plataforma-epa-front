@@ -5,12 +5,12 @@ import { overtimesService } from '../services';
 
 
 export const useCreateOvertimes = () => {
+  const [isError, setIsError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [openModal, setOpenModal] = useState(false);
   const [overtimeRegister, setOvertimeRegister] = useState({});
   const [sheetNames, setSheetNames] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
   const { workers } = useAseo();
   
   const fileInputRef = useRef(null);
@@ -110,24 +110,27 @@ export const useCreateOvertimes = () => {
   }
   
   return {
-    workers,
+    
+    controlExcel,
+    errorsExcel,
+    errorsHoras,
+    fileInputRef,
+    isError,
+    loading,
+    modalMessage,
+    openModal,
     overtimeRegister,
     sheetNames,
-    loading,
-    isError,
-    openModal,
-    modalMessage,
-    fileInputRef,
-    registerHoras,
-    handleSubmitHoras,
-    errorsHoras,
-    controlExcel,
-    handleSubmitExcel,
-    errorsExcel,
-    onSubmit,
-    onSubmitExcel,
+    workers,
+
+    // Methods
     getExcelSheetNames,
+    handleSubmitExcel,
+    handleSubmitHoras,
     onCloseModal,
     onDeleteOvertimeRegister,
+    onSubmit,
+    onSubmitExcel,
+    registerHoras,
   };
 };

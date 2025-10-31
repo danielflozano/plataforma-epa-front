@@ -99,7 +99,7 @@ export const RegisteredOvertimeTable = ({ data, onDeleteSuccess }) => {
             <p className="text-gray-600 mb-6">¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer.</p>
             <div className="flex justify-end gap-4">
               <GlobalButton
-                variant="modalTwo"
+                variant="modalFour"
                 onClick={cerrarConfirm}
                 className="p-1.5"
               >
