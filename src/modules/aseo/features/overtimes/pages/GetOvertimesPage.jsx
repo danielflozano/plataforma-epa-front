@@ -1,19 +1,26 @@
-import { GlobalButton } from "@/components";
-import { useBackNavigation } from "@/hooks";
-import { OvertimesRecordsSection, TimesAndDatesRecorded } from "../components";
-import { useGetOvertimes } from "../hooks";
+import { GlobalButton } from '@/components';
+import { useBackNavigation } from '@/hooks';
+import { OvertimesRecordsSection, TimesAndDatesRecorded } from '../components';
+import { useGetOvertimes } from '../hooks';
 
 export const GetOvertimesPage = () => {
   const {
-    overtimes,
-    loading,
-    register,
-    handleSubmit,
+    // Properties
     errors,
+    errorsFilter,
+    loading,
     openUpdateModal,
-    onSubmitUpdate,
-    onClickOpenUpdateModal,
+    overtimes,
+    selectedId,
+
+    // Methods
+    handleSubmit,
+    handleSubmitFilter,
     onClickCloseEditModal,
+    onClickOpenUpdateModal,
+    onSubmitUpdate,
+    register,
+    registerFilter,
   } = useGetOvertimes();
   const { onClickBack } = useBackNavigation();
 
@@ -26,11 +33,17 @@ export const GetOvertimesPage = () => {
         <h2 className="text-epaColor1 text-center text-4xl font-extrabold">
           Registro Individual de Horas Extra
         </h2>
-        <OvertimesRecordsSection overtimes={overtimes} onClickOpenUpdateModal={onClickOpenUpdateModal}  />
+        <OvertimesRecordsSection
+          errors={errorsFilter}
+          overtimes={overtimes}
+          handleSubmit={handleSubmitFilter}
+          onClickOpenUpdateModal={onClickOpenUpdateModal}
+          register={registerFilter}
+        />
       </div>
       {openUpdateModal && (
         <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">
-          <form 
+          <form
             onSubmit={handleSubmit(onSubmitUpdate)}
             className="flex flex-col gap-4 bg-white p-4 rounded-lg shadow-lg w-[1000px]"
           >
@@ -40,16 +53,13 @@ export const GetOvertimesPage = () => {
             <TimesAndDatesRecorded register={register} errors={errors} />
             <div className="flex justify-end gap-2">
               <GlobalButton
-                // variant=""
+                variant="modalFour"
                 onClick={onClickCloseEditModal}
                 className="p-1.5"
               >
                 Cancelar
               </GlobalButton>
-              <GlobalButton
-                // variant=""
-                className="p-1.5"
-              >
+              <GlobalButton variant="modalTwo" className="p-1.5">
                 Guardar
               </GlobalButton>
             </div>

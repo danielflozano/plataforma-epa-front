@@ -7,7 +7,14 @@ import { onRenderCallback } from '@/profiler';
 import { authRoutesList } from '@/routes';
 
 export const LoginPage = () => {
-  const { register, handleSubmit, errors, loading, apiError, onSubmit } = useLogin();
+  const { 
+    apiError,
+    errors,
+    loading,
+    handleSubmit,
+    onSubmit,
+    register,
+  } = useLogin();
 
   if(loading) {
     return (

@@ -14,10 +14,10 @@ const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(null); // { user, accessToken }
-  const [loading, setLoading] = useState(true);
   const [accessErrorMessages, setAccessErrorMessages] = useState(null);
+  const [auth, setAuth] = useState(null); // { user, accessToken }
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setupInterceptors(logout, setAuth);
@@ -94,10 +94,13 @@ export const AuthProvider = ({ children }) => {
 
   const contextValue = useMemo(
     () => ({
-      auth,
-      loading,
+      // Properties
       accessErrorMessages,
+      auth,
       email,
+      loading,
+
+      // Methods
       login,
       logout,
       setAccessErrorMessages,

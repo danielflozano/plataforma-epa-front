@@ -70,11 +70,14 @@ export const useRecoverPassword = () => {
   console.log(accessErrorMessages?.text);
 
   return {
+    // Properties
     accessErrorMessages,
     email,
+    errors,
+
+    // Methods
     register,
     handleSubmit,
-    errors,
     onSubmitRecoverPassword,
     onSubmitVerifyCode,
     onSubmitResetPassword,

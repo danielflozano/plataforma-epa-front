@@ -4,12 +4,12 @@ import { GlobalButton, GlobalInput } from '@/components';
 
 export const ResetPasswordPage = () => {
   const {
-    register,
-    handleSubmit,
-    onSubmitResetPassword,
-    errors,
     accessErrorMessages,
     email,
+    errors,
+    handleSubmit,
+    onSubmitResetPassword,
+    register,
   } = useRecoverPassword();
 
   return (

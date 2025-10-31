@@ -4,11 +4,11 @@ import { AuthLayout, SuccessErrorMessage } from '../components';
 
 export const VerifyCodePage = () => {
   const {
-    register,
-    handleSubmit,
-    errors,
-    onSubmitVerifyCode,
     accessErrorMessages,
+    errors,
+    handleSubmit,
+    onSubmitVerifyCode,
+    register,
   } = useRecoverPassword();
 
   return (

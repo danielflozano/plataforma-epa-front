@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { overtimesService } from "../services";
+import { useState } from 'react';
+import { overtimesService } from '../services';
 
 export const useRegisteredOvertimeTable = ({ onDeleteSuccess }) => {
-  const [message, setMessage] = useState('');
   const [estado, setEstado] = useState('');
+  const [message, setMessage] = useState('');
   const [openResultModal, setOpenResultModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const abrirConfirm = () => setShowConfirmModal(true);
   const cerrarConfirm = () => setShowConfirmModal(false);
-  const onOpenModal = () => setOpenResultModal(true);
   const onCloseModal = () => setOpenResultModal(false);
+  const onOpenModal = () => setOpenResultModal(true);
 
   const handleDelete = async (idHoraExtra) => {
     console.log('handleDelete called ->', idHoraExtra);
@@ -38,14 +38,17 @@ export const useRegisteredOvertimeTable = ({ onDeleteSuccess }) => {
   };
 
   return {
-    message,
+    // Properties
     estado,
+    message,
     openResultModal,
     showConfirmModal,
+
+    // Methods
     abrirConfirm,
     cerrarConfirm,
-    onOpenModal,
-    onCloseModal,
     handleDelete,
+    onCloseModal,
+    onOpenModal,
   };
 };

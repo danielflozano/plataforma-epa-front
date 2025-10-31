@@ -2,8 +2,8 @@ import { useAseo } from "@/modules/aseo/context";
 
 export const useOvertimesRecordsSection = () => {
   const {
-    overtimes,
     loading,
+    overtimes,
     getAllOvertimes
   } = useAseo();
 
@@ -18,6 +18,5 @@ export const useOvertimesRecordsSection = () => {
   return {
     formatDate,
     formatHour,
-  }
-  
-}
+  };
+};

@@ -4,8 +4,8 @@ import { useAseo } from "@/modules/aseo/context"
 
 export const useGetOvertimes = () => {
   const {
-    overtimes,
     loading,
+    overtimes,
     getAllOvertimes,
   } = useAseo();
   
@@ -16,18 +16,25 @@ export const useGetOvertimes = () => {
     formState: { errors },
   } = useForm();
 
+  const {
+    register: registerFilter,
+    handleSubmit: handleSubmitFilter,
+    reset: resetFilter,
+    formState: { errors: errorsFilter }
+  } = useForm();
+
   const [ openUpdateModal, setOpenUpdateModal ] = useState(false);
   const [ selectedId, setSelectedId ] = useState('');
 
   const onSubmitUpdate = (updateData) => {
     console.log('Entró');    
-  }
+  };
 
 
   const onClickOpenUpdateModal = (id) => {
     setSelectedId(id);
 
-    const selectedRegister = overtimes.find((reg) => reg._id === id);    
+    const selectedRegister = overtimes.find((reg) => reg._id === id);
 
     if (selectedRegister) {
       reset({
@@ -47,24 +54,28 @@ export const useGetOvertimes = () => {
     setOpenUpdateModal(true);
   };
 
-  const onClickCloseEditModal = () => {
-    setOpenUpdateModal(false);
-  };
+  const onClickCloseEditModal = () => setOpenUpdateModal(false);
 
   console.log(openUpdateModal);
 
   return {
-    overtimes,
-    loading,
-    register,
-    handleSubmit,
-    reset,
+    // Properties
     errors,
+    errorsFilter,
+    loading,
     openUpdateModal,
+    overtimes,
     selectedId,
-    onSubmitUpdate,
-    onClickOpenUpdateModal,
-    onClickCloseEditModal,
-  }
 
-}
+    // Methods
+    handleSubmit,
+    handleSubmitFilter,
+    onClickCloseEditModal,
+    onClickOpenUpdateModal,
+    onSubmitUpdate,
+    register,
+    registerFilter,
+    reset,
+    resetFilter,
+  };
+};
