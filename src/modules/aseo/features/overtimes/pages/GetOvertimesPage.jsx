@@ -6,21 +6,27 @@ import { useGetOvertimes } from '../hooks';
 export const GetOvertimesPage = () => {
   const {
     // Properties
+    currentPage,
     errors,
-    errorsFilter,
+    filterValue,
     loading,
     openUpdateModal,
-    overtimes,
+    overtimesFilter,
     selectedId,
+    showPagination,
+    totalPages,
+    totalRecords,
 
     // Methods
+    handleKeyDown,
+    handlePageChange,
+    handleSearch,
     handleSubmit,
-    handleSubmitFilter,
     onClickCloseEditModal,
     onClickOpenUpdateModal,
     onSubmitUpdate,
     register,
-    registerFilter,
+    setFilterValue,
   } = useGetOvertimes();
   const { onClickBack } = useBackNavigation();
 
@@ -34,12 +40,41 @@ export const GetOvertimesPage = () => {
           Registro Individual de Horas Extra
         </h2>
         <OvertimesRecordsSection
-          errors={errorsFilter}
-          overtimes={overtimes}
-          handleSubmit={handleSubmitFilter}
+          filterValue={filterValue}
+          overtimesFilter={overtimesFilter}
+          handleKeyDown={handleKeyDown}
+          handleSearch={handleSearch}
           onClickOpenUpdateModal={onClickOpenUpdateModal}
-          register={registerFilter}
+          setFilterValue={setFilterValue}
         />
+        <div className="flex justify-between items-center px-4">
+          <span>
+            Mostrando {overtimesFilter.length} de {totalRecords} registros.
+          </span>
+          {showPagination && (
+            <div className="flex items-center gap-2">
+              <GlobalButton
+                variant="modalTwo"
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-3 py-1 disabled:bg-gray-400"
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </GlobalButton>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <GlobalButton
+                variant="modalTwo"
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-3 py-1 disabled:bg-gray-400"
+                disabled={currentPage === totalPages}
+              >
+                Siguiente
+              </GlobalButton>
+            </div>
+          )}
+        </div>
       </div>
       {openUpdateModal && (
         <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">

@@ -1,99 +1,91 @@
-import { useOvertimesRecordsSection } from "../hooks";
-import { GlobalButton, GlobalInput } from "@/components";
+import { useOvertimesRecordsSection } from '../hooks';
+import { GlobalButton } from '@/components';
 
 export const OvertimesRecordsSection = ({
-  errors,
-  overtimes = [],
-  handleSubmit,
+  filterValue = '',
+  overtimesFilter = [],
+  handleKeyDown = () => {},
+  handleSearch = () => {},
   onClickOpenUpdateModal = () => {},
-  register, 
+  setFilterValue = () => {},
 }) => {
-
-  const {
-    formatDate,
-    formatHour,
-  } = useOvertimesRecordsSection();
+  const { formatDate, formatHour } = useOvertimesRecordsSection();
 
   return (
     <>
-    <GlobalInput
-      label='Filtro'
-      data='identificacion'
-      classNameComponent="bg-white w-100 p-1 border-2 border-epaColor1 rounded-md text-epaColor1"
-      register={register}
-      errors={''}
-      rules={{
-        required: true
-      }}
-    />
+      <div className="flex gap-4">
+        <input
+          type="text"
+          value={filterValue}
+          onChange={(e) => setFilterValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Buscar por identificación..."
+          className="bg-white w-100 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
+        />
+        <GlobalButton className="w-30" onClick={handleSearch}>
+          Buscar
+        </GlobalButton>
+      </div>
       <div className="bg-white shadow-md rounded-lg p-4 mx-auto">
         <table className="w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-epaColor1 text-white">
             <tr>
-              <th className="py-4 text-center border border-white">Identificación</th>
-              <th className='text-center border border-white'>Nombre</th>
-              <th className='text-center border border-white'>Fecha creación</th>
-              <th className='text-center border border-white'>Inicio trabajo</th>
-              <th className='text-center border border-white'>Fin trabajo</th>
-              <th className='text-center border border-white'>
+              <th className="py-4 text-center border border-white">
+                Identificación
+              </th>
+              <th className="text-center border border-white">Nombre</th>
+              <th className="text-center border border-white">
+                Fecha creación
+              </th>
+              <th className="text-center border border-white">
+                Inicio trabajo
+              </th>
+              <th className="text-center border border-white">Fin trabajo</th>
+              <th className="text-center border border-white">
                 Hora inicio
                 <br />
                 trabajo
               </th>
-              <th className='text-center border border-white'>
+              <th className="text-center border border-white">
                 Hora fin
                 <br />
                 trabajo
               </th>
-              <th className='text-center border border-white'>Inicio descanso</th>
-              <th className='text-center border border-white'>Fin descanso</th>
-              <th className='text-center border border-white'>
+              <th className="text-center border border-white">
+                Inicio descanso
+              </th>
+              <th className="text-center border border-white">Fin descanso</th>
+              <th className="text-center border border-white">
                 Hora inicio
                 <br />
                 descanso
               </th>
-              <th className='text-center border border-white'>
+              <th className="text-center border border-white">
                 Hora fin
                 <br />
                 descanso
               </th>
-              <th className='text-center border border-white'>Acciones</th>
+              <th className="text-center border border-white">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-300">
-            {overtimes.map((overtime) => (
+            {overtimesFilter.map((overtime) => (
               <tr
                 key={overtime._id}
                 className="hover:bg-gray-50 transition-colors"
               >
-                <td className="py-2">
-                  {overtime.FuncionarioAsignado?.identificacion}
-                </td>
+                <td className="py-2">{overtime.FuncionarioAsignado?.identificacion}</td>
                 <td>{overtime.FuncionarioAsignado?.nombre_completo}</td>
-                <td>
-                  {new Date(overtime.createdAt).toISOString().split('T')[0]}
-                </td>
-                <td>
-                  {
-                    new Date(overtime.fecha_inicio_trabajo)
-                      .toISOString()
-                      .split('T')[0]
-                  }
-                </td>
-                <td>
-                  {
-                    new Date(overtime.fecha_fin_trabajo)
-                      .toISOString()
-                      .split('T')[0]
-                  }
-                </td>
+                <td>{formatDate(overtime.createdAt)}</td>
+                <td>{formatDate(overtime.fecha_inicio_trabajo)}</td>
+                <td>{formatDate(overtime.fecha_fin_trabajo)}</td>
                 <td>{overtime.hora_inicio_trabajo}</td>
                 <td>{overtime.hora_fin_trabajo}</td>
                 <td>{formatDate(overtime.fecha_inicio_descanso)}</td>
                 <td>{formatDate(overtime.fecha_fin_descanso)}</td>
                 <td>{formatHour(overtime.hora_inicio_descanso)}</td>
                 <td>{formatHour(overtime.hora_fin_descanso)}</td>
-                <td className="space-x-1 space-y-1">
+                <td className="p-1 space-x-1 space-y-1">
                   <GlobalButton
                     variant="modalTwo"
                     onClick={() => onClickOpenUpdateModal(overtime._id)}
@@ -102,7 +94,7 @@ export const OvertimesRecordsSection = ({
                     Actualizar
                   </GlobalButton>
                   <GlobalButton
-                  variant="modalThree"
+                    variant="modalThree"
                     onClick={() => abrirModal(overtime._id)}
                     className="px-3 py-0.5"
                   >
@@ -114,7 +106,7 @@ export const OvertimesRecordsSection = ({
           </tbody>
         </table>
 
-        {overtimes.length === 0 && (
+        {overtimesFilter.length === 0 && (
           <div className="text-center text-xl text-gray-500 font-semibold py-8">
             No se encontraron registros de horas extra
           </div>

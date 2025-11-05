@@ -1,12 +1,17 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { useAseo } from "@/modules/aseo/context"
+import { overtimesService } from "../services";
 
 export const useGetOvertimes = () => {
   const {
-    loading,
     overtimes,
+    currentPage,
+    totalPages,
+    totalRecords,
+    loading,
     getAllOvertimes,
+    handlePageChange,
   } = useAseo();
   
   const {
@@ -16,35 +21,64 @@ export const useGetOvertimes = () => {
     formState: { errors },
   } = useForm();
 
-  const {
-    register: registerFilter,
-    handleSubmit: handleSubmitFilter,
-    reset: resetFilter,
-    formState: { errors: errorsFilter }
-  } = useForm();
-
+  const [ filterValue, setFilterValue ] = useState('');
+  const [ overtimesFilter, setOvertimesFilter ] = useState(overtimes || []);
   const [ openUpdateModal, setOpenUpdateModal ] = useState(false);
   const [ selectedId, setSelectedId ] = useState('');
+  const [ showPagination, setShowPagination ] = useState(true);
+
+
+  useEffect(() => {
+    setOvertimesFilter(overtimes);
+  }, [overtimes]);
+
+  const handleSearch = async () => {
+    if (!filterValue.trim()) {
+      setOvertimesFilter(overtimes);
+      setShowPagination(true);
+      return;
+    }
+
+    try {
+      const response = await overtimesService.getOvertimesByWorker(filterValue);
+      setOvertimesFilter(response.data);
+      setShowPagination(false);
+      console.log('Si funcionó handleSearch');      
+    } catch (error) {
+      console.error(error);
+      setOvertimesFilter([]);
+      setShowPagination(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if(e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   const onSubmitUpdate = (updateData) => {
     console.log('Entró');    
   };
 
-
   const onClickOpenUpdateModal = (id) => {
     setSelectedId(id);
 
-    const selectedRegister = overtimes.find((reg) => reg._id === id);
+    console.log(id);
+    
+
+    const selectedRegister = overtimesFilter.find((reg) => reg._id === id);
+    const formatDate = (dateString) => dateString?.split('T')[0] || '';
 
     if (selectedRegister) {
       reset({
-        fecha_inicio_trabajo: selectedRegister.fecha_inicio_trabajo?.split('T')[0] || '',
+        fecha_inicio_trabajo: formatDate(selectedRegister.fecha_inicio_trabajo),
         hora_inicio_trabajo: selectedRegister.hora_inicio_trabajo || '',
-        fecha_fin_trabajo: selectedRegister.fecha_fin_trabajo?.split('T')[0] || '',
+        fecha_fin_trabajo: formatDate(selectedRegister.fecha_fin_trabajo),
         hora_fin_trabajo: selectedRegister.hora_fin_trabajo || '',
-        fecha_inicio_descanso: selectedRegister.fecha_inicio_descanso?.split('T')[0] || '',
+        fecha_inicio_descanso: formatDate(selectedRegister.fecha_inicio_descanso),
         hora_inicio_descanso: selectedRegister.hora_inicio_descanso || '',
-        fecha_fin_descanso: selectedRegister.fecha_fin_descanso?.split('T')[0] || '',
+        fecha_fin_descanso: formatDate(selectedRegister.fecha_fin_descanso),
         hora_fin_descanso: selectedRegister.hora_fin_descanso || '',
         es_festivo_Inicio: selectedRegister.es_festivo_Inicio || false,
         es_festivo_Fin: selectedRegister.es_festivo_Fin || false,
@@ -56,26 +90,30 @@ export const useGetOvertimes = () => {
 
   const onClickCloseEditModal = () => setOpenUpdateModal(false);
 
-  console.log(openUpdateModal);
+  console.log(overtimesFilter);
 
   return {
     // Properties
+    currentPage,
     errors,
-    errorsFilter,
+    filterValue,
     loading,
     openUpdateModal,
-    overtimes,
+    overtimesFilter,
     selectedId,
+    showPagination,
+    totalPages,
+    totalRecords,
 
     // Methods
+    handleKeyDown,
+    handlePageChange,
+    handleSearch,
     handleSubmit,
-    handleSubmitFilter,
     onClickCloseEditModal,
     onClickOpenUpdateModal,
     onSubmitUpdate,
     register,
-    registerFilter,
-    reset,
-    resetFilter,
+    setFilterValue,
   };
 };
