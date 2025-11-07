@@ -6,7 +6,8 @@ export const OvertimesRecordsSection = ({
   overtimesFilter = [],
   handleKeyDown = () => {},
   handleSearch = () => {},
-  onClickOpenUpdateModal = () => {},
+  OpenUpdateModal = () => {},
+  onOpenConfirmModal = () => {},
   setFilterValue = () => {},
 }) => {
   const { formatDate, formatHour } = useOvertimesRecordsSection();
@@ -26,7 +27,7 @@ export const OvertimesRecordsSection = ({
           Buscar
         </GlobalButton>
       </div>
-      <div className="bg-white shadow-md rounded-lg p-4 mx-auto">
+      <div className="w-full bg-white shadow-md rounded-lg p-4 mx-auto">
         <table className="w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-epaColor1 text-white">
             <tr>
@@ -76,6 +77,7 @@ export const OvertimesRecordsSection = ({
               >
                 <td className="py-2">{overtime.FuncionarioAsignado?.identificacion}</td>
                 <td>{overtime.FuncionarioAsignado?.nombre_completo}</td>
+                {/* <td>{overtime._id}</td> */}
                 <td>{formatDate(overtime.createdAt)}</td>
                 <td>{formatDate(overtime.fecha_inicio_trabajo)}</td>
                 <td>{formatDate(overtime.fecha_fin_trabajo)}</td>
@@ -88,14 +90,14 @@ export const OvertimesRecordsSection = ({
                 <td className="p-1 space-x-1 space-y-1">
                   <GlobalButton
                     variant="modalTwo"
-                    onClick={() => onClickOpenUpdateModal(overtime._id)}
+                    onClick={() => OpenUpdateModal(overtime._id)}
                     className="px-3 py-0.5"
                   >
                     Actualizar
                   </GlobalButton>
                   <GlobalButton
                     variant="modalThree"
-                    onClick={() => abrirModal(overtime._id)}
+                    onClick={() => onOpenConfirmModal(overtime._id)}
                     className="px-3 py-0.5"
                   >
                     Eliminar
@@ -105,7 +107,6 @@ export const OvertimesRecordsSection = ({
             ))}
           </tbody>
         </table>
-
         {overtimesFilter.length === 0 && (
           <div className="text-center text-xl text-gray-500 font-semibold py-8">
             No se encontraron registros de horas extra

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { overtimesService } from '../services';
 
-export const useRegisteredOvertimeTable = ({ onDeleteSuccess }) => {
+export const useDeleteOvertime = (onDeleteSuccess) => {
   const [estado, setEstado] = useState('');
   const [message, setMessage] = useState('');
   const [openResultModal, setOpenResultModal] = useState(false);
@@ -9,13 +9,13 @@ export const useRegisteredOvertimeTable = ({ onDeleteSuccess }) => {
 
   const abrirConfirm = () => setShowConfirmModal(true);
   const cerrarConfirm = () => setShowConfirmModal(false);
-  const onCloseModal = () => setOpenResultModal(false);
-  const onOpenModal = () => setOpenResultModal(true);
+  const onCloseAlertModal = () => setOpenResultModal(false);
+  const onOpenAlertModal = () => setOpenResultModal(true);
 
-  const handleDelete = async (idHoraExtra) => {
-    console.log('handleDelete called ->', idHoraExtra);
+  const handleDelete = async (idOvertime) => {
+    console.log('La función llamo a ->', idOvertime);
     try {
-      const response = await overtimesService.deleteOvertimes(idHoraExtra);
+      const response = await overtimesService.deleteOvertimes(idOvertime);
       const success = !!response?.success;
       setMessage(
         response?.message ||
@@ -25,8 +25,8 @@ export const useRegisteredOvertimeTable = ({ onDeleteSuccess }) => {
       cerrarConfirm();
       if (success) {
         setTimeout(() => {
-          if (typeof onDeleteSuccess === 'function') onDeleteSuccess();
-        }, 2000);
+          onDeleteSuccess();
+        }, 1500);
       }
     } catch (error) {
       console.error('Error eliminando:', error);
@@ -48,7 +48,7 @@ export const useRegisteredOvertimeTable = ({ onDeleteSuccess }) => {
     abrirConfirm,
     cerrarConfirm,
     handleDelete,
-    onCloseModal,
-    onOpenModal,
+    onCloseAlertModal,
+    onOpenAlertModal,
   };
 };

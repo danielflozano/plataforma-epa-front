@@ -27,7 +27,7 @@ export const AseoProvider = ({ children }) => {
       const response = await overtimesService.getAllOvertimes(page, limit);
       setOvertimes(response.data);
       setCurrentPage(response.page);
-      setTotalPages(response.totalPages);
+      setTotalPages(response.totalPages || 1);
       setTotalRecords(response.total);
     } catch (error) {
       console.error(error);
@@ -68,17 +68,17 @@ export const AseoProvider = ({ children }) => {
 
   const contextValue = useMemo(
     () => ({
-      overtimes,
       currentPage,
+      loading,
+      overtimes,
       totalPages,
       totalRecords,
       workers,
-      loading,
       getAllOvertimes,
       getAllWorkers,
       handlePageChange,
     }),
-    [overtimes, workers, loading]
+    [currentPage, loading, overtimes, totalPages, totalRecords, workers,]
   );
 
   return <AseoContext.Provider value={contextValue}>{ children }</AseoContext.Provider>

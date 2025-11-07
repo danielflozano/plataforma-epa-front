@@ -1,4 +1,4 @@
-import { GlobalButton } from '@/components';
+import { AlertModal, ConfirmModal, GlobalButton } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { OvertimesRecordsSection, TimesAndDatesRecorded } from '../components';
 import { useGetOvertimes } from '../hooks';
@@ -6,28 +6,35 @@ import { useGetOvertimes } from '../hooks';
 export const GetOvertimesPage = () => {
   const {
     // Properties
+    alertModalMessage,
     currentPage,
     errors,
     filterValue,
-    loading,
-    openUpdateModal,
+    loading, // TODO: Hacer algo con esto!
+    openAlertModal,
+    openConfirmModal,
     overtimesFilter,
-    selectedId,
     showPagination,
+    state,
     totalPages,
     totalRecords,
+    updateModal,
 
     // Methods
+    closeAlertModal,
+    CloseModals,
+    handleDelete,
     handleKeyDown,
     handlePageChange,
     handleSearch,
     handleSubmit,
-    onClickCloseEditModal,
-    onClickOpenUpdateModal,
+    onOpenConfirmModal,
     onSubmitUpdate,
+    OpenUpdateModal,
     register,
     setFilterValue,
   } = useGetOvertimes();
+  
   const { onClickBack } = useBackNavigation();
 
   return (
@@ -44,7 +51,8 @@ export const GetOvertimesPage = () => {
           overtimesFilter={overtimesFilter}
           handleKeyDown={handleKeyDown}
           handleSearch={handleSearch}
-          onClickOpenUpdateModal={onClickOpenUpdateModal}
+          OpenUpdateModal={OpenUpdateModal}
+          onOpenConfirmModal={onOpenConfirmModal}
           setFilterValue={setFilterValue}
         />
         <div className="flex justify-between items-center px-4">
@@ -76,7 +84,7 @@ export const GetOvertimesPage = () => {
           )}
         </div>
       </div>
-      {openUpdateModal && (
+      {updateModal && (
         <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">
           <form
             onSubmit={handleSubmit(onSubmitUpdate)}
@@ -89,18 +97,35 @@ export const GetOvertimesPage = () => {
             <div className="flex justify-end gap-2">
               <GlobalButton
                 variant="modalFour"
-                onClick={onClickCloseEditModal}
+                onClick={CloseModals}
                 className="p-1.5"
               >
                 Cancelar
               </GlobalButton>
-              <GlobalButton variant="modalTwo" className="p-1.5">
+              <GlobalButton variant="modalTwo" className="p-1.5" type="submit">
                 Guardar
               </GlobalButton>
             </div>
           </form>
         </div>
       )}
+      <AlertModal
+        openAlertModal={openAlertModal}
+        closeAlertModal={closeAlertModal}
+        modalTitle={state}
+        modalDescription={alertModalMessage}
+      />
+      {openConfirmModal && (
+        <ConfirmModal
+          title="Confirmar Eliminación"
+          content="¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer."
+          onClickCancel={CloseModals}
+          onClickConfirm={() => handleDelete()}
+          buttonConfirmContent="Eliminar"
+          variant="modalThree"
+        />
+      )}
+
     </>
   );
 };
