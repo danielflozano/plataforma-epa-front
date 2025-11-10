@@ -9,6 +9,8 @@ const aseoRoutesList = {
   createOvertimes: `${overtimes}/create`,
   getOvertimes: `${overtimes}/get`,
   workers: workers,
+  createWorkers: `${workers}/create-workers`,
+  getWorkers: `${workers}/get-workers`,
   reports: reports,
 }
 

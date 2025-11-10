@@ -53,7 +53,7 @@ export const CreateOvertimesPage = () => {
       </GlobalButton>
       <div className="flex flex-col gap-4 items-center">
         <h2 className="text-epaColor1 text-4xl font-extrabold">
-          Registro de Horas Extra
+          Registrar Horas Extra
         </h2>
         <form
           onSubmit={handleSubmitHoras(onSubmit)}

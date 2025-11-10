@@ -1,5 +1,14 @@
 import { aseoRoutesList } from '@/routes';
-import { AseoDashboardPage, CreateOvertimesPage, GetOvertimesPage, OvertimesPage, ReportsPage, WorkersPage } from '../features';
+import {
+  AseoDashboardPage,
+  CreateOvertimesPage,
+  CreateWorkersPage,
+  GetOvertimesPage,
+  GetWorkersPage,
+  OvertimesPage,
+  ReportsPage,
+  WorkersPage,
+} from '../features';
 import { AseoLayout } from '../aseoLayout';
 
 export const AseoRoutes = [
@@ -18,14 +27,22 @@ export const AseoRoutes = [
       {
         path: aseoRoutesList.createOvertimes,
         element: <CreateOvertimesPage />,
-      },    
+      },
       {
         path: aseoRoutesList.getOvertimes,
         element: <GetOvertimesPage />,
-      },    
+      },
       {
         path: aseoRoutesList.workers,
         element: <WorkersPage />,
+      },
+      {
+        path: aseoRoutesList.createWorkers,
+        element: <CreateWorkersPage />,
+      },
+      {
+        path: aseoRoutesList.getWorkers,
+        element: <GetWorkersPage />
       },
       {
         path: aseoRoutesList.reports,

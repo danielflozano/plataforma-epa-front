@@ -25,6 +25,7 @@ export const useGetOvertimes = () => {
   const [overtimesFilter, setOvertimesFilter] = useState(overtimes || []);
   const [updateModal, setUpdateModal] = useState(false);
   const [selectedId, setSelectedId] = useState('');
+  const [selectedName, setSelectedName] = useState('')
   const [showPagination, setShowPagination] = useState(true);
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
@@ -42,7 +43,6 @@ export const useGetOvertimes = () => {
 
   const onSubmitUpdate = async (updateData) => {
     try {
-      // TODO: Organizar el actualizar cuando haya un filtro
       const response = await overtimesService.updateOvertimes(
         selectedId,
         updateData
@@ -110,6 +110,7 @@ export const useGetOvertimes = () => {
     const formatDate = (dateString) => dateString?.split('T')[0] || '';
 
     if (selectedRegister) {
+      setSelectedName(selectedRegister.FuncionarioAsignado.nombre_completo);
       reset({
         fecha_inicio_trabajo: formatDate(selectedRegister.fecha_inicio_trabajo),
         hora_inicio_trabajo: selectedRegister.hora_inicio_trabajo || '',
@@ -136,6 +137,7 @@ export const useGetOvertimes = () => {
 
   const CloseModals = () => {
     setSelectedId('');
+    setSelectedName('');
     setAlertModalMessage('');
     setSuccess(false);
     setUpdateModal(false);
@@ -148,7 +150,7 @@ export const useGetOvertimes = () => {
     }
 
     setOpenAlertModal(false);
-  };
+  };  
 
   return {
     // Properties
@@ -160,7 +162,7 @@ export const useGetOvertimes = () => {
     openAlertModal,
     openConfirmModal,
     overtimesFilter,
-    selectedId,
+    selectedName,
     showPagination,
     state,
     totalPages,
