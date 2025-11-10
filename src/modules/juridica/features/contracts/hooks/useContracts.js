@@ -10,6 +10,8 @@ export const useContracts = () => {
         return navigate(`${juridicaRoutesList.createContracts}`);
       case 'get':
         return navigate(`${juridicaRoutesList.listContracts}`);
+      case 'type':
+        return navigate(`${juridicaRoutesList.createContractType}`);
     }
   };
   

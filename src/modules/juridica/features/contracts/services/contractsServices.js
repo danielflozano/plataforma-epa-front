@@ -29,5 +29,16 @@ export const contractsServices =  {
     }catch (error){
         throw new Error(handleAxiosError(error, 'Error actualizando contrato ❌'))
     }
+  },
+
+
+  getAllProcess: async () => {
+    try {
+      const response = await apiClient.get('/procesos/');
+      return response.data
+    } catch (error) {
+      throw new Error(error, "Error listando los procesos ❌");
+      
+    }
   }
 }

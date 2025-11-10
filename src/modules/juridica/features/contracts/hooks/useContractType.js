@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { lawyersServices } from '../services';
+import { contractTypeServices } from '../services';
 
-export const useLawyer = () => {
-  const [alertModal, setAlertModal] = useState(false);
+export const useContractType = () => {
   const [isError, setIsError] = useState(false);
   const [modal, setModal] = useState(false);
   const [message, setMessage] = useState('');
-
-  
 
   const {
     register,
@@ -17,39 +14,31 @@ export const useLawyer = () => {
     reset,
   } = useForm();
 
-  //Cuando uno hace una funcion de una sola linea, puede obviar las llaves y el return
-  const openModal = () => setModal(true);
   const closeModal = () => setModal(false);
-  const closeAlertModal = () => setAlertModal(false);
 
   const onSubmit = async (createData) => {
     try {
-      await lawyersServices.createLawyers(createData);
+      await contractTypeServices.createContractType(createData);
       setIsError(false);
-      setMessage('¡Abogado creado con Éxito! ✅');
+      setMessage('¡Tipo de Contrato creado con Exito ✅');
       reset();
       setModal(false);
     } catch (error) {
       setIsError(true);
-      setMessage('Error al crear el Abogado. ❌', error);
+      setMessage('Error al crear el Tipo de Contrato. ❌', error);
     } finally {
-      setAlertModal(true);
+      setModal(true);
     }
-  };  
+  };
 
   return {
-    // Properties
-    alertModal,
     errors,
     isError,
     message,
     modal,
 
-    // Methods
-    closeAlertModal,
     closeModal,
     handleSubmit,
-    openModal,
     onSubmit,
     register,
   };

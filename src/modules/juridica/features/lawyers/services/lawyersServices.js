@@ -8,16 +8,17 @@ export const lawyersServices = {
         '/abogados/crearAbogado',
         lawyersData
       );
-      console.log(response.data.message);
+      console.log(response.data);
       return response.data;
     } catch (error) {
+      console.error(error);
       throw new Error(handleAxiosError(error, 'Error creando abogado ❌'));
     }
   },
 
   getAllLawyers: async () => {
     try {
-      const response = await apiClient.get('/abogados/');
+      const response = await apiClient.get('/abogados/mostrar');
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error listando abogados ❌'));

@@ -1,25 +1,32 @@
+import { GlobalButton, LoadSpinner } from '@/components';
+import { useBackNavigation } from '@/hooks';
 import { EyeClosed, Eye, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useGetContracts } from '../hooks';
 
 export const GetContractsPage = () => {
-  // const [filteredData, setFilteredData] = useState(data);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 3;
 
-  // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentItems = filteredData.slice(startIndex, endIndex);
+  const{
+    contracts,
+    loading,
+  } = useGetContracts();
 
-  const [hover, setHover] = useState(false);
-
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  // }, [filteredData]);
+  const { onClickBack } = useBackNavigation();
+  const [hoverEye, setHoverEye] = useState(false);
 
   return (
     <>
-      <div className=" h-full gap-4">
+    {loading && (
+      <LoadSpinner name='Cargando Contratos' styles="fixed bg-gray-200/95"/>
+    )}
+      <GlobalButton
+        variant="back"
+        className="p-2 w-30 mb-3"
+        onClick={onClickBack}
+      >
+        Regresar
+      </GlobalButton>
+      <div className="flex flex-col h-full gap-4">
         {/* Cards */}
         <div className=" h-1/5 flex flex-row justify-around items-center gap-4">
           <div className="bg-green-400 h-25 p-3   rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
@@ -37,12 +44,6 @@ export const GetContractsPage = () => {
         </div>
 
         {/*Filtros*/}
-        {/* <GlobalFilter
-          data={data}
-          setFilteredData={setFilteredData}
-          keys={['nombre', 'identificacion', 'ciudad']}
-          placeholder="Buscar usuario..."
-        /> */}
 
         {/*Tabla de Contratos*/}
         <section className="">
@@ -53,9 +54,7 @@ export const GetContractsPage = () => {
                   <th className="py-4 text-center border border-white">
                     Proceso/Dependencia <br /> del contrato
                   </th>
-                  <th className="text-center border">
-                    Consecutivo
-                  </th>
+                  <th className="text-center border">Consecutivo</th>
                   <th className="text-center border">
                     Tipo de <br />
                     Contrato
@@ -78,23 +77,24 @@ export const GetContractsPage = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                {contracts.map((c) =>(
+                <tr key = {c._id} className='hover:bg-gray-100 transition-colors'>
+                  <td>{c.proceso}</td>
+                  <td>{c.consecutivo}</td>
+                  <td>{c.tipoContrato}</td>
+                  <td>{c.objeto}</td>
+                  <td>{c.ValorContrato}</td>
+                  <td>{c.NombreContratista}</td>
+                  <td>{c.AbogadoAsignado}</td>
+                  <td>{c.FechaInicio}</td>
                   <td>
                     <button
-                      onMouseEnter={() => setHover(true)}
-                      onMouseLeave={() => setHover(false)}
+                      onMouseEnter={() => setHoverEye(true)}
+                      onMouseLeave={() => setHoverEye(false)}
                       className="p-2 transition-transform duration-300 hover:scale-110"
                       title="Ver Detalles"
                     >
-                      {hover ? <Eye size={20} /> : <EyeClosed size={20} />}
+                      {hoverEye ? <Eye size={20} /> : <EyeClosed size={20} />}
                     </button>
                     <button title="Editar">
                       <Pencil size={20} />
@@ -104,6 +104,8 @@ export const GetContractsPage = () => {
                     </button>
                   </td>
                 </tr>
+
+                ))}
               </tbody>
             </table>
           </div>

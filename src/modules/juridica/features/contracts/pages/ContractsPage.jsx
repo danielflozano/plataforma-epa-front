@@ -15,6 +15,10 @@ export const ContractsPage = () => {
         title="Listar Contratos" 
         onClick={() => onClickCard('get')} 
       />
+      <GlobalCards 
+        title="Crear Tipo de Contrato" 
+        onClick={() => onClickCard('type')} 
+      />
     </div>
   );
 };
