@@ -1,6 +1,7 @@
 const buttonVariants = {
   primary: 'bg-epaColor1 font-semibold rounded-xl hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out',
   secondary: 'bg-gray-600 font-semibold rounded-xl hover:border-epaColor1 hover:bg-epaColor6 hover:text-epaColor1 transform transition duration-300 ease-in-out',
+  third: 'bg-gray-600 font-semibold rounded-xl hover:border-epaColor1 hover:bg-blue-200 hover:text-epaColor1 transform transition duration-300 ease-in-out',
   modal: 'bg-epaColor1 rounded-xl hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 hover:font-semibold',
   modalTwo: 'bg-epaColor1 rounded-md hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out',
   modalThree: 'bg-red-700 rounded-md hover:border-red-600 hover:bg-red-200 hover:text-red-600 transform transition duration-300 ease-in-out',

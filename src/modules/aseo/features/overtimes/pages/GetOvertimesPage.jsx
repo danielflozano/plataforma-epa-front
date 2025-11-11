@@ -2,6 +2,7 @@ import { AlertModal, ConfirmModal, GlobalButton } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { OvertimesRecordsSection, TimesAndDatesRecorded } from '../components';
 import { useGetOvertimes } from '../hooks';
+import { ArchiveX, IdCardLanyard } from 'lucide-react';
 
 export const GetOvertimesPage = () => {
   const {
@@ -10,10 +11,11 @@ export const GetOvertimesPage = () => {
     currentPage,
     errors,
     filterValue,
-    loading, // TODO: Hacer algo con esto!
+    loading, // TODO: Hacer algo con esto!!!
     openAlertModal,
     openConfirmModal,
     overtimesFilter,
+    selectedName,
     showPagination,
     state,
     totalPages,
@@ -34,7 +36,7 @@ export const GetOvertimesPage = () => {
     register,
     setFilterValue,
   } = useGetOvertimes();
-  
+
   const { onClickBack } = useBackNavigation();
 
   return (
@@ -88,21 +90,29 @@ export const GetOvertimesPage = () => {
         <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">
           <form
             onSubmit={handleSubmit(onSubmitUpdate)}
-            className="flex flex-col gap-4 bg-white p-4 rounded-lg shadow-lg w-[1000px]"
+            className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[1000px]"
           >
-            <h3 className="text-epaColor1 text-2xl font-extrabold">
+            <h3 className="text-epaColor1 text-3xl text-center font-extrabold">
               Editar Horas Extra
             </h3>
+            <div className="flex">
+              <IdCardLanyard className="text-epaColor1 mr-1" />
+              <h4 className="text-epaColor1 font-semibold">{selectedName}</h4>
+            </div>
             <TimesAndDatesRecorded register={register} errors={errors} />
             <div className="flex justify-end gap-2">
               <GlobalButton
                 variant="modalFour"
                 onClick={CloseModals}
-                className="p-1.5"
+                className="p-1.5 w-30"
               >
                 Cancelar
               </GlobalButton>
-              <GlobalButton variant="modalTwo" className="p-1.5" type="submit">
+              <GlobalButton
+                variant="modalTwo"
+                className="p-1.5 w-30"
+                type="submit"
+              >
                 Guardar
               </GlobalButton>
             </div>
@@ -125,7 +135,6 @@ export const GetOvertimesPage = () => {
           variant="modalThree"
         />
       )}
-
     </>
   );
 };
