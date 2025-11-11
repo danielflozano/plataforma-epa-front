@@ -1,14 +1,10 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
   GlobalButton,
   GlobalInput,
   LoadSpinner,
+  AlertModal,
 } from '@/components';
-import { useCreateOvertimes } from '../hooks';
+import { useCreateOvertimes, useDeleteOvertime } from '../hooks';
 import { ExcelImportForm, RegisteredOvertimeTable } from '../components';
 import { useBackNavigation } from '@/hooks';
 
@@ -19,12 +15,12 @@ export const CreateOvertimesPage = () => {
     errorsExcel,
     errorsHoras,
     fileInputRef,
-    isError,
     loading,
     modalMessage,
     openModal,
     overtimeRegister,
     sheetNames,
+    state,
     workers,
     getExcelSheetNames,
     handleSubmitExcel,
@@ -36,9 +32,22 @@ export const CreateOvertimesPage = () => {
     registerHoras,
   } = useCreateOvertimes();
 
+  const {
+    message,
+    estado,
+    openResultModal,
+    showConfirmModal,
+    abrirConfirm,
+    cerrarConfirm,
+    onCloseAlertModal,
+    handleDelete,
+  } = useDeleteOvertime(onDeleteOvertimeRegister);
+
   return (
     <>
-      {loading && ( <LoadSpinner styles='fixed bg-gray-200/95' name='Importando Excel' /> )}
+      {loading && (
+        <LoadSpinner styles="fixed bg-gray-200/95" name="Importando Excel" />
+      )}
       <GlobalButton variant="back" className="p-1.5 w-30" onClick={onClickBack}>
         Regresar
       </GlobalButton>
@@ -181,27 +190,28 @@ export const CreateOvertimesPage = () => {
           sheetNamesProp={sheetNames}
           getExcelSheetNamesProp={getExcelSheetNames}
         />
-        <RegisteredOvertimeTable data={overtimeRegister} onDeleteSuccess={onDeleteOvertimeRegister} />
+        <RegisteredOvertimeTable
+          data={overtimeRegister}
+          showConfirmModal={showConfirmModal}
+          abrirConfirm={abrirConfirm}
+          cerrarConfirm={cerrarConfirm}
+          handleDelete={handleDelete}
+        />
       </div>
-      <Dialog open={openModal} onOpenChange={onCloseModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-epaColor1 text-3xl text-center font-bold mb-2">
-              {isError ? 'Error' : 'Registro Exitoso'}
-            </DialogTitle>
-            <DialogDescription className="text-xl text-center font-semibold mb-2">
-              {modalMessage}
-            </DialogDescription>
-          </DialogHeader>
-          <GlobalButton
-            onClick={onCloseModal}
-            variant="modal"
-            className="p-1.5 w-1/2 block mx-auto"
-          >
-            Cerrar
-          </GlobalButton>
-        </DialogContent>
-      </Dialog>
+      {/* AlertModal de crear registro */}
+      <AlertModal
+        openAlertModal={openModal}
+        closeAlertModal={onCloseModal}
+        modalTitle={state}
+        modalDescription={modalMessage}
+      />
+      {/* AlertModal de eliminar el registro creado */}
+      <AlertModal
+        openAlertModal={openResultModal}
+        closeAlertModal={onCloseAlertModal}
+        modalTitle={estado}
+        modalDescription={message}
+      />
     </>
   );
 };

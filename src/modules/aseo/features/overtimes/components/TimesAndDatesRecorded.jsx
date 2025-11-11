@@ -1,6 +1,6 @@
 import { GlobalInput } from "@/components";
 
-export const TimesAndDatesRecorded = ({ register, errors, reset }) => {
+export const TimesAndDatesRecorded = ({ register, errors }) => {
   return (
     <div className="grid grid-cols-2 gap-4">
       <div className="flex justify-between items-center">

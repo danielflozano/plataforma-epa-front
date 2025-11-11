@@ -14,8 +14,8 @@ export const contractsServices =  {
 
   getAllContracts: async () => {
     try {
-        const response = await apiClient.get('/contrato');
-        return response.data;
+        const response = await apiClient.get('/contrato/filtro');
+        return response;
     }catch (error) {
         throw new Error(handleAxiosError(error, 'Error listando contratos ❌'));
     }

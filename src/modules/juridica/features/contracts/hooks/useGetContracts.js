@@ -13,6 +13,7 @@ export const useGetContracts = () => {
     setLoading(true);
     try {
       const response = await contractsServices.getAllContracts();
+      console.log("📦 Contratos desde backend:", response);
       setContracts(response.data);
     } catch (error) {
       console.error(error);

@@ -5,7 +5,7 @@ import { overtimesService } from '../services';
 
 
 export const useCreateOvertimes = () => {
-  const [isError, setIsError] = useState(false);
+  const [state, setState] = useState()
   const [loading, setLoading] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [openModal, setOpenModal] = useState(false);
@@ -34,10 +34,10 @@ export const useCreateOvertimes = () => {
       const response = await overtimesService.createOvertimes(data);
       setOvertimeRegister(response.data);
       resetHoras();
-      setIsError(false);
+      setState('Registro Exitoso');
       setModalMessage(response.message);
     } catch (error) {
-      setIsError(true);
+      setState('Error');
       setModalMessage(error.message);      
     } finally {
       setOpenModal(true);
@@ -50,14 +50,14 @@ export const useCreateOvertimes = () => {
     const sheetName = data.sheetName;
 
     if(!file) {
-      setIsError(true);
+      setState('Error');
       setModalMessage('Seleccione un archivo de Excel');
       setOpenModal(true);
       return;
     }
 
     if(!sheetName) {
-      setIsError(true);
+      setState('Error');
       setModalMessage('Seleccione una hoja del archivo Excel');
       setOpenModal(true);
       return;
@@ -69,10 +69,10 @@ export const useCreateOvertimes = () => {
 
     try {
       const response = await overtimesService.importOvertimesFromExcel(formData)
-      setIsError(false);
+      setState('Registro Exitoso');
       setModalMessage(response.message || 'Archivo importado con exito');
     } catch (error) {
-      setIsError(true);
+      setState('Error');
       setModalMessage(error.message || 'Error al importar el archivo');      
     } finally {
       resetExcel({ sheetName: '' });
@@ -96,7 +96,8 @@ export const useCreateOvertimes = () => {
       const response = await overtimesService.getExcelSheetNames(formData);
       setSheetNames(response.sheetNames);
     } catch (error) {
-      setIsError(true);setModalMessage(error.message);
+      setState('Error');
+      setModalMessage(error.message);
       setOpenModal(true);
     }
   };
@@ -115,12 +116,12 @@ export const useCreateOvertimes = () => {
     errorsExcel,
     errorsHoras,
     fileInputRef,
-    isError,
     loading,
     modalMessage,
     openModal,
     overtimeRegister,
     sheetNames,
+    state,
     workers,
 
     // Methods

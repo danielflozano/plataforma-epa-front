@@ -12,9 +12,11 @@ export const useCreateContracts = () => {
 
   const [process, setProcess] = useState([]);
   const [contractType, setContractType] = useState([]);
-  const [isError, setIsError] = useState(false);
-  const [modal, setModal] = useState(false);
-  const [message, setMessage] = useState('');
+  const [modal, setModal] = useState({
+    open: false,
+    message: '',
+    state:''
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -46,15 +48,19 @@ export const useCreateContracts = () => {
     setLoading(true);
     try {
       await contractsServices.createContracts(createData);
-      setIsError(false);
-      setMessage('¡Contrato creado con Exito ✅');
+      setModal({
+        open: true,
+        message: '¡Contrato creado con Exito ✅!',
+        state: 'Registro Exitoso'
+      });
       reset();
-      setModal(false);
     } catch (error) {
-      setIsError(true);
-      setMessage('Error al crear el Contrato. ❌', error);
+      setModal({
+        open: true,
+        message: 'Error al crear el Contrato. ❌',
+        state: 'Error'
+      });
     } finally {
-      setModal(true);
       setLoading(false);
     }
   };
@@ -64,9 +70,7 @@ export const useCreateContracts = () => {
     contractType,
     errors,
     handleSubmit,
-    isError,
     loading,
-    message,
     modal,
     process,
     register,

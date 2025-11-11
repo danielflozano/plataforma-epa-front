@@ -1,24 +1,12 @@
-import { useRegisteredOvertimeTable } from "../hooks";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  GlobalButton,
-} from '@/components';
+import { GlobalButton, ConfirmModal } from '@/components';
 
-export const RegisteredOvertimeTable = ({ data, onDeleteSuccess }) => {
-  const {
-    message,
-    estado,
-    openResultModal,
-    showConfirmModal,
-    abrirConfirm,
-    cerrarConfirm,
-    onCloseModal,
-    handleDelete,
-  } = useRegisteredOvertimeTable({ onDeleteSuccess });
+export const RegisteredOvertimeTable = ({
+  data,
+  showConfirmModal,
+  abrirConfirm,
+  cerrarConfirm,
+  handleDelete,
+}) => {
   const renderRow = (label, value, isDate = false) => {
     if (!value) return null;
     return (
@@ -64,7 +52,9 @@ export const RegisteredOvertimeTable = ({ data, onDeleteSuccess }) => {
 
           <tr>
             <td className="px-4 py-2 font-semibold">Festivo Inicio</td>
-            <td className="px-4 py-2">{data.es_festivo_Inicio ? 'Sí' : 'No'}</td>
+            <td className="px-4 py-2">
+              {data.es_festivo_Inicio ? 'Sí' : 'No'}
+            </td>
           </tr>
           <tr>
             <td className="px-4 py-2 font-semibold">Festivo Fin</td>
@@ -80,12 +70,6 @@ export const RegisteredOvertimeTable = ({ data, onDeleteSuccess }) => {
               >
                 Eliminar
               </GlobalButton>
-              {/*<button
-                onClick={abrirConfirm}
-                className="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-800 transition block mx-auto"
-              >
-                Eliminar
-              </button>*/}
             </td>
           </tr>
         </tbody>
@@ -93,47 +77,15 @@ export const RegisteredOvertimeTable = ({ data, onDeleteSuccess }) => {
 
       {/* modal de confirmación personalizado */}
       {showConfirmModal && (
-        <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Confirmar eliminación</h3>
-            <p className="text-gray-600 mb-6">¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer.</p>
-            <div className="flex justify-end gap-4">
-              <GlobalButton
-                variant="modalFour"
-                onClick={cerrarConfirm}
-                className="p-1.5"
-              >
-                Cancelar
-              </GlobalButton>
-              <GlobalButton
-              variant="modalThree"
-              onClick={() => handleDelete(data._id)}
-              className="p-1.5"
-              >
-                Eliminar
-              </GlobalButton>
-            </div>
-          </div>
-        </div>
+        <ConfirmModal
+          title="Confirmar Eliminación"
+          content="¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer."
+          onClickCancel={cerrarConfirm}
+          onClickConfirm={() => handleDelete(data._id)}
+          buttonConfirmContent="Eliminar"
+          variant="modalThree"
+        />
       )}
-
-      {/* Dialog de resultado (éxito/error) */}
-      <Dialog open={openResultModal} onOpenChange={onCloseModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className={`text-4xl text-center font-semibold mb-2 ${estado === "Error" ? "text-red-500" : "text-epaColor1"}`}>
-              {estado}
-            </DialogTitle>
-            <DialogDescription className={'text-xl text-center font-semibold mb-2'}>{message}</DialogDescription>
-          </DialogHeader>
-          <button
-            onClick={onCloseModal}
-            className="bg-epaColor1 w-1/2 text-white rounded-xl p-1.5 border border-transparent mx-auto block hover:border-black hover:bg-blue-100 hover:text-epaColor1 hover:font-semibold"
-          >
-            Cerrar
-          </button>
-        </DialogContent>
-      </Dialog>
     </>
   );
 };

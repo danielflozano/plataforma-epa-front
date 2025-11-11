@@ -1,4 +1,5 @@
 import {
+  AlertModal,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -11,6 +12,7 @@ import {
 import { useBackNavigation } from '@/hooks';
 import { useCreateContracts } from '../hooks';
 import { useJuridica } from '@/modules/juridica/context';
+import { FilePlus } from 'lucide-react';
 
 export const CreateContractsPage = () => {
   const {
@@ -27,7 +29,7 @@ export const CreateContractsPage = () => {
 
     // Methods
     onSubmit,
-    closeModal
+    closeModal,
   } = useCreateContracts();
 
   const { lawyers } = useJuridica();
@@ -36,10 +38,21 @@ export const CreateContractsPage = () => {
 
   return (
     <>
-      
       <GlobalButton className="p-1.5 w-30" variant="back" onClick={onClickBack}>
         Regresar
       </GlobalButton>
+
+      <div className='flex mt-5'>
+        <GlobalButton
+        variant='secondary'
+          className="flex w-70 ml-3 items-center gap-3 px-5 py-3"
+          // onClick={openModal}
+        >
+          <FilePlus />
+          Crear Tipo de Contrato
+        </GlobalButton>
+      </div>
+
       <div className="flex flex-col gap-4 items-center">
         <h2 className="font-extrabold text-4xl text-epaColor1">
           Crear Contrato
@@ -147,47 +160,47 @@ export const CreateContractsPage = () => {
           />
 
           <GlobalInput
-            type='text'
-            label='Nombre del Contratista'
-            data='NombreContratista'
+            type="text"
+            label="Nombre del Contratista"
+            data="NombreContratista"
             register={register}
             errors={errors}
             rules={{
-              required:'Este campo es obligatorio'
+              required: 'Este campo es obligatorio',
             }}
           />
 
           <GlobalInput
-            type='text'
-            label='Valor del Contrato'
-            data='ValorContrato'
+            type="text"
+            label="Valor del Contrato"
+            data="ValorContrato"
             register={register}
             errors={errors}
             rules={{
-              required:'Este campo es obligatorio'
+              required: 'Este campo es obligatorio',
             }}
           />
 
-          <div className='flex justify-around'>
+          <div className="flex justify-around">
             <GlobalInput
-              type='date'
-              label='Fecha de Inicio'
-              data='FechaInicio'
+              type="date"
+              label="Fecha de Inicio"
+              data="FechaInicio"
               register={register}
               errors={errors}
               rules={{
-                required:'Este campo es obligatorio'
+                required: 'Este campo es obligatorio',
               }}
             />
 
             <GlobalInput
-              type='date'
-              label='Fecha de Finalizacion'
-              data='FechaFinalizacion'
+              type="date"
+              label="Fecha de Finalizacion"
+              data="FechaFinalizacion"
               register={register}
               errors={errors}
               rules={{
-                required:'Este campo es obligatorio'
+                required: 'Este campo es obligatorio',
               }}
             />
           </div>
@@ -195,11 +208,17 @@ export const CreateContractsPage = () => {
           <GlobalButton type="submit" className="p-1.5 w-1/2 block mx-auto">
             Registrar
           </GlobalButton>
-
         </form>
 
         {/* Modal */}
-        <Dialog open={modal} onOpenChange={closeModal}>
+        <AlertModal
+          openAlertModal={modal}
+          closeAlertModal={closeModal}
+          modalTitle={isError}
+          modalDescription={message}
+
+        />
+        {/* <Dialog open={modal} onOpenChange={closeModal}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="text-epaColor1 text-3xl text-center font-bold mb-2">
@@ -217,10 +236,10 @@ export const CreateContractsPage = () => {
               Cerrar
             </GlobalButton>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
       {loading && (
-        <LoadSpinner name='Creando Contrato' styles="fixed bg-gray-200/95"/>
+        <LoadSpinner name="Creando Contrato" styles="fixed bg-gray-200/95" />
       )}
     </>
   );
