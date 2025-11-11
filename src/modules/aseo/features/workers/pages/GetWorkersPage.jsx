@@ -1,5 +1,9 @@
+import { GlobalButton } from "@/components";
+
 export const GetWorkersPage = () => {
   return (
-    <div>GetWorkersPage</div>
+    <>
+      <GlobalButton></GlobalButton>
+    </>
   )
 };

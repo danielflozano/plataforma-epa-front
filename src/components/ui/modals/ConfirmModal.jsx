@@ -1,5 +1,6 @@
-import { GlobalButton } from ".";
+
 import { AnimatePresence, motion } from "framer-motion";
+import { GlobalButton } from "../buttons";
 
 export const ConfirmModal = ({
   title,

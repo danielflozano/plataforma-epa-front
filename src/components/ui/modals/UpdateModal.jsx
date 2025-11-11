@@ -1,5 +1,5 @@
-import { GlobalButton } from '.';
 import { AnimatePresence, motion } from 'framer-motion';
+import { GlobalButton } from '../buttons';
 
 export const UpdateModal = ({
   children,
@@ -8,6 +8,7 @@ export const UpdateModal = ({
   onSubmit,
   closeModal,
   isOpen,
+  formClassName = 'flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[800px]',
 }) => {
   return (
     <AnimatePresence>
@@ -30,17 +31,25 @@ export const UpdateModal = ({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[800px]"
+            className={formClassName}
           >
             <h3 className="text-epaColor1 text-3xl text-center font-extrabold">
               {title}
             </h3>
             {children}
             <div className="flex justify-end gap-4">
-              <GlobalButton variant="modalFour" onClick={closeModal} className="p-1.5 w-30">
+              <GlobalButton
+                variant="modalFour"
+                onClick={closeModal}
+                className="p-1.5 w-30"
+              >
                 Cancelar
               </GlobalButton>
-              <GlobalButton variant="modalTwo" type="submit" className="p-1.5 w-30">
+              <GlobalButton
+                variant="modalTwo"
+                type="submit"
+                className="p-1.5 w-30"
+              >
                 Guardar
               </GlobalButton>
             </div>

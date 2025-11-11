@@ -119,6 +119,7 @@ export const CreateWorkersPage = () => {
         handleSubmit={handleSubmitJobPosition}
         onSubmit={onSubmitJobPosition}
         closeModal={closeUpdateModal}
+        formClassName='flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]'
       >
         <GlobalInput
           label="Cargo"

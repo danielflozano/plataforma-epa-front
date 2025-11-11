@@ -66,7 +66,7 @@ export const useCreateWorkers = () => {
       const response = await workersService.createJobPosition(data);
       setAlertModal({
         open: true,
-        message: response.message,
+        message: 'El cargo ha sido creado exitosamente',
         status: 'Cargo Creado con Exito',
       });
       getJobPositions();
@@ -87,6 +87,7 @@ export const useCreateWorkers = () => {
       message: '',
       status: '',
     });
+    setUpdateModal(false);
   };
 
   const openUpdateModal = () => {
@@ -104,8 +105,7 @@ export const useCreateWorkers = () => {
     jobPositionErrors,
     alertModal,
     tipoOperario,
-    updateModal,
-    
+    updateModal,    
 
     // Methods
     closeModal,
