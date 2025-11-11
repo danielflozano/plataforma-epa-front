@@ -1,5 +1,10 @@
 import { FilePlus } from 'lucide-react';
-import { AlertModal, GlobalButton, GlobalInput } from '@/components';
+import {
+  AlertModal,
+  GlobalButton,
+  GlobalInput,
+  UpdateModal,
+} from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { useCreateWorkers } from '../hooks';
 
@@ -9,14 +14,21 @@ export const CreateWorkersPage = () => {
     // Properties
     errors,
     jobPositions,
-    modal,
+    jobPositionErrors,
+    alertModal,
     tipoOperario,
+    updateModal,
 
     // Methods
     closeModal,
+    closeUpdateModal,
     handleSubmit,
+    handleSubmitJobPosition,
     onSubmit,
+    onSubmitJobPosition,
+    openUpdateModal,
     register,
+    registerJobPosition,
   } = useCreateWorkers();
 
   return (
@@ -28,10 +40,14 @@ export const CreateWorkersPage = () => {
       >
         Regresar
       </GlobalButton>
-        <GlobalButton variant="third" className="flex p-1.5 w-65">
-          <FilePlus className="w-1/3"/>
-          Crear Cargo    
-        </GlobalButton>
+      <GlobalButton
+        variant="third"
+        className="flex p-1.5 w-65"
+        onClick={openUpdateModal}
+      >
+        <FilePlus className="w-1/3" />
+        Crear Cargo
+      </GlobalButton>
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-epaColor1 text-4xl font-extrabold">
           Registrar Funcionario
@@ -97,11 +113,28 @@ export const CreateWorkersPage = () => {
           </GlobalButton>
         </form>
       </div>
+      <UpdateModal
+        isOpen={updateModal}
+        title="Crear Nuevo Cargo"
+        handleSubmit={handleSubmitJobPosition}
+        onSubmit={onSubmitJobPosition}
+        closeModal={closeUpdateModal}
+      >
+        <GlobalInput
+          label="Cargo"
+          data="name"
+          register={registerJobPosition}
+          errors={jobPositionErrors}
+          rules={{
+            required: 'Campo Obligatorio',
+          }}
+        />
+      </UpdateModal>
       <AlertModal
-        openAlertModal={modal.open}
+        openAlertModal={alertModal.open}
         closeAlertModal={closeModal}
-        modalTitle={modal.status}
-        modalDescription={modal.message}
+        modalTitle={alertModal.status}
+        modalDescription={alertModal.message}
       />
     </>
   );

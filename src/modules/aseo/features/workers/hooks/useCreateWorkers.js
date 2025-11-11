@@ -6,18 +6,26 @@ import { useAseo } from '@/modules/aseo/context';
 const tipoOperario = ['Planta', 'Temporal'];
 export const useCreateWorkers = () => {
   const { getAllWorkers } = useAseo();
-  const [modal, setModal] = useState({
+  const [jobPositions, setJobPositions] = useState([]);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
     status: '',
   });
-  const [jobPositions, setJobPositions] = useState([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+  } = useForm();
+
+  const {
+    register: registerJobPosition,
+    handleSubmit: handleSubmitJobPosition,
+    reset: resetJobPosition,
+    formState: {errors: jobPositionErrors},
   } = useForm();
 
   useEffect(() => {
@@ -36,7 +44,7 @@ export const useCreateWorkers = () => {
   const onSubmit = async (data) => {
     try {
       const response = await workersService.createWorker(data);
-      setModal({
+      setAlertModal({
         open: true,
         message: response.message,
         status: response.success ? 'Funcionario Registrado' : 'Error',
@@ -45,7 +53,7 @@ export const useCreateWorkers = () => {
       reset();
     } catch (error) {
       console.error(error)
-      setModal({
+      setAlertModal({
         open: true,
         message: error.message,
         status: 'Error',
@@ -53,27 +61,61 @@ export const useCreateWorkers = () => {
     }
   };
 
+  const onSubmitJobPosition = async (data) => {
+    try {
+      const response = await workersService.createJobPosition(data);
+      setAlertModal({
+        open: true,
+        message: response.message,
+        status: 'Cargo Creado con Exito',
+      });
+      getJobPositions();
+      resetJobPosition();
+    } catch (error) {
+      console.error(error);
+      setAlertModal({
+        open: true,
+        message: error.message,
+        status: 'Error',
+      })
+    }
+  }
+
   const closeModal = () => {
-    setModal({
+    setAlertModal({
       open: false,
       message: '',
       status: '',
     });
   };
 
-  console.log(modal);
+  const openUpdateModal = () => {
+    setUpdateModal(true);
+  }
+
+  const closeUpdateModal = () => {
+    setUpdateModal(false);
+  }
 
   return {
     // Properties
     errors,
     jobPositions,
-    modal,
+    jobPositionErrors,
+    alertModal,
     tipoOperario,
+    updateModal,
+    
 
     // Methods
     closeModal,
+    closeUpdateModal,
     handleSubmit,
+    handleSubmitJobPosition,
     onSubmit,
+    onSubmitJobPosition,
+    openUpdateModal,
     register,
+    registerJobPosition,
   };
 };
