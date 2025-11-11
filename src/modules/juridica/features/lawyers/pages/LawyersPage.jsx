@@ -41,7 +41,8 @@ export const LawyersPage = () => {
           Abogados
         </h2>
         <GlobalButton
-          className="flex w-50 ml-3 items-center gap-3 px-5 py-3"
+          variant='third'
+          className="flex w-50 ml-3 items-center gap-3 px-5 py-1.5"
           onClick={openModal}
         >
           <FilePlus />

@@ -15,7 +15,7 @@ export const useCreateContracts = () => {
   const [modal, setModal] = useState({
     open: false,
     message: '',
-    state:''
+    state: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,8 +23,6 @@ export const useCreateContracts = () => {
     getAllProcess();
     getAllContractType();
   }, []);
-
-  const closeModal = () => setModal(false);
 
   const getAllProcess = async () => {
     try {
@@ -38,11 +36,11 @@ export const useCreateContracts = () => {
   const getAllContractType = async () => {
     try {
       const response = await contractTypeServices.getAllContractType();
-      setContractType(response.data)
+      setContractType(response.data);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const onSubmit = async (createData) => {
     setLoading(true);
@@ -51,18 +49,27 @@ export const useCreateContracts = () => {
       setModal({
         open: true,
         message: '¡Contrato creado con Exito ✅!',
-        state: 'Registro Exitoso'
+        state: 'Registro Exitoso',
       });
       reset();
     } catch (error) {
+      console.log(error);
       setModal({
         open: true,
-        message: 'Error al crear el Contrato. ❌',
-        state: 'Error'
+        message: error.message,
+        state: 'Error',
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeModal = () => {
+    setModal({
+      open: false,
+      message: '',
+      state: '',
+    });
   };
 
   return {
@@ -77,6 +84,6 @@ export const useCreateContracts = () => {
 
     // Methods
     onSubmit,
-    closeModal
+    closeModal,
   };
 };

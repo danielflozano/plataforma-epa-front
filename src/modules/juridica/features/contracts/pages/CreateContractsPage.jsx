@@ -20,9 +20,7 @@ export const CreateContractsPage = () => {
     contractType,
     errors,
     handleSubmit,
-    isError,
     loading,
-    message,
     modal,
     process,
     register,
@@ -44,8 +42,8 @@ export const CreateContractsPage = () => {
 
       <div className='flex mt-5'>
         <GlobalButton
-        variant='secondary'
-          className="flex w-70 ml-3 items-center gap-3 px-5 py-3"
+        variant='third'
+          className="flex items-center gap-3 px-5 py-1.5"
           // onClick={openModal}
         >
           <FilePlus />
@@ -149,9 +147,11 @@ export const CreateContractsPage = () => {
           />
 
           <GlobalInput
-            type="textArea"
+            as='textarea'
+            type="text"
             label="Objeto"
             data="objeto"
+            classNameComponent='border border-gray-500 rounded-md p-1 resize-none h-25'
             register={register}
             errors={errors}
             rules={{
@@ -212,10 +212,10 @@ export const CreateContractsPage = () => {
 
         {/* Modal */}
         <AlertModal
-          openAlertModal={modal}
+          openAlertModal={modal.open}
           closeAlertModal={closeModal}
-          modalTitle={isError}
-          modalDescription={message}
+          modalTitle={modal.state}
+          modalDescription={modal.message}
 
         />
         {/* <Dialog open={modal} onOpenChange={closeModal}>
