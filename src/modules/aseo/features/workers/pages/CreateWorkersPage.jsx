@@ -23,17 +23,15 @@ export const CreateWorkersPage = () => {
     <>
       <GlobalButton
         variant="back"
-        className="p-1.5 w-30 mb-2"
+        className="p-1.5 w-30 mb-3"
         onClick={onClickBack}
       >
         Regresar
       </GlobalButton>
-      <div className='flex justify-end'>
-        <GlobalButton variant="third" className="flex p-1.5 w-50">
-          <FilePlus className="mr-7" />
-          Crear Cargo
+        <GlobalButton variant="third" className="flex p-1.5 w-65">
+          <FilePlus className="w-1/3"/>
+          Crear Cargo    
         </GlobalButton>
-      </div>
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-epaColor1 text-4xl font-extrabold">
           Registrar Funcionario

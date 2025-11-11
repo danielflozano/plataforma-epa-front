@@ -135,7 +135,7 @@ export const useGetOvertimes = () => {
     setOpenConfirmModal(true);
   };
 
-  const CloseModals = () => {
+  const closeModals = () => {
     setSelectedId('');
     setSelectedName('');
     setAlertModalMessage('');
@@ -146,7 +146,7 @@ export const useGetOvertimes = () => {
 
   const closeAlertModal = () => {
     if (success) {
-      CloseModals();
+      closeModals();
     }
 
     setOpenAlertModal(false);
@@ -171,7 +171,7 @@ export const useGetOvertimes = () => {
 
     // Methods
     closeAlertModal,
-    CloseModals,
+    closeModals,
     handleDelete,
     handleKeyDown,
     handlePageChange,

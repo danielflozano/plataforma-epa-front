@@ -1,8 +1,8 @@
-import { AlertModal, ConfirmModal, GlobalButton } from '@/components';
+import { AlertModal, ConfirmModal, GlobalButton, UpdateModal } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { OvertimesRecordsSection, TimesAndDatesRecorded } from '../components';
 import { useGetOvertimes } from '../hooks';
-import { ArchiveX, IdCardLanyard } from 'lucide-react';
+import { IdCardLanyard } from 'lucide-react';
 
 export const GetOvertimesPage = () => {
   const {
@@ -24,7 +24,7 @@ export const GetOvertimesPage = () => {
 
     // Methods
     closeAlertModal,
-    CloseModals,
+    closeModals,
     handleDelete,
     handleKeyDown,
     handlePageChange,
@@ -87,37 +87,49 @@ export const GetOvertimesPage = () => {
         </div>
       </div>
       {updateModal && (
-        <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">
-          <form
-            onSubmit={handleSubmit(onSubmitUpdate)}
-            className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[1000px]"
-          >
-            <h3 className="text-epaColor1 text-3xl text-center font-extrabold">
-              Editar Horas Extra
-            </h3>
-            <div className="flex">
-              <IdCardLanyard className="text-epaColor1 mr-1" />
-              <h4 className="text-epaColor1 font-semibold">{selectedName}</h4>
-            </div>
-            <TimesAndDatesRecorded register={register} errors={errors} />
-            <div className="flex justify-end gap-2">
-              <GlobalButton
-                variant="modalFour"
-                onClick={CloseModals}
-                className="p-1.5 w-30"
-              >
-                Cancelar
-              </GlobalButton>
-              <GlobalButton
-                variant="modalTwo"
-                className="p-1.5 w-30"
-                type="submit"
-              >
-                Guardar
-              </GlobalButton>
-            </div>
-          </form>
-        </div>
+        <UpdateModal
+          title='Editar Horas Extra'
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmitUpdate}
+          closeModal={closeModals}
+        >
+          <div className="flex">
+            <IdCardLanyard className="text-epaColor1 mr-1" />
+            <h4 className="text-epaColor1 font-semibold">{selectedName}</h4>
+          </div>
+          <TimesAndDatesRecorded register={register} errors={errors} />
+        </UpdateModal>
+        // <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">
+        //   <form
+        //     onSubmit={handleSubmit(onSubmitUpdate)}
+        //     className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[1000px]"
+        //   >
+        //     <h3 className="text-epaColor1 text-3xl text-center font-extrabold">
+        //       Editar Horas Extra
+        //     </h3>
+        //     <div className="flex">
+        //       <IdCardLanyard className="text-epaColor1 mr-1" />
+        //       <h4 className="text-epaColor1 font-semibold">{selectedName}</h4>
+        //     </div>
+        //     <TimesAndDatesRecorded register={register} errors={errors} />
+        //     <div className="flex justify-end gap-2">
+        //       <GlobalButton
+        //         variant="modalFour"
+        //         onClick={closeModals}
+        //         className="p-1.5 w-30"
+        //       >
+        //         Cancelar
+        //       </GlobalButton>
+        //       <GlobalButton
+        //         variant="modalTwo"
+        //         className="p-1.5 w-30"
+        //         type="submit"
+        //       >
+        //         Guardar
+        //       </GlobalButton>
+        //     </div>
+        //   </form>
+        // </div>
       )}
       <AlertModal
         openAlertModal={openAlertModal}
@@ -129,7 +141,7 @@ export const GetOvertimesPage = () => {
         <ConfirmModal
           title="Confirmar Eliminación"
           content="¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer."
-          onClickCancel={CloseModals}
+          onClickCancel={closeModals}
           onClickConfirm={() => handleDelete()}
           buttonConfirmContent="Eliminar"
           variant="modalThree"
