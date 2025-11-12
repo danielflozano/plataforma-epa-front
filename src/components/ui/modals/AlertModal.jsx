@@ -4,7 +4,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '.';
+} from './dialog';
 
 export const AlertModal = ({
   openAlertModal,

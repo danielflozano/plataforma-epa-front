@@ -1,5 +1,10 @@
 import { FilePlus } from 'lucide-react';
-import { AlertModal, GlobalButton, GlobalInput } from '@/components';
+import {
+  AlertModal,
+  GlobalButton,
+  GlobalInput,
+  UpdateModal,
+} from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { useCreateWorkers } from '../hooks';
 
@@ -9,31 +14,40 @@ export const CreateWorkersPage = () => {
     // Properties
     errors,
     jobPositions,
-    modal,
+    jobPositionErrors,
+    alertModal,
     tipoOperario,
+    updateModal,
 
     // Methods
     closeModal,
+    closeUpdateModal,
     handleSubmit,
+    handleSubmitJobPosition,
     onSubmit,
+    onSubmitJobPosition,
+    openUpdateModal,
     register,
+    registerJobPosition,
   } = useCreateWorkers();
 
   return (
     <>
       <GlobalButton
         variant="back"
-        className="p-1.5 w-30 mb-2"
+        className="p-1.5 w-30 mb-3"
         onClick={onClickBack}
       >
         Regresar
       </GlobalButton>
-      <div className='flex justify-end'>
-        <GlobalButton variant="third" className="flex p-1.5 w-50">
-          <FilePlus className="mr-7" />
-          Crear Cargo
-        </GlobalButton>
-      </div>
+      <GlobalButton
+        variant="third"
+        className="flex p-1.5 w-65"
+        onClick={openUpdateModal}
+      >
+        <FilePlus className="w-1/3" />
+        Crear Cargo
+      </GlobalButton>
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-epaColor1 text-4xl font-extrabold">
           Registrar Funcionario
@@ -99,11 +113,29 @@ export const CreateWorkersPage = () => {
           </GlobalButton>
         </form>
       </div>
+      <UpdateModal
+        isOpen={updateModal}
+        title="Crear Nuevo Cargo"
+        handleSubmit={handleSubmitJobPosition}
+        onSubmit={onSubmitJobPosition}
+        closeModal={closeUpdateModal}
+        formClassName='flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]'
+      >
+        <GlobalInput
+          label="Cargo"
+          data="name"
+          register={registerJobPosition}
+          errors={jobPositionErrors}
+          rules={{
+            required: 'Campo Obligatorio',
+          }}
+        />
+      </UpdateModal>
       <AlertModal
-        openAlertModal={modal.open}
+        openAlertModal={alertModal.open}
         closeAlertModal={closeModal}
-        modalTitle={modal.status}
-        modalDescription={modal.message}
+        modalTitle={alertModal.status}
+        modalDescription={alertModal.message}
       />
     </>
   );

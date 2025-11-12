@@ -76,16 +76,15 @@ export const RegisteredOvertimeTable = ({
       </table>
 
       {/* modal de confirmación personalizado */}
-      {showConfirmModal && (
-        <ConfirmModal
-          title="Confirmar Eliminación"
-          content="¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer."
-          onClickCancel={cerrarConfirm}
-          onClickConfirm={() => handleDelete(data._id)}
-          buttonConfirmContent="Eliminar"
-          variant="modalThree"
-        />
-      )}
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        title="Confirmar Eliminación"
+        content="¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer."
+        onClickCancel={cerrarConfirm}
+        onClickConfirm={() => handleDelete(data._id)}
+        buttonConfirmContent="Eliminar"
+        variant="modalThree"
+      />
     </>
   );
 };

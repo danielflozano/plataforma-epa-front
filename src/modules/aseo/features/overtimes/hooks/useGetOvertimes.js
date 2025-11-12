@@ -75,24 +75,28 @@ export const useGetOvertimes = () => {
     }
   };
 
-  const handleSearch = async () => {
-    if (!filterValue.trim()) {
-      getAllOvertimes(currentPage);
-      setOvertimesFilter(overtimes);
-      setShowPagination(true);
-      return;
-    }
+  const handleSearch = () => {
+    setTimeout(async () => {
+      if (!filterValue.trim()) {
+        getAllOvertimes(currentPage);
+        setOvertimesFilter(overtimes);
+        setShowPagination(true);
+        return;
+      }
+  
+      try {
+        const response = await overtimesService.getOvertimesByWorker(filterValue);
+        setOvertimesFilter(response.data);
+        setShowPagination(false);
+        console.log('Si funcionó handleSearch');
+      } catch (error) {
+        console.error(error);
+        setOvertimesFilter([]);
+        setShowPagination(false);
+      }
+      
+    }, 600);
 
-    try {
-      const response = await overtimesService.getOvertimesByWorker(filterValue);
-      setOvertimesFilter(response.data);
-      setShowPagination(false);
-      console.log('Si funcionó handleSearch');
-    } catch (error) {
-      console.error(error);
-      setOvertimesFilter([]);
-      setShowPagination(false);
-    }
   };
 
   const handleKeyDown = (e) => {
@@ -135,7 +139,7 @@ export const useGetOvertimes = () => {
     setOpenConfirmModal(true);
   };
 
-  const CloseModals = () => {
+  const closeModals = () => {
     setSelectedId('');
     setSelectedName('');
     setAlertModalMessage('');
@@ -146,7 +150,7 @@ export const useGetOvertimes = () => {
 
   const closeAlertModal = () => {
     if (success) {
-      CloseModals();
+      closeModals();
     }
 
     setOpenAlertModal(false);
@@ -171,7 +175,7 @@ export const useGetOvertimes = () => {
 
     // Methods
     closeAlertModal,
-    CloseModals,
+    closeModals,
     handleDelete,
     handleKeyDown,
     handlePageChange,
