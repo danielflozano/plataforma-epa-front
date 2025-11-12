@@ -12,12 +12,16 @@ export const useCreateContracts = () => {
 
   const [process, setProcess] = useState([]);
   const [contractType, setContractType] = useState([]);
-  const [modal, setModal] = useState({
+  const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
     state: '',
   });
+  const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const openModal = () => setModal(true);
+  const closeModal = () => setModal(false);
 
   useEffect(() => {
     getAllProcess();
@@ -46,15 +50,16 @@ export const useCreateContracts = () => {
     setLoading(true);
     try {
       await contractsServices.createContracts(createData);
-      setModal({
+      setAlertModal({
         open: true,
         message: '¡Contrato creado con Exito ✅!',
         state: 'Registro Exitoso',
       });
       reset();
+      setModal(false);
     } catch (error) {
       console.log(error);
-      setModal({
+      setAlertModal({
         open: true,
         message: error.message,
         state: 'Error',
@@ -64,16 +69,18 @@ export const useCreateContracts = () => {
     }
   };
 
-  const closeModal = () => {
+  const closeAlertModal = () => {
     setModal({
       open: false,
       message: '',
       state: '',
     });
+    closeModal()
   };
 
   return {
     // Properties
+    alertModal,
     contractType,
     errors,
     handleSubmit,
@@ -85,5 +92,7 @@ export const useCreateContracts = () => {
     // Methods
     onSubmit,
     closeModal,
+    closeAlertModal,
+    openModal,
   };
 };

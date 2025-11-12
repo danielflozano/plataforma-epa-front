@@ -6,21 +6,19 @@ import {
   DialogDescription,
   GlobalButton,
   GlobalInput,
+  AlertModal,
 } from '@/components';
 import { FilePlus, Pencil } from 'lucide-react';
 import { useLawyer } from '../hooks';
 import { useJuridica } from '@/modules/juridica/context/JuridicaContext';
 
 export const LawyersPage = () => {
-  
   const { lawyers } = useJuridica();
 
   const {
     // Properties
     alertModal,
     errors,
-    isError,
-    message,
     modal,
 
     // Methods
@@ -32,16 +30,14 @@ export const LawyersPage = () => {
     register,
   } = useLawyer();
 
-
   return (
     <>
-      
       <div className="flex flex-col gap-4">
         <h2 className="text-4xl text-center font-extrabold text-epaColor1">
           Abogados
         </h2>
         <GlobalButton
-          variant='third'
+          variant="third"
           className="flex w-50 ml-3 items-center gap-3 px-5 py-1.5"
           onClick={openModal}
         >
@@ -58,12 +54,15 @@ export const LawyersPage = () => {
                 <th className="text-center">Acciones</th>
               </tr>
             </thead>
-            <tbody className='divide-y divide-gray-200'>
+            <tbody className="divide-y divide-gray-200">
               {lawyers.map((lawyer) => (
-                <tr key = {lawyer._id} className='hover:bg-gray-100 transition-colors'>
-                  <td className='pl-2'>{lawyer.identificacion}</td>
-                  <td className='pl-2'>{lawyer.nombreAbogado}</td>
-                  <td className='pl-2'>{lawyer.EstadoAbogado}</td>
+                <tr
+                  key={lawyer._id}
+                  className="hover:bg-gray-100 transition-colors"
+                >
+                  <td className="pl-2">{lawyer.identificacion}</td>
+                  <td className="pl-2">{lawyer.nombreAbogado}</td>
+                  <td className="pl-2">{lawyer.EstadoAbogado}</td>
                   <td className="py-1 flex justify-center">
                     <button
                       title="Editar"
@@ -142,25 +141,12 @@ export const LawyersPage = () => {
       )}
 
       {/* Alert Modal */}
-      <Dialog open={alertModal} onOpenChange={closeAlertModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-epaColor1 text-3xl text-center font-bold mb-2">
-              {isError ? 'Error' : 'Registro Exitoso'}
-            </DialogTitle>
-            <DialogDescription className="text-xl text-center font-semibold mb-2">
-              {message}
-            </DialogDescription>
-          </DialogHeader>
-          <GlobalButton
-            onClick={closeAlertModal}
-            variant="modal"
-            className="p-1.5 w-1/2 block mx-auto"
-          >
-            Cerrar
-          </GlobalButton>
-        </DialogContent>
-      </Dialog>
+      <AlertModal
+        openAlertModal={alertModal.open}
+        closeAlertModal={closeAlertModal}
+        modalTitle={alertModal.state}
+        modalDescription={alertModal.message}
+      />
     </>
   );
 };

@@ -17,6 +17,7 @@ import { FilePlus } from 'lucide-react';
 export const CreateContractsPage = () => {
   const {
     // Properties
+    alertModal,
     contractType,
     errors,
     handleSubmit,
@@ -28,6 +29,8 @@ export const CreateContractsPage = () => {
     // Methods
     onSubmit,
     closeModal,
+    closeAlertModal,
+    openModal,
   } = useCreateContracts();
 
   const { lawyers } = useJuridica();
@@ -39,18 +42,16 @@ export const CreateContractsPage = () => {
       <GlobalButton className="p-1.5 w-30" variant="back" onClick={onClickBack}>
         Regresar
       </GlobalButton>
-
-      <div className='flex mt-5'>
+      <div className="flex mt-5">
         <GlobalButton
-        variant='third'
+          variant="third"
           className="flex items-center gap-3 px-5 py-1.5"
-          // onClick={openModal}
+          onClick={openModal}
         >
           <FilePlus />
           Crear Tipo de Contrato
         </GlobalButton>
       </div>
-
       <div className="flex flex-col gap-4 items-center">
         <h2 className="font-extrabold text-4xl text-epaColor1">
           Crear Contrato
@@ -147,11 +148,11 @@ export const CreateContractsPage = () => {
           />
 
           <GlobalInput
-            as='textarea'
+            as="textarea"
             type="text"
             label="Objeto"
             data="objeto"
-            classNameComponent='border border-gray-500 rounded-md p-1 resize-none h-25'
+            classNameComponent="border border-gray-500 rounded-md p-1 resize-none h-25"
             register={register}
             errors={errors}
             rules={{
@@ -209,35 +210,55 @@ export const CreateContractsPage = () => {
             Registrar
           </GlobalButton>
         </form>
-
-        {/* Modal */}
-        <AlertModal
-          openAlertModal={modal.open}
-          closeAlertModal={closeModal}
-          modalTitle={modal.state}
-          modalDescription={modal.message}
-
-        />
-        {/* <Dialog open={modal} onOpenChange={closeModal}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="text-epaColor1 text-3xl text-center font-bold mb-2">
-                {isError ? 'Error' : 'Registro Exitoso'}
-              </DialogTitle>
-              <DialogDescription className="text-xl text-center font-semibold mb-2">
-                {message}
-              </DialogDescription>
-            </DialogHeader>
-            <GlobalButton
-              onClick={closeModal}
-              variant="modal"
-              className="p-1.5 w-1/2 block mx-auto"
-            >
-              Cerrar
-            </GlobalButton>
-          </DialogContent>
-        </Dialog> */}
       </div>
+      {/* Modal */}
+      (modal && (
+      <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center">
+        <div className="flex flex-col gap-4 w-[500px] p-6 bg-white rounded-2xl">
+          <h2 className="text-epaColor1 text-4xl font-extrabold items-center">
+            Crear Tipo de Contrato
+          </h2>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <GlobalInput
+              label="Nombre del Tipo de Contrato"
+              data="tipoContrato"
+              register={register}
+              errors={errors}
+              rules={{
+                required: 'El nombre del tipo de contrato es obligatorio',
+              }}
+            />
+
+            <div className="flex gap-2 justify-end ">
+              <GlobalButton
+                variant="modalFour"
+                className="p-1.5 w-25"
+                onClick={closeModal}
+              >
+                Cancelar
+              </GlobalButton>
+              <GlobalButton
+                type="submit"
+                variant="modalTwo"
+                className="p-1.5 w-25"
+              >
+                Guardar
+              </GlobalButton>
+            </div>
+          </form>
+        </div>
+      </div>
+      ))
+      {/* AlertModal */}
+      <AlertModal
+        openAlertModal={alertModal.open}
+        closeAlertModal={closeAlertModal}
+        modalTitle={alertModal.state}
+        modalDescription={alertModal.message}
+      />
       {loading && (
         <LoadSpinner name="Creando Contrato" styles="fixed bg-gray-200/95" />
       )}

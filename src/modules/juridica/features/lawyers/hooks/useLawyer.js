@@ -30,7 +30,7 @@ export const useLawyer = () => {
         open: true,
         message: '¡Abogado creado con Éxito! ✅',
         state: 'Registro Exitoso',
-      })      
+      })   
       reset();
       setModal(false);
     } catch (error) {

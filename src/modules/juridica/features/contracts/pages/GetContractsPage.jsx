@@ -1,6 +1,6 @@
 import { GlobalButton, LoadSpinner } from '@/components';
 import { useBackNavigation } from '@/hooks';
-import { EyeClosed, Eye, Pencil, Trash2 } from 'lucide-react';
+import { EyeClosed, Eye, Pencil, Ban } from 'lucide-react';
 import { useState } from 'react';
 import { useGetContracts } from '../hooks';
 
@@ -82,7 +82,7 @@ export const GetContractsPage = () => {
                       <td className="pl-2">{c.proceso.nombreProceso}</td>
                       <td className="pl-2">{c.consecutivo}</td>
                       <td className="pl-2">{c.tipoContrato.tipoContrato}</td>
-                      <td className="pl-2">{c.objeto}</td>
+                      <td className="pl-2 whitespace-normal break-words overflow-hidden">{c.objeto}</td>
                       <td className="pl-2">{c.ValorContrato}</td>
                       <td className="pl-2">{c.NombreContratista}</td>
                       <td className="pl-2">
@@ -93,7 +93,7 @@ export const GetContractsPage = () => {
                         <button
                           onMouseEnter={() => setHoverEye(c._id)}
                           onMouseLeave={() => setHoverEye(null)}
-                          className="p-2 bg-sky-200 rounded-full hover:scale-110 transition-transform"
+                          className="p-2 bg-sky-200 rounded-full hover:bg-sky-300 hover:scale-110 transition-transform"
                           title="Ver detalles"
                         >
                           {hoverEye === c._id ? (
@@ -104,17 +104,17 @@ export const GetContractsPage = () => {
                         </button>
 
                         <button
-                          className="p-2 hover:scale-110 transition-transform"
+                          className="p-2 bg-yellow-200 rounded-full hover:scale-110 transition-transform"
                           title="Editar"
                         >
                           <Pencil size={18} />
                         </button>
 
                         <button
-                          className="p-2 hover:scale-110 transition-transform"
+                          className="p-2 bg-red-200 rounded-full hover:bg-red-300 hover:scale-110 transition-transform"
                           title="Eliminar"
                         >
-                          <Trash2 size={18} />
+                          <Ban size={18} />
                         </button>
                       </td>
                     </tr>

@@ -1,4 +1,5 @@
 export * from './ContractsPage'
 export * from './CreateContractsPage'
-export * from './GetContractsPage'
 export * from './ContractType'
+export * from './DetailsContractPage'
+export * from './GetContractsPage'
