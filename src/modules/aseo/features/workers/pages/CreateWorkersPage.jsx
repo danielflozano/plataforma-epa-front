@@ -1,4 +1,3 @@
-import { FilePlus } from 'lucide-react';
 import {
   AlertModal,
   GlobalButton,
@@ -7,6 +6,7 @@ import {
 } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { useCreateWorkers } from '../hooks';
+import { ArrowLeft, FilePlus } from 'lucide-react';
 
 export const CreateWorkersPage = () => {
   const { onClickBack } = useBackNavigation();
@@ -35,9 +35,10 @@ export const CreateWorkersPage = () => {
     <>
       <GlobalButton
         variant="back"
-        className="p-1.5 w-30 mb-3"
+        className="flex w-30 p-1.5 mb-3"
         onClick={onClickBack}
       >
+        <ArrowLeft className="ml-0.5 mr-2 -left-0.5" />
         Regresar
       </GlobalButton>
       <GlobalButton

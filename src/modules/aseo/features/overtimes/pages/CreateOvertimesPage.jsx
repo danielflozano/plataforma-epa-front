@@ -7,6 +7,7 @@ import {
 import { useCreateOvertimes, useDeleteOvertime } from '../hooks';
 import { ExcelImportForm, RegisteredOvertimeTable } from '../components';
 import { useBackNavigation } from '@/hooks';
+import { ArrowLeft } from 'lucide-react';
 
 export const CreateOvertimesPage = () => {
   const { onClickBack } = useBackNavigation();
@@ -48,7 +49,12 @@ export const CreateOvertimesPage = () => {
       {loading && (
         <LoadSpinner styles="fixed bg-gray-200/95" name="Importando Excel" />
       )}
-      <GlobalButton variant="back" className="p-1.5 w-30" onClick={onClickBack}>
+      <GlobalButton
+        variant="back"
+        className="flex w-30 p-1.5"
+        onClick={onClickBack}
+      >
+        <ArrowLeft className="ml-0.5 mr-2 -left-0.5" />
         Regresar
       </GlobalButton>
       <div className="flex flex-col gap-4 items-center">

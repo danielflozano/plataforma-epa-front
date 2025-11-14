@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { workersService } from '../services';
 import { useAseo } from '@/modules/aseo/context';
 
 const tipoOperario = ['Planta', 'Temporal'];
 export const useCreateWorkers = () => {
-  const { getAllWorkers } = useAseo();
-  const [jobPositions, setJobPositions] = useState([]);
+  const { jobPositions, getAllWorkers, getAllJobPositions } = useAseo();
   const [updateModal, setUpdateModal] = useState(false);
   const [alertModal, setAlertModal] = useState({
     open: false,
@@ -27,19 +26,6 @@ export const useCreateWorkers = () => {
     reset: resetJobPosition,
     formState: {errors: jobPositionErrors},
   } = useForm();
-
-  useEffect(() => {
-    getJobPositions();
-  }, []);
-
-  const getJobPositions = async () => {
-    try {
-      const response = await workersService.getAllJobPositions();
-      setJobPositions(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const onSubmit = async (data) => {
     try {
@@ -64,12 +50,13 @@ export const useCreateWorkers = () => {
   const onSubmitJobPosition = async (data) => {
     try {
       const response = await workersService.createJobPosition(data);
+      console.log('Respuesta del servicio:', response);
       setAlertModal({
-        open: true,
+        open: response.success,
         message: 'El cargo ha sido creado exitosamente',
-        status: 'Cargo Creado con Exito',
+        status: `Cargo ${response.data.name} Creado con Exito`,
       });
-      getJobPositions();
+      getAllJobPositions();
       resetJobPosition();
     } catch (error) {
       console.error(error);

@@ -1,15 +1,27 @@
-import { Link, Outlet } from "react-router-dom";
-import { ClipboardClock, House, NotebookPen, UserCheck, Users } from "lucide-react";
-import { useAuth } from "@/context";
-import { GlobalButton } from "@/components";
-import { aseoRoutesList } from "@/routes";
-import logo from '@/assets/logoepa.png'
-import { AseoProvider } from "../context";
+import { Link, Outlet } from 'react-router-dom';
+import {
+  ClipboardClock,
+  House,
+  NotebookPen,
+  UserCheck,
+  Users,
+  LogOut,
+} from 'lucide-react';
+import { useAuth } from '@/context';
+import { GlobalButton, LoadSpinner } from '@/components';
+import { aseoRoutesList } from '@/routes';
+import logo from '@/assets/logoepa.png';
+import { AseoProvider, useAseo } from '../context';
 
 const currentYear = new Date().getFullYear();
 
 export const AseoLayout = () => {
   const { auth, logout } = useAuth();
+  const { initialLoading } = useAseo();
+
+  if (initialLoading) {
+    return <LoadSpinner styles="fixed bg-gray-200/95" />;
+  }
 
   return (
     <AseoProvider>
@@ -58,7 +70,12 @@ export const AseoLayout = () => {
               </Link>
             </div>
           </nav>
-          <GlobalButton variant="danger" onClick={logout} className="p-1.5 w-3/4 block mx-auto">
+          <GlobalButton
+            variant="danger"
+            onClick={logout}
+            className="flex justify-center p-1.5 w-38 mx-auto"
+          >
+            <LogOut className="mr-2" />
             Cerrar Sesión
           </GlobalButton>
         </div>
@@ -92,6 +109,6 @@ export const AseoLayout = () => {
           </footer>
         </div>
       </div>
-    </AseoProvider> 
+    </AseoProvider>
   );
 };

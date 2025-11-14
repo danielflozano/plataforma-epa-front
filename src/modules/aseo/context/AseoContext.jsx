@@ -1,28 +1,65 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { overtimesService, workersService } from "../features";
+import { overtimesService, workersService } from '../features';
 
 const AseoContext = createContext({
   overtimes: [],
+  workers: [],
+  jobPositions: [],
   currentPage: null,
   totalPages: null,
   totalRecords: null,
-  workers: [],
-  loading: false,
+  initialLoading: false,
+  loadingWorkers: false,
+  loadingJobPositions: false,
+  loadingOvertimes: false,
   getAllOvertimes: () => {},
   getAllWorkers: () => {},
+  getAllJobPositions: () => {},
   handlePageChange: () => {},
 });
 
 export const AseoProvider = ({ children }) => {
-  const [ overtimes, setOvertimes ] = useState([]);
-  const [ currentPage, setCurrentPage ] = useState(1);
-  const [ totalPages, setTotalPages ] = useState(1);
-  const [ totalRecords, setTotalRecords ] = useState(0);
-  const [ workers, setWorkers ] = useState([]);
-  const [ loading, setLoading ] = useState(false);
+  const [workers, setWorkers] = useState([]);
+  const [jobPositions, setJobPositions] = useState([]);
+  const [overtimes, setOvertimes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loadingWorkers, setLoadingWorkers] = useState(false);
+  const [loadingJobPositions, setLoadingJobPositions] = useState(false);
+  const [loadingOvertimes, setLoadingOvertimes] = useState(false);
+
   const limit = 15;
-  
-  const getAllOvertimes = async (page) => {
+
+  const getAllWorkers = async (showLoader = true) => {
+    if (showLoader) setLoadingWorkers(true);
+    try {
+      const response = await workersService.getAllWorkers();
+      setWorkers(response.data);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      if (showLoader) setLoadingWorkers(false);
+    }
+  };
+
+  const getAllJobPositions = async (showLoader = true) => {
+    if (showLoader) setLoadingJobPositions(true);
+    try {
+      const response = await workersService.getAllJobPositions();
+      setJobPositions(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      if (showLoader) setLoadingJobPositions(false);
+    }
+  };
+
+  const getAllOvertimes = async (page, showLoader = true) => {
+    if (showLoader) setLoadingOvertimes(true);
     try {
       const response = await overtimesService.getAllOvertimes(page, limit);
       setOvertimes(response.data);
@@ -32,6 +69,8 @@ export const AseoProvider = ({ children }) => {
     } catch (error) {
       console.error(error);
       throw error;
+    } finally {
+      if (showLoader) setLoadingOvertimes(false);
     }
   };
 
@@ -41,47 +80,61 @@ export const AseoProvider = ({ children }) => {
     }
   };
 
-  const getAllWorkers = async () => {
-    try {
-      const response = await workersService.getAllWorkers();
-      setWorkers(response.data);
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
-  
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    const fetchInitialData = async () => {
       try {
-        await Promise.allSettled([getAllOvertimes(currentPage), getAllWorkers()]);
+        await Promise.allSettled([
+          getAllWorkers(false),
+          getAllJobPositions(false),
+          getAllOvertimes(1, false),
+        ]);
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false);
+        setInitialLoading(false);
       }
     };
-
-    fetchData();
-  }, [currentPage]);
+    fetchInitialData();
+  }, []);
 
   const contextValue = useMemo(
     () => ({
-      currentPage,
-      loading,
+      workers,
+      jobPositions,
       overtimes,
+      currentPage,
       totalPages,
       totalRecords,
-      workers,
-      getAllOvertimes,
+      initialLoading,
+      loadingOvertimes,
+      loadingWorkers,
+      loadingJobPositions,
       getAllWorkers,
+      getAllJobPositions,
+      getAllOvertimes,
       handlePageChange,
+      setCurrentPage,
+      setOvertimes,
+      setTotalRecords,
     }),
-    [currentPage, loading, overtimes, totalPages, totalRecords, workers,]
+    [
+      workers,
+      jobPositions,
+      overtimes,
+      currentPage,
+      totalPages,
+      totalRecords,
+      initialLoading,
+      loadingOvertimes,
+      loadingWorkers,
+      loadingJobPositions,
+      
+    ]
   );
 
-  return <AseoContext.Provider value={contextValue}>{ children }</AseoContext.Provider>
+  return (
+    <AseoContext.Provider value={contextValue}>{children}</AseoContext.Provider>
+  );
 };
 
 export const useAseo = () => useContext(AseoContext);

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
-import { GlobalButton, GlobalInput } from '@/components';
+import { GlobalButton, GlobalInput, LoadSpinner } from '@/components';
 import { AuthLayout } from '../components';
 import { Profiler } from 'react';
 import { onRenderCallback } from '@/profiler';
@@ -18,9 +18,7 @@ export const LoginPage = () => {
 
   if(loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-editColor-3"></div>
-      </div>
+      <LoadSpinner styles="fixed bg-gray-200/95" />
     );
   }
 

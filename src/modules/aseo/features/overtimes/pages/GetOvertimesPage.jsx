@@ -1,8 +1,15 @@
-import { AlertModal, ConfirmModal, GlobalButton, UpdateModal } from '@/components';
+import {
+  AlertModal,
+  ConfirmModal,
+  FilterInput,
+  GlobalButton,
+  LoadSpinner,
+  UpdateModal,
+} from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { OvertimesRecordsSection, TimesAndDatesRecorded } from '../components';
 import { useGetOvertimes } from '../hooks';
-import { IdCardLanyard } from 'lucide-react';
+import { ArrowLeft, IdCardLanyard } from 'lucide-react';
 
 export const GetOvertimesPage = () => {
   const {
@@ -11,7 +18,8 @@ export const GetOvertimesPage = () => {
     currentPage,
     errors,
     filterValue,
-    loading, // TODO: Hacer algo con esto!!!
+    loading,
+    loadingOvertimes,
     openAlertModal,
     openConfirmModal,
     overtimesFilter,
@@ -41,21 +49,28 @@ export const GetOvertimesPage = () => {
 
   return (
     <>
-      <GlobalButton variant="back" className="p-1.5 w-30" onClick={onClickBack}>
+      <GlobalButton
+        variant="back"
+        className="flex w-30 p-1.5"
+        onClick={onClickBack}
+      >
+        <ArrowLeft className="ml-0.5 mr-2 -left-0.5" />
         Regresar
       </GlobalButton>
       <div className="flex flex-col gap-4">
         <h2 className="text-epaColor1 text-center text-4xl font-extrabold">
           Registro Individual de Horas Extra
         </h2>
-        <OvertimesRecordsSection
+        <FilterInput
           filterValue={filterValue}
-          overtimesFilter={overtimesFilter}
+          setFilterValue={setFilterValue}
           handleKeyDown={handleKeyDown}
           handleSearch={handleSearch}
+        />
+        <OvertimesRecordsSection
+          overtimesFilter={overtimesFilter}
           OpenUpdateModal={OpenUpdateModal}
           onOpenConfirmModal={onOpenConfirmModal}
-          setFilterValue={setFilterValue}
         />
         <div className="flex justify-between items-center px-4">
           <span>
@@ -86,7 +101,7 @@ export const GetOvertimesPage = () => {
           )}
         </div>
       </div>
-      
+
       <UpdateModal
         isOpen={updateModal}
         title="Editar Horas Extra"
@@ -100,7 +115,7 @@ export const GetOvertimesPage = () => {
         </div>
         <TimesAndDatesRecorded register={register} errors={errors} />
       </UpdateModal>
-      
+
       <AlertModal
         openAlertModal={openAlertModal}
         closeAlertModal={closeAlertModal}
@@ -117,6 +132,9 @@ export const GetOvertimesPage = () => {
         buttonConfirmContent="Eliminar"
         variant="modalThree"
       />
+      {(loading || loadingOvertimes) && (
+        <LoadSpinner styles="fixed bg-gray-200/90" />
+      )}
     </>
   );
 };
