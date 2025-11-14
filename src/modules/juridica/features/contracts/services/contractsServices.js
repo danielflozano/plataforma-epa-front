@@ -23,7 +23,7 @@ export const contractsServices =  {
 
   updateContracts: async (id, data) => {
     try {
-        const response = await apiClient.put(`/contrato/${id}`, data);
+        const response = await apiClient.put(`/contrato/update/${id}`, data);
         console.log(response.data.message);
         return response.data
     }catch (error){

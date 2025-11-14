@@ -9,7 +9,6 @@ const juridicaRoutesList = {
   contracts: contracts,
   createContracts: `${contracts}/create`,
   listContracts: `${contracts}/list`,
-  createContractType: `${contracts}/contractType`,
 
   lawyers: lawyers,
 

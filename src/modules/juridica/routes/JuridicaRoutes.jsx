@@ -5,7 +5,6 @@ import {
   CreateContractsPage,
   GetContractsPage,
   LawyersPage,
-  ContractType,
 } from '../features';
 import { JuridicaLayout } from '../layout/JuridicaLayout';
 import { juridicaRoutesList } from '@/routes';
@@ -30,10 +29,6 @@ export const JuridicaRoutes = [
       {
         path: juridicaRoutesList.listContracts,
         element: <GetContractsPage />,
-      },
-      {
-        path: juridicaRoutesList.createContractType,
-        element: <ContractType />,
       },
       {
         path: juridicaRoutesList.lawyers,

@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { contractsServices, contractTypeServices } from '../services';
 import { useForm } from 'react-hook-form';
+import { useJuridica } from '@/modules/juridica/context';
 
 export const useCreateContracts = () => {
+  const { lawyers, process, contractType, getAllContractType } = useJuridica();
+
   const {
     register,
     handleSubmit,
@@ -10,41 +13,22 @@ export const useCreateContracts = () => {
     reset,
   } = useForm();
 
-  const [process, setProcess] = useState([]);
-  const [contractType, setContractType] = useState([]);
+  const {
+    register: registerContractType,
+    handleSubmit: handleSubmitContractType,
+    formState: { errors: errorsContractType },
+    reset: resetContractType,
+  } = useForm();
+
+  const [contractTypeModal, setContractTypeModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
     state: '',
   });
-  const [modal, setModal] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const openModal = () => setModal(true);
-  const closeModal = () => setModal(false);
-
-  useEffect(() => {
-    getAllProcess();
-    getAllContractType();
-  }, []);
-
-  const getAllProcess = async () => {
-    try {
-      const response = await contractsServices.getAllProcess();
-      setProcess(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getAllContractType = async () => {
-    try {
-      const response = await contractTypeServices.getAllContractType();
-      setContractType(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const openContractTypeModal = () => setContractTypeModal(true);
 
   const onSubmit = async (createData) => {
     setLoading(true);
@@ -56,7 +40,6 @@ export const useCreateContracts = () => {
         state: 'Registro Exitoso',
       });
       reset();
-      setModal(false);
     } catch (error) {
       console.log(error);
       setAlertModal({
@@ -69,13 +52,36 @@ export const useCreateContracts = () => {
     }
   };
 
-  const closeAlertModal = () => {
-    setModal({
+  const onSubmitContractType = async (createData) => {
+    try {
+      await contractTypeServices.createContractType(createData);
+      setAlertModal({
+        open: true,
+        message: '¡Tipo de Contrato creado con Exito ✅',
+        state: 'Registro Exitoso',
+      });
+      resetContractType();
+      getAllContractType();
+      setContractTypeModal(false);
+    } catch (error) {
+      console.log(error);
+      setAlertModal({
+        open: true,
+        message: error.message || 'Error al crear el Tipo de Contrato. ❌',
+        state: 'Error',
+      });
+    } finally {
+      setContractTypeModal(true);
+    }
+  };
+
+  const closeModals = () => {
+    setAlertModal({
       open: false,
       message: '',
       state: '',
     });
-    closeModal()
+    setContractTypeModal(false);
   };
 
   return {
@@ -83,16 +89,20 @@ export const useCreateContracts = () => {
     alertModal,
     contractType,
     errors,
+    errorsContractType,
     handleSubmit,
+    handleSubmitContractType,
+    lawyers,
     loading,
-    modal,
-    process,
+    contractTypeModal,
     register,
+    registerContractType,
+    process,
 
     // Methods
     onSubmit,
-    closeModal,
-    closeAlertModal,
-    openModal,
+    onSubmitContractType,
+    closeModals,
+    openContractTypeModal,
   };
 };

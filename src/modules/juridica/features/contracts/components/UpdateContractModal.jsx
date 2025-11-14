@@ -1,68 +1,9 @@
-import {
-  AlertModal,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  GlobalButton,
-  GlobalInput,
-  LoadSpinner,
-  UpdateModal,
-} from '@/components';
-import { useBackNavigation } from '@/hooks';
-import { useCreateContracts } from '../hooks';
-import { FilePlus } from 'lucide-react';
+import { GlobalInput } from '@/components';
 
-export const CreateContractsPage = () => {
-  const {
-    // Properties
-    alertModal,
-    contractType,
-    errors,
-    errorsContractType,
-    handleSubmit,
-    handleSubmitContractType,
-    loading,
-    lawyers,
-    contractTypeModal,
-    register,
-    registerContractType,
-    process,
-
-    // Methods
-    onSubmit,
-    onSubmitContractType,
-    closeModals,
-    openContractTypeModal,
-  } = useCreateContracts();
-
-  const { onClickBack } = useBackNavigation();
-
+export const UpdateContractModal = ({ register, errors, lawyers, contractType, process }) => {
   return (
-    <>
-      <GlobalButton className="p-1.5 w-30" variant="back" onClick={onClickBack}>
-        Regresar
-      </GlobalButton>
-      <div className="flex mt-5">
-        <GlobalButton
-          variant="third"
-          className="flex items-center gap-3 px-5 py-1.5"
-          onClick={openContractTypeModal}
-        >
-          <FilePlus />
-          Crear Tipo de Contrato
-        </GlobalButton>
-      </div>
-      <div className="flex flex-col gap-4 items-center">
-        <h2 className="font-extrabold text-4xl text-epaColor1">
-          Crear Contrato
-        </h2>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 shadow-2xl bg-white w-1/2  rounded-2xl p-4"
-        >
-          <GlobalInput
+    <div>
+      <GlobalInput
             type="text"
             label="Identidad O Nit"
             data="identificacionOnit"
@@ -213,42 +154,6 @@ export const CreateContractsPage = () => {
               }}
             />
           </div>
-
-          <GlobalButton type="submit" className="p-1.5 w-1/2 block mx-auto">
-            Registrar
-          </GlobalButton>
-        </form>
-      </div>
-      {/* Modal */}
-      <UpdateModal
-        title="Crear Tipo de Contrato"
-        isOpen={contractTypeModal}
-        closeModal={closeModals}
-        handleSubmit={handleSubmitContractType}
-        onSubmit={onSubmitContractType}
-        formClassName="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]"
-      >
-        <GlobalInput
-          label="Nombre del Tipo de Contrato"
-          data="tipoContrato"
-          register={registerContractType}
-          errors={errorsContractType}
-          rules={{
-            required: 'El nombre del tipo de contrato es obligatorio',
-          }}
-        />
-      </UpdateModal>
-
-      {/* AlertModal */}
-      <AlertModal
-        openAlertModal={alertModal.open}
-        closeAlertModal={closeModals}
-        modalTitle={alertModal.state}
-        modalDescription={alertModal.message}
-      />
-      {loading && (
-        <LoadSpinner name="Creando Contrato" styles="fixed bg-gray-200/95" />
-      )}
-    </>
+    </div>
   );
 };

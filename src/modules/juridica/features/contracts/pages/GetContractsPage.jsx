@@ -1,14 +1,38 @@
-import { GlobalButton, LoadSpinner } from '@/components';
+import { AlertModal, GlobalButton, LoadSpinner, UpdateModal } from '@/components';
 import { useBackNavigation } from '@/hooks';
-import { EyeClosed, Eye, Pencil, Ban } from 'lucide-react';
-import { useState } from 'react';
+import { EyeClosed, Eye, Pencil, Ban, StickyNote } from 'lucide-react';
 import { useGetContracts } from '../hooks';
+import { DetailsContractModal, UpdateContractModal } from '../components';
 
 export const GetContractsPage = () => {
-  const { contracts, loading } = useGetContracts();
+  const {
+    //Properties
+    alertModal,
+    // confirmModal,
+    contracts,
+    contractType,
+    detailsContractModal,
+    errors,
+    hoverEye,
+    lawyers,
+    loading,
+    process,
+    selectedConsecutive,
+    selectedContract,
+    selectedContractType,
+    updateModal,
 
+    //Methods
+    closeModals,
+    handleSubmit,
+    onSubmitUpdateContract,
+    openConfirmModal,
+    openDetailsContractModal,
+    openEye,
+    openUpdateModal,
+    register,
+  } = useGetContracts();
   const { onClickBack } = useBackNavigation();
-  const [hoverEye, setHoverEye] = useState(false);
 
   return (
     <>
@@ -25,22 +49,26 @@ export const GetContractsPage = () => {
       <div className="flex flex-col h-full gap-4">
         {/* Cards */}
         <div className=" h-1/5 flex flex-row justify-around items-center gap-4">
-          <div className="bg-green-400 h-25 p-3   rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
+          <div className="bg-green-400 h-25 w-70 p-3   rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
             <span> Numero de contratos vigentes </span>
             <p className="text-3xl">10</p>
           </div>
-          <div className="bg-red-500 h-25 p-3  rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
+          <div className="bg-yellow-300 h-25 w-70 p-3 rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
+            <span>Contratos por vencer en 30 dias</span>
+            <p className="text-3xl">10</p>
+          </div>
+          <div className="bg-red-500 h-25 w-70 p-3  rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
             <span>Numero de contratos vencidos</span>
             <p className="text-3xl">10</p>
           </div>
-          <div className="bg-yellow-300 h-25 p-3 rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
-            <span>Contratos por vencer en 30 dias</span>
+          <div className="bg-gray-400 h-25 w-70 p-3 rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
+            <span>Contratos Anulados</span>
             <p className="text-3xl">10</p>
           </div>
         </div>
 
         {/*Filtros*/}
-        
+
         {/*Tabla de Contratos*/}
         <section className="">
           <div className="bg-white  shadow-md rounded-lg p-6 mx-auto mt-6">
@@ -48,7 +76,7 @@ export const GetContractsPage = () => {
               <thead className="bg-epaColor1 text-white uppercase">
                 <tr>
                   <th className="py-4 text-center border border-white">
-                    Proceso/Dependencia <br /> del contrato
+                    Proceso/ <br /> Dependencia <br /> del contrato
                   </th>
                   <th className="text-center border">Consecutivo</th>
                   <th className="text-center border">
@@ -77,45 +105,52 @@ export const GetContractsPage = () => {
                   contracts.map((c) => (
                     <tr
                       key={c._id}
-                      className="hover:bg-gray-100 transition-colors "
+                      className="hover:bg-gray-100 transition-colors"
                     >
                       <td className="pl-2">{c.proceso.nombreProceso}</td>
                       <td className="pl-2">{c.consecutivo}</td>
                       <td className="pl-2">{c.tipoContrato.tipoContrato}</td>
-                      <td className="pl-2 whitespace-normal break-words overflow-hidden">{c.objeto}</td>
+                      <td className="pl-2 whitespace-normal break-words overflow-hidden">
+                        {c.objeto}
+                      </td>
                       <td className="pl-2">{c.ValorContrato}</td>
                       <td className="pl-2">{c.NombreContratista}</td>
                       <td className="pl-2">
                         {c.AbogadoAsignado.nombreAbogado}
                       </td>
                       <td className="pl-2">{c.FechaInicio}</td>
-                      <td className="flex justify-center items-center gap-x-3">
-                        <button
-                          onMouseEnter={() => setHoverEye(c._id)}
-                          onMouseLeave={() => setHoverEye(null)}
-                          className="p-2 bg-sky-200 rounded-full hover:bg-sky-300 hover:scale-110 transition-transform"
-                          title="Ver detalles"
-                        >
-                          {hoverEye === c._id ? (
-                            <Eye size={18} />
-                          ) : (
-                            <EyeClosed size={18} />
-                          )}
-                        </button>
+                      <td className="">
+                        <div className='flex gap-2 pl-2'>
+                          <button
+                            onMouseEnter={() => openEye(c._id)}
+                            onMouseLeave={() => openEye(null)}
+                            className="p-2 bg-sky-200 rounded-full hover:bg-sky-300 hover:scale-110 transition-transform"
+                            title="Ver detalles"
+                            onClick={() => openDetailsContractModal(c._id)}
+                          >
+                            {hoverEye === c._id ? (
+                              <Eye size={18} />
+                            ) : (
+                              <EyeClosed size={18} />
+                            )}
+                          </button>
 
-                        <button
-                          className="p-2 bg-yellow-200 rounded-full hover:scale-110 transition-transform"
-                          title="Editar"
-                        >
-                          <Pencil size={18} />
-                        </button>
+                          <button
+                            className="p-2 bg-yellow-200 rounded-full hover:bg-yellow-300 hover:scale-110 transition-transform"
+                            title="Editar"
+                            onClick={() => openUpdateModal(c._id)}
+                          >
+                            <Pencil size={18} />
+                          </button>
 
-                        <button
-                          className="p-2 bg-red-200 rounded-full hover:bg-red-300 hover:scale-110 transition-transform"
-                          title="Eliminar"
-                        >
-                          <Ban size={18} />
-                        </button>
+                          <button
+                            className="p-2 bg-red-200 rounded-full hover:bg-red-300 hover:scale-110 transition-transform"
+                            title="Eliminar"
+                            onClick={() => openConfirmModal(c._id)}
+                          >
+                            <Ban size={18} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -130,6 +165,41 @@ export const GetContractsPage = () => {
             </table>
           </div>
         </section>
+        <DetailsContractModal
+          isOpen={detailsContractModal}
+          closeDetailsContractModal={closeModals}
+          contractData={selectedContract}
+        />
+        <UpdateModal
+          isOpen={updateModal}
+          title="Editar Contrato"
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmitUpdateContract}
+          closeModal={closeModals}
+        >
+          <div className="flex text-epaColor1 font-bold">
+            <StickyNote className="mr-1" />
+            <h4>
+              {' '}
+              CONTRATO {selectedContractType} N° {selectedConsecutive}
+            </h4>
+          </div>
+          <UpdateContractModal
+            register={register}
+            errors={errors}
+            lawyers={lawyers}
+            contractType={contractType}
+            process={process}
+          />
+        </UpdateModal>
+
+        {/* AlertModal */}
+        <AlertModal
+          openAlertModal={alertModal.open}
+          closeAlertModal={closeModals}
+          modalTitle={alertModal.state}
+          modalDescription={alertModal.message}
+        />
       </div>
     </>
   );
