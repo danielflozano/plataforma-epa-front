@@ -9,9 +9,11 @@ export const useGetOvertimes = () => {
     currentPage,
     totalPages,
     totalRecords,
-    loading,
+    loadingOvertimes,
     getAllOvertimes,
     handlePageChange,
+    setOvertimes,
+    setTotalRecords,
   } = useAseo();
 
   const {
@@ -25,17 +27,18 @@ export const useGetOvertimes = () => {
   const [overtimesFilter, setOvertimesFilter] = useState(overtimes || []);
   const [updateModal, setUpdateModal] = useState(false);
   const [selectedId, setSelectedId] = useState('');
-  const [selectedName, setSelectedName] = useState('')
+  const [selectedName, setSelectedName] = useState('');
   const [showPagination, setShowPagination] = useState(true);
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [alertModalMessage, setAlertModalMessage] = useState('');
   const [state, setState] = useState('');
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getAllOvertimes();
-  }, []);
+    getAllOvertimes(currentPage, false);
+  }, [currentPage]);
 
   useEffect(() => {
     setOvertimesFilter(overtimes);
@@ -47,10 +50,14 @@ export const useGetOvertimes = () => {
         selectedId,
         updateData
       );
+      setOvertimes((prev) =>
+        prev.map((item) =>
+          item._id === selectedId ? { ...item, ...updateData } : item
+        )
+      );
       setState(response.success ? 'Registro Actualizado' : 'Error');
       setAlertModalMessage(response.message);
       setSuccess(response.success);
-      await handleSearch();
     } catch (error) {
       setState('Error');
       setAlertModalMessage(error.message);
@@ -62,10 +69,11 @@ export const useGetOvertimes = () => {
   const handleDelete = async () => {
     try {
       const response = await overtimesService.deleteOvertimes(selectedId);
+      setOvertimes(prev => prev.filter(item => item._id !== selectedId));
+      setTotalRecords(prev => prev - 1);
       setState(response.success ? 'Registro Eliminado' : 'Error');
       setAlertModalMessage(response.message);
       setSuccess(response.success);
-      await handleSearch();
     } catch (error) {
       console.error('Error eliminando:', error);
       setState('Error');
@@ -75,28 +83,35 @@ export const useGetOvertimes = () => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = (showLoader = true) => {
+    if (showLoader) setLoading(true);
     setTimeout(async () => {
       if (!filterValue.trim()) {
         getAllOvertimes(currentPage);
         setOvertimesFilter(overtimes);
         setShowPagination(true);
+        if (showLoader) setLoading(false);
         return;
       }
-  
+
       try {
-        const response = await overtimesService.getOvertimesByWorker(filterValue);
+        const response = await overtimesService.getOvertimesByWorker(
+          filterValue
+        );
         setOvertimesFilter(response.data);
         setShowPagination(false);
         console.log('Si funcionó handleSearch');
       } catch (error) {
         console.error(error);
+        setState('Error');
+        setAlertModalMessage(error.message);
+        setOpenAlertModal(true);
         setOvertimesFilter([]);
         setShowPagination(false);
+      } finally {
+        if (showLoader) setLoading(false);
       }
-      
     }, 600);
-
   };
 
   const handleKeyDown = (e) => {
@@ -154,7 +169,7 @@ export const useGetOvertimes = () => {
     }
 
     setOpenAlertModal(false);
-  };  
+  };
 
   return {
     // Properties
@@ -163,6 +178,7 @@ export const useGetOvertimes = () => {
     errors,
     filterValue,
     loading,
+    loadingOvertimes,
     openAlertModal,
     openConfirmModal,
     overtimesFilter,

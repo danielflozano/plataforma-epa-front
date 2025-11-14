@@ -5,14 +5,16 @@ import { useAseo } from '@/modules/aseo/context';
 
 const tipoOperario = ['Planta', 'Temporal'];
 export const useCreateWorkers = () => {
-  const { getAllWorkers } = useAseo();
-  const [jobPositions, setJobPositions] = useState([]);
   const [updateModal, setUpdateModal] = useState(false);
+  const [departaments, setDepartaments] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
     status: '',
   });
+
+  const { jobPositions, getAllWorkers, getAllJobPositions } = useAseo();
 
   const {
     register,
@@ -25,19 +27,31 @@ export const useCreateWorkers = () => {
     register: registerJobPosition,
     handleSubmit: handleSubmitJobPosition,
     reset: resetJobPosition,
-    formState: {errors: jobPositionErrors},
+    formState: { errors: jobPositionErrors },
   } = useForm();
 
   useEffect(() => {
-    getJobPositions();
+    getDepartaments();
+    getLocations();
   }, []);
 
-  const getJobPositions = async () => {
+  const getDepartaments = async () => {
     try {
-      const response = await workersService.getAllJobPositions();
-      setJobPositions(response.data);
+      const response = await workersService.getAllDepartaments();
+      console.log(response);
+      setDepartaments(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    }
+  };
+
+  const getLocations = async () => {
+    try {
+      const response = await workersService.getAllLocations();
+      console.log(response);
+      setLocations(response.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -52,7 +66,7 @@ export const useCreateWorkers = () => {
       getAllWorkers();
       reset();
     } catch (error) {
-      console.error(error)
+      console.error(error);
       setAlertModal({
         open: true,
         message: error.message,
@@ -64,12 +78,13 @@ export const useCreateWorkers = () => {
   const onSubmitJobPosition = async (data) => {
     try {
       const response = await workersService.createJobPosition(data);
+      console.log('Respuesta del servicio:', response);
       setAlertModal({
-        open: true,
+        open: response.success,
         message: 'El cargo ha sido creado exitosamente',
-        status: 'Cargo Creado con Exito',
+        status: `Cargo ${response.data.name} Creado con Exito`,
       });
-      getJobPositions();
+      getAllJobPositions();
       resetJobPosition();
     } catch (error) {
       console.error(error);
@@ -77,9 +92,9 @@ export const useCreateWorkers = () => {
         open: true,
         message: error.message,
         status: 'Error',
-      })
+      });
     }
-  }
+  };
 
   const closeModal = () => {
     setAlertModal({
@@ -92,20 +107,22 @@ export const useCreateWorkers = () => {
 
   const openUpdateModal = () => {
     setUpdateModal(true);
-  }
+  };
 
   const closeUpdateModal = () => {
     setUpdateModal(false);
-  }
+  };
 
   return {
     // Properties
-    errors,
-    jobPositions,
-    jobPositionErrors,
     alertModal,
+    departaments,
+    errors,
+    jobPositionErrors,
+    jobPositions,
+    locations,
     tipoOperario,
-    updateModal,    
+    updateModal,
 
     // Methods
     closeModal,

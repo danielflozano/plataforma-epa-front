@@ -73,7 +73,7 @@ export const workersService = {
   createJobPosition: async (data) => {
     try {
       const response = await apiClient.post('/cargos/crearCargo', data);
-      console.log(response.data);
+      return response.data;
     } catch (error) {
       throw new Error(
         handleAxiosError(error, `Error creando el cargo ${data} ❌`)
@@ -89,6 +89,26 @@ export const workersService = {
       throw new Error(
         handleAxiosError(error, 'Error obteniendo todos los cargos ❌')
       );
+    }
+  },
+
+  getAllDepartaments: async () => {
+    try {
+      const response = await apiClient.get('/procesos');
+      return response.data;
+    } catch (error) {
+      throw new Error(error, 'Error obteniendo todos los procesos ❌');
+    }
+  },
+
+  getAllLocations: async () => {
+    try {
+      const response = await apiClient.get('/sede/listar');      
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      
+      throw new Error(error, 'Error obteniendo todas las sedes ❌');
     }
   },
 };

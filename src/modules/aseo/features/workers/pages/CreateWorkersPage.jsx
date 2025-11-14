@@ -1,4 +1,3 @@
-import { FilePlus } from 'lucide-react';
 import {
   AlertModal,
   GlobalButton,
@@ -7,15 +6,18 @@ import {
 } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { useCreateWorkers } from '../hooks';
+import { ArrowLeft, FilePlus } from 'lucide-react';
 
 export const CreateWorkersPage = () => {
   const { onClickBack } = useBackNavigation();
   const {
     // Properties
-    errors,
-    jobPositions,
-    jobPositionErrors,
     alertModal,
+    departaments,
+    errors,
+    jobPositionErrors,
+    jobPositions,
+    locations,
     tipoOperario,
     updateModal,
 
@@ -35,9 +37,10 @@ export const CreateWorkersPage = () => {
     <>
       <GlobalButton
         variant="back"
-        className="p-1.5 w-30 mb-3"
+        className="flex w-30 p-1.5 mb-3"
         onClick={onClickBack}
       >
+        <ArrowLeft className="ml-0.5 mr-2 -left-0.5" />
         Regresar
       </GlobalButton>
       <GlobalButton
@@ -108,6 +111,40 @@ export const CreateWorkersPage = () => {
               </option>
             ))}
           </GlobalInput>
+          <GlobalInput
+            as="select"
+            label="Proceso"
+            data="ProcesoAsignado"
+            register={register}
+            errors={errors}
+            rules={{
+              required: 'Campo Obligatorio',
+            }}
+          >
+            <option value="">Seleccione el proceso</option>
+            {departaments.map((departament) => (
+              <option key={departament._id} value={departament._id}>
+                {departament.nombreProceso}
+              </option>
+            ))}
+          </GlobalInput>
+          <GlobalInput
+            as="select"
+            label="Sede"
+            data="SedeAsignada"
+            register={register}
+            errors={errors}
+            rules={{
+              required: 'Campo Obligatorio',
+            }}
+          >
+            <option value="">Seleccione la sede</option>
+            {locations.map((location) => (
+              <option key={location._id} value={location._id}>
+                {location.name}
+              </option>
+            ))}
+          </GlobalInput>
           <GlobalButton type="submit" className="p-1.5 w-1/2 block mx-auto">
             Registrar
           </GlobalButton>
@@ -119,7 +156,7 @@ export const CreateWorkersPage = () => {
         handleSubmit={handleSubmitJobPosition}
         onSubmit={onSubmitJobPosition}
         closeModal={closeUpdateModal}
-        formClassName='flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]'
+        formClassName="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]"
       >
         <GlobalInput
           label="Cargo"
