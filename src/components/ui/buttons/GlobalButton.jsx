@@ -8,6 +8,7 @@ const buttonVariants = {
   modalFour: 'bg-gray-600 rounded-md hover:bg-gray-300 hover:text-epaColor1 transform transition duration-300 ease-in-out',
   back: 'bg-epaColor1 rounded-4xl hover:border-epaColor1 hover:bg-transparent hover:text-epaColor1 hover:font-semibold hover:scale-105 transform transition duration-300 ease-in-out',
   danger: 'bg-red-600 rounded-4xl hover:bg-red-800 hover:scale-105 transform transition duration-300 ease-in-out',
+  
 }
 
 export const GlobalButton = ({

@@ -2,9 +2,11 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { overtimesService, workersService } from '../features';
 
 const AseoContext = createContext({
-  overtimes: [],
   workers: [],
   jobPositions: [],
+  overtimes: [],
+  departaments: [],
+  locations: [],
   currentPage: null,
   totalPages: null,
   totalRecords: null,
@@ -15,6 +17,8 @@ const AseoContext = createContext({
   getAllOvertimes: () => {},
   getAllWorkers: () => {},
   getAllJobPositions: () => {},
+  getAllDepartaments: () => {},
+  getAllLocations: () => {},
   handlePageChange: () => {},
 });
 
@@ -22,6 +26,8 @@ export const AseoProvider = ({ children }) => {
   const [workers, setWorkers] = useState([]);
   const [jobPositions, setJobPositions] = useState([]);
   const [overtimes, setOvertimes] = useState([]);
+  const [departaments, setDepartaments] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -30,6 +36,8 @@ export const AseoProvider = ({ children }) => {
   const [loadingWorkers, setLoadingWorkers] = useState(false);
   const [loadingJobPositions, setLoadingJobPositions] = useState(false);
   const [loadingOvertimes, setLoadingOvertimes] = useState(false);
+  const [loadingDepartaments, setLoadingDepartaments] = useState(false);
+  const [loadingLocations, setLoadingLocations] = useState(false);
 
   const limit = 15;
 
@@ -37,7 +45,7 @@ export const AseoProvider = ({ children }) => {
     if (showLoader) setLoadingWorkers(true);
     try {
       const response = await workersService.getAllWorkers();
-      setWorkers(response.data);
+      setWorkers(response.data);      
     } catch (error) {
       console.log(error);
       throw error;
@@ -74,6 +82,30 @@ export const AseoProvider = ({ children }) => {
     }
   };
 
+  const getAllDepartaments = async (showLoader = true) => {
+    if (showLoader) setLoadingDepartaments(true);
+    try {
+      const response = await workersService.getAllDepartaments();
+      setDepartaments(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      if (showLoader) setLoadingDepartaments(false);
+    }
+  };
+
+  const getAllLocations = async (showLoader = true) => {
+    if (showLoader) setLoadingLocations(true);
+    try {
+      const response = await workersService.getAllLocations();
+      setLocations(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      if (showLoader) setLoadingLocations(false);
+    }
+  };
+
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -87,6 +119,8 @@ export const AseoProvider = ({ children }) => {
           getAllWorkers(false),
           getAllJobPositions(false),
           getAllOvertimes(1, false),
+          getAllDepartaments(false),
+          getAllLocations(false),
         ]);
       } catch (error) {
         console.error(error);
@@ -102,16 +136,22 @@ export const AseoProvider = ({ children }) => {
       workers,
       jobPositions,
       overtimes,
+      departaments,
+      locations,
       currentPage,
       totalPages,
       totalRecords,
       initialLoading,
-      loadingOvertimes,
       loadingWorkers,
       loadingJobPositions,
+      loadingOvertimes,
+      loadingDepartaments,
+      loadingLocations,
       getAllWorkers,
       getAllJobPositions,
       getAllOvertimes,
+      getAllDepartaments,
+      getAllLocations,
       handlePageChange,
       setCurrentPage,
       setOvertimes,
@@ -121,14 +161,17 @@ export const AseoProvider = ({ children }) => {
       workers,
       jobPositions,
       overtimes,
+      departaments,
+      locations,
       currentPage,
       totalPages,
       totalRecords,
       initialLoading,
-      loadingOvertimes,
       loadingWorkers,
       loadingJobPositions,
-      
+      loadingOvertimes,
+      loadingDepartaments,
+      loadingLocations,
     ]
   );
 
