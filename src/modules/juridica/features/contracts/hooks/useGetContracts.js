@@ -4,19 +4,18 @@ import { useForm } from 'react-hook-form';
 import { useJuridica } from '@/modules/juridica/context';
 
 export const useGetContracts = () => {
-  const { lawyers, process, contractType } = useJuridica();
+  const { lawyers, process, contractType, contracts, getAllContracts, loading, updateContracts } = useJuridica();
 
-  const [contracts, setContracts] = useState([]);
   const [hoverEye, setHoverEye] = useState(false);
+  const [detailsContractModal, setDetailsContractModal] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
   const [selectedContract, setSelectedContract] = useState(null);
   const [selectedContractId, setSelectedContractId] = useState('');
   const [selectedConsecutive, setSelectedConsecutive] = useState('');
   const [selectedContractType, setSelectedContractType] = useState('');
-  const [summaries, setSummaries] = useState('')
-  const [loading, setLoading] = useState(false);
-  const [detailsContractModal, setDetailsContractModal] = useState(false);
-  const [updateModal, setUpdateModal] = useState(false);
-  const [confirmModal, setConfirmModal] = useState(false);
+  const [summaries, setSummaries] = useState('');
+  const [filterValue, setFilterValue] = useState('');
   const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
@@ -31,42 +30,21 @@ export const useGetContracts = () => {
   } = useForm();
 
   useEffect(() => {
-    getAllContracts(), getContractSummaries();
-  }, [])
+    getAllContracts(),
+    getContractSummaries();
+  }, []);
 
-  const getAllContracts = async () => {
-      setLoading(true);
-      try {
-        const response = await contractsServices.getAllContracts();
-        console.log('📦 Contratos desde backend:', response);
-        setContracts(response.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const updateContracts = (updateData) => {
-    setContracts(updateData)
-  }
+  
 
   const onSubmitUpdateContract = async (updateData) => {
     try {
-      await contractsServices.updateContracts(
-        selectedContractId,
-        updateData
-      );
+      await contractsServices.updateContracts(selectedContractId, updateData);
       setAlertModal({
         open: true,
         message: 'El contrato ha sido actualizado con Exito✅',
-        state: 'Contrato Actualizado'
-      })
-      updateContracts((prev) =>
-        prev.map((item) =>
-          item._id === selectedContractId ? {...item, ...updateData, EstadoContrato: "Anulado" } : item
-        )
-      )
+        state: 'Contrato Actualizado',
+      });
+      getAllContracts();
     } catch (error) {
       console.log(error);
       setAlertModal({
@@ -74,8 +52,8 @@ export const useGetContracts = () => {
         message: error.message || 'Error al actualizar el contrato. ❌',
         state: 'Error',
       });
-    } 
-  }
+    }
+  };
 
   const openEye = (id) => {
     setHoverEye(id);
@@ -100,7 +78,7 @@ export const useGetContracts = () => {
   };
 
   const openUpdateModal = (id) => {
-    setSelectedContractId(id)
+    setSelectedContractId(id);
     const selectedContract = contracts.find((c) => c._id === id);
 
     const formatDate = (dateString) => dateString?.split('T')[0] || '';
@@ -126,7 +104,7 @@ export const useGetContracts = () => {
   };
 
   const openConfirmModal = (id) => {
-    setSelectedContractId(id)
+    setSelectedContractId(id);
     const selectedContract = contracts.find((c) => c._id === id);
 
     setSelectedContract(selectedContract);
@@ -139,33 +117,45 @@ export const useGetContracts = () => {
       setAlertModal({
         open: true,
         message: 'El contrato ha sido anulado con Exito✅',
-        state: 'Contrato Anulado'
-      })
-      updateContracts((prev) => 
-        prev.map(item =>
-          item._id === selectedContractId ? {...item, EstadoContrato: "Anulado"} : item
+        state: 'Contrato Anulado',
+      });
+      updateContracts((prev) =>
+        prev.map((item) =>
+          item._id === selectedContractId
+            ? { ...item, EstadoContrato: 'Anulado' }
+            : item
         )
-      )
+      );
     } catch (error) {
       console.log(error);
       setAlertModal({
         open: true,
         message: error.message || 'Error al anular el contrato. ❌',
-        state: 'Error'
-      })
+        state: 'Error',
+      });
     }
-  }
-
+  };
 
   // Cards
   const getContractSummaries = async () => {
-      try {
-        const response = await contractsServices.getContractSummaries();
-        setSummaries(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    try {
+      const response = await contractsServices.getContractSummaries();
+      setSummaries(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //Filter
+  const handleSearch = () => {
+
+  }
+
+  const handleKeyDown = () => {
+
+  }
+  console.log(contracts);
+  
 
   return {
     //Properties
@@ -175,6 +165,7 @@ export const useGetContracts = () => {
     contractType,
     detailsContractModal,
     errors,
+    filterValue,
     hoverEye,
     lawyers,
     loading,
@@ -187,7 +178,9 @@ export const useGetContracts = () => {
 
     //Methods
     closeModals,
+    handleKeyDown,
     handleOverride,
+    handleSearch,
     handleSubmit,
     onSubmitUpdateContract,
     openConfirmModal,
@@ -195,6 +188,6 @@ export const useGetContracts = () => {
     openEye,
     openUpdateModal,
     register,
-    updateContracts,
+    setFilterValue,
   };
 };

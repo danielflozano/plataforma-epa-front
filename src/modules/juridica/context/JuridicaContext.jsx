@@ -6,15 +6,20 @@ const JuridicaContext = createContext({
   contracts: [],
   lawyers: [],
   process: [],
+  contractType: [],
+  loading: Boolean,
+
   getAllContracts: () => {},
   getAllLawyers: () => {},
   getAllProcess: () => {},
+  getAllContractType: () => {},
   updateLawyers: () => {},
 });
 
 export const JuridicaProvider = ({ children }) => {
   const [lawyers, setLawyers] = useState([]);
   const [process, setProcess] = useState([]);
+  const [contracts, setContracts] = useState([]);
   const [contractType, setContractType] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +51,23 @@ export const JuridicaProvider = ({ children }) => {
     }
   };
 
+  const getAllContracts = async () => {
+    setLoading(true);
+    try {
+      const response = await contractsServices.getAllContracts();
+      console.log('📦 Contratos desde backend:', response);
+      setContracts(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateContracts = (updateData) => {
+    setContracts(updateData);
+  };
+
   const updateLawyers = (updateData) => {
     setLawyers(updateData);
   }
@@ -54,7 +76,7 @@ export const JuridicaProvider = ({ children }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await Promise.allSettled([getAllLawyers(), getAllProcess(), getAllContractType()]);
+        await Promise.allSettled([getAllContracts(), getAllLawyers(), getAllProcess(), getAllContractType()]);
       } catch (error) {
         console.error(error);
       } finally {
@@ -69,15 +91,18 @@ export const JuridicaProvider = ({ children }) => {
     () => ({
       lawyers,
       process,
+      contracts,
       contractType,
       loading,
 
       getAllLawyers,
       getAllProcess,
       getAllContractType,
+      getAllContracts,
       updateLawyers,
+      updateContracts,
     }),
-    [lawyers, process, contractType, loading]
+    [lawyers, process, contracts, contractType, loading]
   );
 
   return (

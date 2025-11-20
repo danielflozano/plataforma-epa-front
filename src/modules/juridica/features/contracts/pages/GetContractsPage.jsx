@@ -1,6 +1,7 @@
 import {
   AlertModal,
   ConfirmModal,
+  FilterInput,
   GlobalButton,
   LoadSpinner,
   UpdateModal,
@@ -19,13 +20,14 @@ import { DetailsContractModal, UpdateContractModal } from '../components';
 
 export const GetContractsPage = () => {
   const {
-    //Properties
+     //Properties
     alertModal,
     confirmModal,
     contracts,
     contractType,
     detailsContractModal,
     errors,
+    filterValue,
     hoverEye,
     lawyers,
     loading,
@@ -38,7 +40,9 @@ export const GetContractsPage = () => {
 
     //Methods
     closeModals,
+    handleKeyDown,
     handleOverride,
+    handleSearch,
     handleSubmit,
     onSubmitUpdateContract,
     openConfirmModal,
@@ -46,6 +50,7 @@ export const GetContractsPage = () => {
     openEye,
     openUpdateModal,
     register,
+    setFilterValue,
   } = useGetContracts();
   const { onClickBack } = useBackNavigation();
 
@@ -84,6 +89,14 @@ export const GetContractsPage = () => {
         </div>
 
         {/*Filtros*/}
+        <FilterInput
+          filterValue={filterValue}
+          setFilterValue={setFilterValue}
+          placeholder='Buscar por Identificacion del Contratista, Consecutivo, Tipo de Contrato o Nombre del Contratista'
+          inputClassName="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
+          handleKeyDown={handleKeyDown}
+          handleSearch={handleSearch}
+        />
 
         {/*Tabla de Contratos*/}
         <section className="">
