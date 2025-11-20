@@ -7,8 +7,9 @@ import {
   GlobalButton,
   GlobalInput,
   AlertModal,
+  UpdateModal,
 } from '@/components';
-import { FilePlus, Pencil } from 'lucide-react';
+import { FilePlus, IdCardLanyard, Pencil } from 'lucide-react';
 import { useLawyer } from '../hooks';
 import { useJuridica } from '@/modules/juridica/context/JuridicaContext';
 
@@ -19,15 +20,21 @@ export const LawyersPage = () => {
     // Properties
     alertModal,
     errors,
+    errorsUpdate,
     modal,
+    selectedNameLawyer,
+    updateModal,
 
     // Methods
-    closeAlertModal,
-    closeModal,
+    closeModals,
     handleSubmit,
+    handleSubmitUpdate,
     openModal,
+    onSubmitUpdateLawyer,
+    openUpdateModal,
     onSubmit,
     register,
+    registerUpdate,
   } = useLawyer();
 
   return (
@@ -55,18 +62,28 @@ export const LawyersPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {lawyers.map((lawyer) => (
-                <tr
-                  key={lawyer._id}
-                  className="hover:bg-gray-100 transition-colors"
-                >
-                  <td className="pl-2">{lawyer.identificacion}</td>
-                  <td className="pl-2">{lawyer.nombreAbogado}</td>
-                  <td className="pl-2">{lawyer.EstadoAbogado}</td>
+              {lawyers.map((l) => (
+                <tr key={l._id} className="hover:bg-gray-100 transition-colors">
+                  <td className="pl-2">{l.identificacion}</td>
+                  <td className="pl-2">{l.nombreAbogado}</td>
+                  <td className="pl-2">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold
+                        ${
+                          l.EstadoAbogado?.toLowerCase() === 'activo'
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-400 text-white'
+                        }
+                      `}
+                    >
+                      {l.EstadoAbogado}
+                    </span>
+                  </td>
                   <td className="py-1 flex justify-center">
                     <button
                       title="Editar"
                       className="bg-cyan-300/50 rounded-4xl p-2 hover:bg-cyan-400 transition-colors"
+                      onClick={() => openUpdateModal(l._id)}
                     >
                       <Pencil size={20} />
                     </button>
@@ -123,7 +140,7 @@ export const LawyersPage = () => {
                 <GlobalButton
                   variant="modalFour"
                   className="p-1.5 w-25"
-                  onClick={closeModal}
+                  onClick={closeModals}
                 >
                   Cancelar
                 </GlobalButton>
@@ -143,10 +160,55 @@ export const LawyersPage = () => {
       {/* Alert Modal */}
       <AlertModal
         openAlertModal={alertModal.open}
-        closeAlertModal={closeAlertModal}
+        closeAlertModal={closeModals}
         modalTitle={alertModal.state}
         modalDescription={alertModal.message}
       />
+
+      <UpdateModal
+        isOpen={updateModal}
+        title="Editar Abogado"
+        handleSubmit={handleSubmitUpdate}
+        onSubmit={onSubmitUpdateLawyer}
+        closeModal={closeModals}
+      >
+        <div className="flex text-epaColor1 font-bold">
+          <IdCardLanyard className="mr-1" />
+          <h4>{selectedNameLawyer}</h4>
+        </div>
+
+        <GlobalInput
+          as="input"
+          label="Identificación"
+          data="identificacion"
+          register={registerUpdate}
+          errors={errorsUpdate}
+          rules={{
+            required: 'La identificación del Abogado es obligatoria',
+          }}
+        />
+        <GlobalInput
+          as="input"
+          label="Nombre Completo"
+          data="nombreAbogado"
+          register={registerUpdate}
+          errors={errorsUpdate}
+          rules={{
+            required: 'El nombre completo del Abogado es obligatorio',
+          }}
+        />
+        <GlobalInput
+          as="select"
+          type="text"
+          label="Estado"
+          data="EstadoAbogado"
+          register={registerUpdate}
+          errors={errorsUpdate}
+        >
+          <option value="Activo">Activo</option>
+          <option value="Inactivo">Inactivo</option>
+        </GlobalInput>
+      </UpdateModal>
     </>
   );
 };

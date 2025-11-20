@@ -27,7 +27,19 @@ export const contractsServices =  {
         console.log(response.data.message);
         return response.data
     }catch (error){
-        throw new Error(handleAxiosError(error, 'Error actualizando contrato ❌'))
+      console.log(error);
+      
+      throw new Error(handleAxiosError(error, 'Error actualizando contrato ❌'))
+    }
+  },
+
+  overrideContracts: async (id) => {
+    try {
+      const response = await apiClient.post(`/contrato/anular/${id}`);
+      console.log(response.data.message);
+      return response.data
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error anulando contrato ❌'))
     }
   },
 
@@ -39,6 +51,15 @@ export const contractsServices =  {
     } catch (error) {
       throw new Error(error, "Error listando los procesos ❌");
       
+    }
+  },
+
+  getContractSummaries: async () => {
+    try {
+      const response = await apiClient.get('/contrato/resumen')
+      return response.data
+    } catch (error) {
+      throw new Error(error, "Error listando el resumen ❌");
     }
   }
 }

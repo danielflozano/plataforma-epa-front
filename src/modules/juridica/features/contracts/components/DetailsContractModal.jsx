@@ -84,8 +84,15 @@ export const DetailsContractModal = ({
                 <strong>Valor del Contrato:</strong>
                 {contractData.ValorContrato}
               </span>
-              <span>
-                <strong>Estado del Contrato:</strong>
+              <span
+                className={`px-1 py-1 rounded-lg text-black font-semibold
+                  ${contractData.EstadoContrato === 'Activo' ? 'bg-green-400' : ''}
+                  ${contractData.EstadoContrato === 'Anulado' ? 'bg-gray-400' : ''}
+                  ${contractData.EstadoContrato === 'Finalizado' ? 'bg-red-400' : ''}
+                  ${contractData.EstadoContrato === 'ProximoVencer' ? 'bg-yellow-300' : ''}
+                `}
+              >
+                <strong>Estado: </strong>
                 {contractData.EstadoContrato}
               </span>
             </div>

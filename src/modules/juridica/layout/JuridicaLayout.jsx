@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom';
-import { UserCheck, House, Folders, Users, NotebookPen, Building2 } from 'lucide-react';
+import { UserCheck, House, Folders, Users, NotebookPen, Building2, LogOut } from 'lucide-react';
 import { GlobalButton } from '@/components';
 import { useAuth } from '@/context/AuthContext';
 import logo from '@/assets/logoepa.png';
@@ -65,8 +65,9 @@ export const JuridicaLayout = () => {
           <GlobalButton
             variant="danger"
             onClick={logout}
-            className="p-1.5 w-3/4 block mx-auto"
+            className="flex justify-center p-1.5 w-38 mx-auto"
           >
+            <LogOut className="mr-2" />
             Cerrar Sesión
           </GlobalButton>
         </div>

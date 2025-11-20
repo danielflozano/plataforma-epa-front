@@ -36,7 +36,7 @@ export const lawyersServices = {
 
   updateLawyers: async (id, data) => {
     try {
-      const response = await apiClient.put(`/abogados/${id}`, data);
+      const response = await apiClient.put(`/abogados/actualizar/${id}`, data);
       console.log(response.data.message);
       return response.data;
     } catch (error) {

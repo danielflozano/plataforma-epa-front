@@ -9,24 +9,15 @@ const JuridicaContext = createContext({
   getAllContracts: () => {},
   getAllLawyers: () => {},
   getAllProcess: () => {},
+  updateLawyers: () => {},
 });
 
 export const JuridicaProvider = ({ children }) => {
-  const [contracts, setContracts] = useState([]);
   const [lawyers, setLawyers] = useState([]);
   const [process, setProcess] = useState([]);
   const [contractType, setContractType] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getAllContracts = async () => {
-    try {
-      const response = await contractsServices.getAllContracts();
-      setContracts(response);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
 
   const getAllLawyers = async () => {
     try {
@@ -55,11 +46,15 @@ export const JuridicaProvider = ({ children }) => {
     }
   };
 
+  const updateLawyers = (updateData) => {
+    setLawyers(updateData);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await Promise.allSettled([getAllContracts(), getAllLawyers(), getAllProcess(), getAllContractType()]);
+        await Promise.allSettled([getAllLawyers(), getAllProcess(), getAllContractType()]);
       } catch (error) {
         console.error(error);
       } finally {
@@ -72,17 +67,17 @@ export const JuridicaProvider = ({ children }) => {
 
   const contextValue = useMemo(
     () => ({
-      contracts,
       lawyers,
       process,
       contractType,
       loading,
 
-      getAllContracts,
       getAllLawyers,
       getAllProcess,
+      getAllContractType,
+      updateLawyers,
     }),
-    [contracts, lawyers, process, contractType, loading]
+    [lawyers, process, contractType, loading]
   );
 
   return (

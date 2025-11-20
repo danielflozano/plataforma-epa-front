@@ -12,9 +12,11 @@ import {
 } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { useCreateContracts } from '../hooks';
-import { FilePlus } from 'lucide-react';
+import { ArrowLeft, FilePlus } from 'lucide-react';
 
 export const CreateContractsPage = () => {
+
+
   const {
     // Properties
     alertModal,
@@ -41,7 +43,12 @@ export const CreateContractsPage = () => {
 
   return (
     <>
-      <GlobalButton className="p-1.5 w-30" variant="back" onClick={onClickBack}>
+      <GlobalButton
+        variant="back"
+        className="flex w-30 p-1.5 mb-3"
+        onClick={onClickBack}
+      >
+        <ArrowLeft className="ml-0.5 mr-2 -left-0.5" />
         Regresar
       </GlobalButton>
       <div className="flex mt-5">
@@ -138,7 +145,7 @@ export const CreateContractsPage = () => {
               <option value="">Seleccione una opcion</option>
               {contractType.map((ct) => (
                 <option key={ct._id} value={ct._id}>
-                  {ct.tipoContrato}
+                  {ct.nombre}
                 </option>
               ))}
             </GlobalInput>
@@ -230,7 +237,7 @@ export const CreateContractsPage = () => {
       >
         <GlobalInput
           label="Nombre del Tipo de Contrato"
-          data="tipoContrato"
+          data="nombre"
           register={registerContractType}
           errors={errorsContractType}
           rules={{

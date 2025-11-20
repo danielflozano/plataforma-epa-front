@@ -61,6 +61,7 @@ export const useCreateContracts = () => {
         state: 'Registro Exitoso',
       });
       resetContractType();
+      // ES PARA ACTUALIZAR EL CONTEXTO Y DE UNA VEZ TRAIGA EL QUE SE ACABO DE AGREGAR
       getAllContractType();
       setContractTypeModal(false);
     } catch (error) {
