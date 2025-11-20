@@ -103,9 +103,6 @@ export const useGetOvertimes = () => {
         console.log('Si funcionó handleSearch');
       } catch (error) {
         console.error(error);
-        setState('Error');
-        setAlertModalMessage(error.message);
-        setOpenAlertModal(true);
         setOvertimesFilter([]);
         setShowPagination(false);
       } finally {
@@ -170,7 +167,7 @@ export const useGetOvertimes = () => {
 
     setOpenAlertModal(false);
   };
-
+  
   return {
     // Properties
     alertModalMessage,

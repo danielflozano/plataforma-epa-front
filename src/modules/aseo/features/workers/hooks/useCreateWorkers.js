@@ -6,15 +6,13 @@ import { useAseo } from '@/modules/aseo/context';
 const tipoOperario = ['Planta', 'Temporal'];
 export const useCreateWorkers = () => {
   const [updateModal, setUpdateModal] = useState(false);
-  const [departaments, setDepartaments] = useState([]);
-  const [locations, setLocations] = useState([]);
   const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
     status: '',
   });
 
-  const { jobPositions, getAllWorkers, getAllJobPositions } = useAseo();
+  const { jobPositions, departaments, locations, getAllWorkers, getAllJobPositions } = useAseo();
 
   const {
     register,
@@ -29,31 +27,6 @@ export const useCreateWorkers = () => {
     reset: resetJobPosition,
     formState: { errors: jobPositionErrors },
   } = useForm();
-
-  useEffect(() => {
-    getDepartaments();
-    getLocations();
-  }, []);
-
-  const getDepartaments = async () => {
-    try {
-      const response = await workersService.getAllDepartaments();
-      console.log(response);
-      setDepartaments(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getLocations = async () => {
-    try {
-      const response = await workersService.getAllLocations();
-      console.log(response);
-      setLocations(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const onSubmit = async (data) => {
     try {
