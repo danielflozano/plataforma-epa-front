@@ -1,1 +1,1 @@
-export * from './HistoricalPage'
+export { default as HistoricalPage } from './HistoricalPage.jsx';

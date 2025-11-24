@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { authService } from '@/modules/auth/services/authService';
 import { apiClient, setupInterceptors } from '@/api';
+import { ROLES } from '@/routes/roles';
 
 const AuthContext = createContext({
   auth: null,
@@ -29,9 +30,12 @@ export const AuthProvider = ({ children }) => {
   // }
 
   const checkSession = async () => {
+    console.log('checkSession: Iniciando revisión de sesión...');
     const accessToken = localStorage.getItem('accessToken');
     const userData = localStorage.getItem('user');
     const user = userData ? JSON.parse(userData) : null;
+    console.log('checkSession: accessToken de localStorage:', accessToken ? 'Presente' : 'Ausente');
+    console.log('checkSession: user de localStorage:', user);
 
     try {
       if (accessToken && user) {
@@ -40,9 +44,11 @@ export const AuthProvider = ({ children }) => {
           user,
         });
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        console.log('checkSession: Sesión restaurada desde localStorage.');
         return;
       }
 
+      console.log('checkSession: No hay sesión en localStorage, intentando renovar token...');
       const { token: newAccessToken, user: newUser } = await authService.renewToken();
       setAuth({
         accessToken: newAccessToken,
@@ -51,18 +57,22 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('accessToken', newAccessToken);
       localStorage.setItem('user', JSON.stringify(newUser));
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+      console.log('checkSession: Token renovado y sesión establecida.');
     } catch (error) {
       console.log('Error checkSession', error);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
       delete apiClient.defaults.headers.common['Authorization'];
       setAuth(null);
+      console.log('checkSession: Sesión eliminada debido a error.');
     } finally {
       setLoading(false);
+      console.log('checkSession: Finalizado.');
     }
   };
 
   const login = (accessToken, user) => {
+    console.log('login: Intentando iniciar sesión...');
     try {
       setAuth({
         accessToken,
@@ -71,8 +81,11 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('user', JSON.stringify(user));
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      console.log('login: Sesión iniciada y token establecido para:', user.rol);
+      return user.rol; // Return the user's role
     } catch (error) {
-      console.error('No se pudo iniciar la sesión correctamente', error);
+      console.error('login: No se pudo iniciar la sesión correctamente', error);
+      return null;
     }
   };
 

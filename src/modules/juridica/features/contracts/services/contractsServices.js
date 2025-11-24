@@ -12,12 +12,26 @@ export const contractsServices =  {
     }
   },
 
-  getAllContracts: async () => {
+  getAllContracts: async ({ page = 1, limit = 15, filtros = {} } = {}) => {
     try {
-        const response = await apiClient.get('/contrato/filtro');
-        return response;
-    }catch (error) {
-        throw new Error(handleAxiosError(error, 'Error listando contratos ❌'));
+      const cleanFiltros = Object.entries(filtros).reduce((acc, [key, value]) => {
+        if (value) {
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+
+      const params = new URLSearchParams({
+        page,
+        limit,
+        ...cleanFiltros
+      });
+
+      const response = await apiClient.get(`/contrato/filtro?${params.toString()}`);
+      console.log('Respuesta del backend a getAllContracts (frontend):', response.data);
+      return response.data;
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error listando contratos ❌'));
     }
   },
 

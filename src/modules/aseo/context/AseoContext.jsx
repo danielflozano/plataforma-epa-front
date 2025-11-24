@@ -20,6 +20,7 @@ const AseoContext = createContext({
   getAllDepartaments: () => {},
   getAllLocations: () => {},
   handlePageChange: () => {},
+  setCurrentPage: () => {},
 });
 
 export const AseoProvider = ({ children }) => {

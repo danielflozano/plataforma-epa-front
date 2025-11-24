@@ -4,7 +4,18 @@ import { useForm } from 'react-hook-form';
 import { useJuridica } from '@/modules/juridica/context';
 
 export const useGetContracts = () => {
-  const { lawyers, process, contractType, contracts, getAllContracts, loading, updateContracts } = useJuridica();
+  const { 
+    lawyers, 
+    process, 
+    contractType, 
+    contracts,
+    totalContracts,
+    currentPage,
+    totalPages: contextTotalPages,
+    getAllContracts, 
+    loading, 
+    updateContracts 
+  } = useJuridica();
 
   const [hoverEye, setHoverEye] = useState(false);
   const [detailsContractModal, setDetailsContractModal] = useState(false);
@@ -16,35 +27,93 @@ export const useGetContracts = () => {
   const [selectedContractType, setSelectedContractType] = useState('');
   const [summaries, setSummaries] = useState('');
   const [filterValue, setFilterValue] = useState('');
+  const [activeFilters, setActiveFilters] = useState({}); // ✅ Estado para filtros activos
+
   const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
     state: '',
   });
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const [totalPages, setTotalPages] = useState(1);
 
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  // 🔥 FUNCIÓN PARA CARGAR CONTRATOS CON FILTROS
+  const loadContracts = async (pageNumber = 1, filtros = {}) => {
+    try {
+      await getAllContracts({ 
+        page: pageNumber, 
+        limit,
+        filtros 
+      });
+      // La actualización de totalPages se maneja a través del contexto y su useEffect.
+    } catch (error) {
+      console.log(error);
+      setTotalPages(1);
+    }
+  };
+
+  // ✅ FUNCIÓN PARA BUSCAR (activada por Enter o botón)
+  const handleSearch = () => {
+    if (!filterValue.trim()) {
+      // Si está vacío, limpiar filtros
+      setActiveFilters({});
+      setPage(1);
+      loadContracts(1, {});
+      return;
+    }
+
+    // Aplicar filtro de búsqueda general
+    const filtros = {
+      search: filterValue.trim()
+    };
+
+    setActiveFilters(filtros);
+    setPage(1);
+    loadContracts(1, filtros);
+  };
+
+  // ✅ FUNCIÓN PARA MANEJAR ENTER
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  // 👉 CARGAR CONTRATOS AL CAMBIAR DE PÁGINA
   useEffect(() => {
-    getAllContracts(),
+    loadContracts(page, activeFilters);
+  }, [page]);
+
+  // 👉 CARGAR CONTRATOS AL MONTAR EL COMPONENTE
+  useEffect(() => {
     getContractSummaries();
   }, []);
 
-  
+  useEffect(() => {
+    setTotalPages(contextTotalPages || 1);
+  }, [contextTotalPages]);
+
+  const changePage = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+  };
 
   const onSubmitUpdateContract = async (updateData) => {
     try {
       await contractsServices.updateContracts(selectedContractId, updateData);
+
       setAlertModal({
         open: true,
         message: 'El contrato ha sido actualizado con Exito✅',
         state: 'Contrato Actualizado',
       });
-      getAllContracts();
+
+      loadContracts(page, activeFilters);
+
     } catch (error) {
       console.log(error);
       setAlertModal({
@@ -55,13 +124,10 @@ export const useGetContracts = () => {
     }
   };
 
-  const openEye = (id) => {
-    setHoverEye(id);
-  };
+  const openEye = (id) => setHoverEye(id);
 
   const openDetailsContractModal = (id) => {
     const selectedContract = contracts.find((c) => c._id === id);
-
     setSelectedContract(selectedContract);
     setDetailsContractModal(true);
   };
@@ -70,11 +136,7 @@ export const useGetContracts = () => {
     setDetailsContractModal(false);
     setUpdateModal(false);
     setConfirmModal(false);
-    setAlertModal({
-      open: false,
-      message: '',
-      status: '',
-    });
+    setAlertModal({ open: false, message: '', status: '' });
   };
 
   const openUpdateModal = (id) => {
@@ -100,13 +162,13 @@ export const useGetContracts = () => {
         FechaFinalizacion: formatDate(selectedContract.FechaFinalizacion),
       });
     }
+
     setUpdateModal(true);
   };
 
   const openConfirmModal = (id) => {
     setSelectedContractId(id);
     const selectedContract = contracts.find((c) => c._id === id);
-
     setSelectedContract(selectedContract);
     setConfirmModal(true);
   };
@@ -114,18 +176,23 @@ export const useGetContracts = () => {
   const handleOverride = async () => {
     try {
       await contractsServices.overrideContracts(selectedContractId);
+      
       setAlertModal({
         open: true,
         message: 'El contrato ha sido anulado con Exito✅',
-        state: 'Contrato Anulado',
+        state: 'Contrato Anulado'
       });
-      updateContracts((prev) =>
-        prev.map((item) =>
-          item._id === selectedContractId
-            ? { ...item, EstadoContrato: 'Anulado' }
+
+      updateContracts((prevContracts) =>
+        prevContracts.map((item) =>
+          item._id === selectedContractId 
+            ? { ...item, EstadoContrato: 'Anulado' } 
             : item
         )
       );
+
+      closeModals();
+
     } catch (error) {
       console.log(error);
       setAlertModal({
@@ -136,7 +203,6 @@ export const useGetContracts = () => {
     }
   };
 
-  // Cards
   const getContractSummaries = async () => {
     try {
       const response = await contractsServices.getContractSummaries();
@@ -146,19 +212,7 @@ export const useGetContracts = () => {
     }
   };
 
-  //Filter
-  const handleSearch = () => {
-
-  }
-
-  const handleKeyDown = () => {
-
-  }
-  console.log(contracts);
-  
-
   return {
-    //Properties
     alertModal,
     confirmModal,
     contracts,
@@ -175,12 +229,13 @@ export const useGetContracts = () => {
     selectedContractType,
     summaries,
     updateModal,
-
-    //Methods
+    page,
+    totalPages,
+    changePage,
     closeModals,
-    handleKeyDown,
+    handleKeyDown,      
     handleOverride,
-    handleSearch,
+    handleSearch,      
     handleSubmit,
     onSubmitUpdateContract,
     openConfirmModal,

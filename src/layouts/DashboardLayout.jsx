@@ -1,14 +1,26 @@
 import { Link, Outlet } from 'react-router-dom';
-import { UserCheck, House, ClipboardClock, Users, NotebookPen } from 'lucide-react';
+import { UserCheck, House, ClipboardClock, Users, NotebookPen, UserPlus, Folders } from 'lucide-react';
 import { GlobalButton } from '@/components';
 import { useAuth } from '@/context/AuthContext';
 import logo from '../assets/logoepa.png';
-import { aseoRoutesList } from '@/routes';
+import { adminRoutesList, aseoRoutesList } from '@/routes';
+import { ROLES } from '@/routes/roles';
+import juridicaRoutesList from '@/routes/list/juridicaRoutesList';
 
 const currentYear = new Date().getFullYear();
 
 export const DashboardLayout = () => {
   const { auth, logout } = useAuth();
+
+  const showAseoLinks = auth.user.rol === ROLES.ADMIN_ASEO ||
+    auth.user.rol === ROLES.USER_ASEO ||
+    auth.user.rol === ROLES.SUPER_ADMIN;
+
+  const showJuridicaLinks = auth.user.rol === ROLES.ADMIN_JURIDICO ||
+    auth.user.rol === ROLES.USER_JURIDICO ||
+    auth.user.rol === ROLES.SUPER_ADMIN;
+
+  const showAdminLinks = auth.user.rol === ROLES.SUPER_ADMIN;
 
   return (
     <div className="flex h-screen">
@@ -19,42 +31,95 @@ export const DashboardLayout = () => {
           <h4 className="font-medium">Version 1.0</h4>
         </div>
         <nav className="space-y-4 pb-10">
-          <div className="text-epaColor1 font-medium">
-            <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.aseoDashboard}
-            >
-              <House size={20} />
-              Inicio
-            </Link>
-          </div>
-          <div className="text-epaColor1 font-medium">
-            <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.overtimes}
-            >
-              <ClipboardClock size={20} />
-              Horas Extra
-            </Link>
-          </div>
-          <div className="text-epaColor1 font-medium">
-            <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.workers}
-            >
-              <Users size={20} />
-              Funcionarios
-            </Link>
-          </div>
-          <div className="text-epaColor1 font-medium">
-            <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.reports}
-            >
-              <NotebookPen size={20} />
-              Reportes
-            </Link>
-          </div>
+          {/* Admin Links */}
+          {showAdminLinks && (
+            <>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={adminRoutesList.createUser}
+                >
+                  <UserPlus size={20} />
+                  Crear Usuario
+                </Link>
+              </div>
+            </>
+          )}
+
+          {/* Aseo Links */}
+          {showAseoLinks && (
+            <>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={aseoRoutesList.aseoDashboard}
+                >
+                  <House size={20} />
+                  Inicio Aseo
+                </Link>
+              </div>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={aseoRoutesList.overtimes}
+                >
+                  <ClipboardClock size={20} />
+                  Horas Extra
+                </Link>
+              </div>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={aseoRoutesList.workers}
+                >
+                  <Users size={20} />
+                  Funcionarios
+                </Link>
+              </div>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={aseoRoutesList.reports}
+                >
+                  <NotebookPen size={20} />
+                  Reportes Aseo
+                </Link>
+              </div>
+            </>
+          )}
+
+          {/* Juridica Links */}
+          {showJuridicaLinks && (
+            <>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={juridicaRoutesList.juridicaDashboard}
+                >
+                  <House size={20} />
+                  Inicio Jurídica
+                </Link>
+              </div>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={juridicaRoutesList.contracts}
+                >
+                  <NotebookPen size={20} />
+                  Contratos
+                </Link>
+              </div>
+              <div className="text-epaColor1 font-medium">
+                <Link
+                  className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+                  to={juridicaRoutesList.historical}
+                >
+                  <Folders size={20} />
+                  Histórico
+                </Link>
+              </div>
+            </>
+          )}
         </nav>
         <GlobalButton variant="danger" onClick={logout} className="p-1.5 w-3/4 block mx-auto">
           Cerrar Sesión
@@ -84,7 +149,7 @@ export const DashboardLayout = () => {
           <div>Plataforma de Horas Extra Aseo - EPA</div>
           <div>
             Contacto de Soporte:{' '}
-            <a href="mailto:redes.tic@epa.gov.co">redes.tic&#64;epa.gov.co</a>
+            <a href="mailto:redes.tic@epa.gov.co">redes.tic@epa.gov.co</a>
             <p>Tel: (606) 741 17 80 Ext. 1512 - 1513</p>
           </div>
         </footer>

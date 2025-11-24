@@ -20,7 +20,7 @@ import { DetailsContractModal, UpdateContractModal } from '../components';
 
 export const GetContractsPage = () => {
   const {
-     //Properties
+    //Properties
     alertModal,
     confirmModal,
     contracts,
@@ -37,6 +37,9 @@ export const GetContractsPage = () => {
     selectedContractType,
     summaries,
     updateModal,
+    page,
+    totalPages,
+    changePage,
 
     //Methods
     closeModals,
@@ -72,7 +75,7 @@ export const GetContractsPage = () => {
         <div className=" h-1/5 flex flex-row justify-around items-center gap-4">
           <div className="bg-green-400 h-25 w-70 p-3 rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
             <span > Numero de contratos vigentes </span>
-            <p className="text-3xl">{summaries?.data?.Activo?? 0}</p>
+            <p className="text-3xl">{summaries?.data?.Activo ?? 0}</p>
           </div>
           <div className="bg-yellow-300 h-25 w-70 p-3 rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
             <span>Contratos por vencer en 30 dias</span>
@@ -207,6 +210,45 @@ export const GetContractsPage = () => {
               </tbody>
             </table>
           </div>
+          {/* PAGINACIÓN */}
+          <div className="flex justify-center items-center gap-3 mt-4">
+
+            {/* Botón Anterior */}
+            <button
+              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              disabled={page === 1}
+              onClick={() => changePage(page - 1)}
+            >
+              Anterior
+            </button>
+
+            {/* Botones numéricos */}
+            {[...Array(totalPages)].map((_, i) => {
+              const num = i + 1;
+              return (
+                <button
+                  key={num}
+                  onClick={() => changePage(num)}
+                  className={`px-3 py-1 rounded ${page === num
+                      ? 'bg-epaColor1 text-white'
+                      : 'bg-gray-200 hover:bg-gray-300'
+                    }`}
+                >
+                  {num}
+                </button>
+              );
+            })}
+
+            {/* Botón Siguiente */}
+            <button
+              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              disabled={page === totalPages}
+              onClick={() => changePage(page + 1)}
+            >
+              Siguiente
+            </button>
+          </div>
+
         </section>
         <DetailsContractModal
           isOpen={detailsContractModal}

@@ -11,7 +11,7 @@ import { useAuth } from '@/context';
 import { GlobalButton, LoadSpinner } from '@/components';
 import { aseoRoutesList } from '@/routes';
 import logo from '@/assets/logoepa.png';
-import { AseoProvider, useAseo } from '../context';
+import { useAseo } from '../context';
 
 const currentYear = new Date().getFullYear();
 
@@ -24,8 +24,7 @@ export const AseoLayout = () => {
   }
 
   return (
-    <AseoProvider>
-      <div className="flex h-screen">
+    <div className="flex h-screen">
         <div className="bg-gray-50 w-1/6 flex flex-col p-4 border-r border-gray-300">
           <div className="space-y-4 pb-10 text-center">
             <img src={logo} alt="Logo EPA" />
@@ -109,6 +108,5 @@ export const AseoLayout = () => {
           </footer>
         </div>
       </div>
-    </AseoProvider>
   );
 };

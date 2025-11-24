@@ -8,21 +8,31 @@ const JuridicaContext = createContext({
   process: [],
   contractType: [],
   loading: Boolean,
+  totalContracts: 0,
+  currentPage: 1,
+  limit: 15,
+  totalPages: 1,
 
-  getAllContracts: () => {},
-  getAllLawyers: () => {},
-  getAllProcess: () => {},
-  getAllContractType: () => {},
-  updateLawyers: () => {},
+  getAllContracts: () => { },
+  getAllLawyers: () => { },
+  getAllProcess: () => { },
+  getAllContractType: () => { },
+  updateLawyers: () => { },
+  updateContracts: () => { },
 });
 
 export const JuridicaProvider = ({ children }) => {
   const [lawyers, setLawyers] = useState([]);
   const [process, setProcess] = useState([]);
-  const [contracts, setContracts] = useState([]);
+  const [contracts, setContracts] = useState({
+    data: [],
+    total: 0,
+    page: 1,
+    limit: 15,
+    totalPages: 1
+  });
   const [contractType, setContractType] = useState([]);
   const [loading, setLoading] = useState(false);
-
 
   const getAllLawyers = async () => {
     try {
@@ -51,36 +61,69 @@ export const JuridicaProvider = ({ children }) => {
     }
   };
 
-  const getAllContracts = async () => {
+  const getAllContracts = async ({ page = 1, limit = 15, filtros = {} } = {}) => {
     setLoading(true);
     try {
-      const response = await contractsServices.getAllContracts();
-      console.log('📦 Contratos desde backend:', response);
-      setContracts(response.data);
+      const response = await contractsServices.getAllContracts({ page, limit, filtros });
+
+      if (response && response.data) {
+        setContracts({
+          data: response.data,
+          total: response.total || 0,
+          page: response.page || page,
+          limit: response.limit || limit,
+          totalPages: response.totalPages || 1
+        });
+        
+        return response; // ✅ Retornar la respuesta completa
+      } else {
+        setContracts({ data: [], total: 0, page: 1, limit, totalPages: 1 });
+        return { data: [], total: 0, page: 1, limit, totalPages: 1 };
+      }
     } catch (error) {
       console.error(error);
+      setContracts({ data: [], total: 0, page: 1, limit, totalPages: 1 });
+      return { data: [], total: 0, page: 1, limit, totalPages: 1 };
     } finally {
       setLoading(false);
     }
   };
 
+  // ✅ Mejorar updateContracts para aceptar tanto función como objeto
   const updateContracts = (updateData) => {
-    setContracts(updateData);
+    if (typeof updateData === 'function') {
+      setContracts(prev => {
+        const updated = updateData(prev.data);
+        return {
+          ...prev,
+          data: updated
+        };
+      });
+    } else {
+      setContracts(prev => ({
+        ...prev,
+        ...updateData
+      }));
+    }
   };
 
   const updateLawyers = (updateData) => {
     setLawyers(updateData);
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
-        await Promise.allSettled([getAllContracts(), getAllLawyers(), getAllProcess(), getAllContractType()]);
+        // Se elimina el setLoading de aquí para evitar race conditions.
+        // La función `getAllContracts` ya gestiona su propio estado de carga.
+        await Promise.allSettled([
+          getAllContracts(),
+          getAllLawyers(),
+          getAllProcess(),
+          getAllContractType()
+        ]);
       } catch (error) {
         console.error(error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -91,7 +134,11 @@ export const JuridicaProvider = ({ children }) => {
     () => ({
       lawyers,
       process,
-      contracts,
+      contracts: contracts.data || [],
+      totalContracts: contracts.total || 0,
+      currentPage: contracts.page || 1,
+      limit: contracts.limit || 15,
+      totalPages: contracts.totalPages || 1,
       contractType,
       loading,
 
@@ -100,7 +147,7 @@ export const JuridicaProvider = ({ children }) => {
       getAllContractType,
       getAllContracts,
       updateLawyers,
-      updateContracts,
+      updateContracts
     }),
     [lawyers, process, contracts, contractType, loading]
   );
