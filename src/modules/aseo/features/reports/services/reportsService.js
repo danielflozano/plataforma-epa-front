@@ -15,7 +15,7 @@ export const reportsService = {
 
   exportExcelReport: async (reportData) => {
     try {
-      const response = await apiClient.post('/reporte/exportar', reporteData, {
+      const response = await apiClient.post('/reporte/exportar', reportData, {
         responseType: 'blob',
       });
       return response

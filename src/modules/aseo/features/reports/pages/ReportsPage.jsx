@@ -1,19 +1,24 @@
 import { GlobalButton, GlobalInput } from '@/components';
 import { useReports } from '../hooks';
+import { ReportsTable } from '../components';
 
 export const ReportsPage = () => {
   const {
     // Properties
     errors,
+    reports,
+    tipoOperario,
 
     // Methods
     handleSubmit,
+    onSubmit,
     register,
   } = useReports();
 
   return (
-    <>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+    <div className='flex flex-col gap-4'>
+      <h2 className="text-epaColor1 text-4xl text-center font-extrabold">Reporte de Horas Extra</h2>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-between">
           <GlobalInput
             type="date"
@@ -52,17 +57,21 @@ export const ReportsPage = () => {
             }}
           >
             <option value="">Seleccione el cargo</option>
+            {tipoOperario.map((tipoOper) => (
+              <option key={tipoOper} value={tipoOper}>{tipoOper}</option>
+            ))}
           </GlobalInput>
         </div>
         <div className="flex justify-center gap-4">
-          <GlobalButton className="w-[30%] max-w-150 p-1.5" type="submit">
+          <GlobalButton className="w-[30%] max-w-150 p-1.5" type="submit" name="generar">
             Generar Reporte
           </GlobalButton>
-          <GlobalButton className="w-[30%] max-w-150 p-1.5" type="submit">
+          <GlobalButton className="w-[30%] max-w-150 p-1.5" type="submit" name="excel">
             Generar Reporte Excel
           </GlobalButton>
         </div>
       </form>
-    </>
+      <ReportsTable reports={reports} />
+    </div>
   );
 };
