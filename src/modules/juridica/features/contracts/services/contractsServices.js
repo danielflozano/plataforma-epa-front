@@ -1,35 +1,46 @@
-import { apiClient } from "@/api"
-import { handleAxiosError } from "@/utils"
+import { apiClient } from '@/api';
+import { handleAxiosError } from '@/utils';
 
-export const contractsServices =  {
+export const contractsServices = {
   createContracts: async (contractsData) => {
     try {
-        const response = await apiClient.post('/contrato/crearContrato', contractsData);
-        console.log(response.data.message);
-        return response.data;
-    }catch (error) {
-        throw new Error(handleAxiosError(error, 'Error creando contrato ❌'));
+      const response = await apiClient.post(
+        '/contrato/crearContrato',
+        contractsData
+      );
+      console.log(response.data.message);
+      return response.data;
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error creando contrato ❌'));
     }
   },
 
-  getAllContracts: async () => {
+  getAllContracts: async (filters) => {
     try {
-        const response = await apiClient.get('/contrato/filtro');
-        return response;
-    }catch (error) {
-        throw new Error(handleAxiosError(error, 'Error listando contratos ❌'));
+      const response = await apiClient.get('/contrato/filtro', {
+        params: {
+          ...filters, // Enviar solo el filtro que toque
+        },
+      });
+
+      console.log(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error listando contratos ❌'));
     }
   },
 
   updateContracts: async (id, data) => {
     try {
-        const response = await apiClient.put(`/contrato/update/${id}`, data);
-        console.log(response.data.message);
-        return response.data
-    }catch (error){
+      const response = await apiClient.put(`/contrato/update/${id}`, data);
+      console.log(response.data.message);
+      return response.data;
+    } catch (error) {
       console.log(error);
-      
-      throw new Error(handleAxiosError(error, 'Error actualizando contrato ❌'))
+
+      throw new Error(
+        handleAxiosError(error, 'Error actualizando contrato ❌')
+      );
     }
   },
 
@@ -37,29 +48,27 @@ export const contractsServices =  {
     try {
       const response = await apiClient.post(`/contrato/anular/${id}`);
       console.log(response.data.message);
-      return response.data
+      return response.data;
     } catch (error) {
-      throw new Error(handleAxiosError(error, 'Error anulando contrato ❌'))
+      throw new Error(handleAxiosError(error, 'Error anulando contrato ❌'));
     }
   },
-
 
   getAllProcess: async () => {
     try {
       const response = await apiClient.get('/procesos/');
-      return response.data
+      return response.data;
     } catch (error) {
-      throw new Error(error, "Error listando los procesos ❌");
-      
+      throw new Error(error, 'Error listando los procesos ❌');
     }
   },
 
   getContractSummaries: async () => {
     try {
-      const response = await apiClient.get('/contrato/resumen')
-      return response.data
+      const response = await apiClient.get('/contrato/resumen');
+      return response.data;
     } catch (error) {
-      throw new Error(error, "Error listando el resumen ❌");
+      throw new Error(error, 'Error listando el resumen ❌');
     }
-  }
-}
+  },
+};

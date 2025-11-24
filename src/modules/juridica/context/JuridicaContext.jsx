@@ -56,7 +56,7 @@ export const JuridicaProvider = ({ children }) => {
     try {
       const response = await contractsServices.getAllContracts();
       console.log('📦 Contratos desde backend:', response);
-      setContracts(response.data);
+      setContracts(response);
     } catch (error) {
       console.error(error);
     } finally {

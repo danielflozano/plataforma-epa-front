@@ -20,13 +20,13 @@ import { DetailsContractModal, UpdateContractModal } from '../components';
 
 export const GetContractsPage = () => {
   const {
-     //Properties
+    //Properties
     alertModal,
     confirmModal,
-    contracts,
     contractType,
     detailsContractModal,
     errors,
+    filteredContracts,
     filterValue,
     hoverEye,
     lawyers,
@@ -40,7 +40,6 @@ export const GetContractsPage = () => {
 
     //Methods
     closeModals,
-    handleKeyDown,
     handleOverride,
     handleSearch,
     handleSubmit,
@@ -71,8 +70,8 @@ export const GetContractsPage = () => {
         {/* Cards */}
         <div className=" h-1/5 flex flex-row justify-around items-center gap-4">
           <div className="bg-green-400 h-25 w-70 p-3 rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
-            <span > Numero de contratos vigentes </span>
-            <p className="text-3xl">{summaries?.data?.Activo?? 0}</p>
+            <span> Numero de contratos vigentes </span>
+            <p className="text-3xl">{summaries?.data?.Activo ?? 0}</p>
           </div>
           <div className="bg-yellow-300 h-25 w-70 p-3 rounded-2xl font-semibold text-center shadow-lg shadow-gray-300">
             <span>Contratos por vencer en 30 dias</span>
@@ -89,14 +88,35 @@ export const GetContractsPage = () => {
         </div>
 
         {/*Filtros*/}
-        <FilterInput
-          filterValue={filterValue}
-          setFilterValue={setFilterValue}
-          placeholder='Buscar por Identificacion del Contratista, Consecutivo, Tipo de Contrato o Nombre del Contratista'
-          inputClassName="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
-          handleKeyDown={handleKeyDown}
-          handleSearch={handleSearch}
+        <input
+          type="text"
+          value={filterValue}
+          onChange={(e) => setFilterValue(e.target.value)}
+          placeholder="Escribe aquí…"
+          className='bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3'
         />
+
+      <div className='flex gap-2'>
+        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('NombreContratista')}>
+          Buscar por Nombre
+        </button>
+
+        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('consecutivo')}>
+          Buscar por Consecutivo
+        </button>
+
+        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('identificacionOnit')}>
+          Buscar por Identificación
+        </button>
+
+        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('tipoContrato')}>
+          Buscar por Tipo de Contrato
+        </button>
+
+        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('vigencia')}>
+          Buscar por Vigencia
+        </button>
+      </div>
 
         {/*Tabla de Contratos*/}
         <section className="">
@@ -131,8 +151,8 @@ export const GetContractsPage = () => {
               </thead>
 
               <tbody>
-                {contracts?.length > 0 ? (
-                  contracts.map((c) => (
+                {filteredContracts?.length > 0 ? (
+                  filteredContracts.map((c) => (
                     <tr
                       key={c._id}
                       className="hover:bg-gray-100 transition-colors"
@@ -152,10 +172,26 @@ export const GetContractsPage = () => {
                       <td>
                         <span
                           className={`ml-3 px-3 py-1 rounded-full text-sm font-semibold
-                            ${c.EstadoContrato === 'Activo' ? 'bg-green-400' : ''}
-                            ${c.EstadoContrato === 'Anulado' ? 'bg-gray-400' : ''}
-                            ${c.EstadoContrato === 'Finalizado' ? 'bg-red-400' : ''}
-                            ${c.EstadoContrato === 'ProximoVencer' ? 'bg-yellow-300' : ''}
+                            ${
+                              c.EstadoContrato === 'Activo'
+                                ? 'bg-green-400'
+                                : ''
+                            }
+                            ${
+                              c.EstadoContrato === 'Anulado'
+                                ? 'bg-gray-400'
+                                : ''
+                            }
+                            ${
+                              c.EstadoContrato === 'Finalizado'
+                                ? 'bg-red-400'
+                                : ''
+                            }
+                            ${
+                              c.EstadoContrato === 'ProximoVencer'
+                                ? 'bg-yellow-300'
+                                : ''
+                            }
                           `}
                         >
                           {c.EstadoContrato}

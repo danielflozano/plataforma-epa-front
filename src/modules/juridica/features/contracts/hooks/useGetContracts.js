@@ -4,8 +4,17 @@ import { useForm } from 'react-hook-form';
 import { useJuridica } from '@/modules/juridica/context';
 
 export const useGetContracts = () => {
-  const { lawyers, process, contractType, contracts, getAllContracts, loading, updateContracts } = useJuridica();
+  const {
+    lawyers,
+    process,
+    contractType,
+    contracts,
+    getAllContracts,
+    loading,
+    updateContracts,
+  } = useJuridica();
 
+  const [filteredContracts, setFilteredContracts] = useState([]);
   const [hoverEye, setHoverEye] = useState(false);
   const [detailsContractModal, setDetailsContractModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -30,11 +39,12 @@ export const useGetContracts = () => {
   } = useForm();
 
   useEffect(() => {
-    getAllContracts(),
-    getContractSummaries();
+    getAllContracts(), getContractSummaries();
   }, []);
 
-  
+  useEffect(() => {
+    setFilteredContracts(contracts);
+  }, [contracts]);
 
   const onSubmitUpdateContract = async (updateData) => {
     try {
@@ -147,15 +157,23 @@ export const useGetContracts = () => {
   };
 
   //Filter
-  const handleSearch = () => {
+  const handleSearch = async (paramName) => {
+  if (!filterValue.trim()) return;
 
-  }
+  const filtros = {
+    [paramName]: filterValue.trim()
+  };
+  console.log("🔥 FILTROS QUE ESTÁ MANDANDO EL FRONT:", filtros);
 
-  const handleKeyDown = () => {
+  const data = await getAllContracts(filtros);
+  setFilteredContracts(data);
+};
 
-  }
-  console.log(contracts);
-  
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return {
     //Properties
@@ -165,6 +183,7 @@ export const useGetContracts = () => {
     contractType,
     detailsContractModal,
     errors,
+    filteredContracts,
     filterValue,
     hoverEye,
     lawyers,
