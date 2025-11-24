@@ -18,6 +18,7 @@ export const GlobalButton = ({
   type = 'button',
   className = '',
   disabled = false,
+  ...props
 }) => {
   return (
     <button
@@ -25,6 +26,7 @@ export const GlobalButton = ({
       onClick={onClick}
       disabled={disabled}
       className={`text-epaColor7 border-2 border-transparent cursor-pointer ${buttonVariants[variant]} ${className}`}
+      {...props}
     >
       {children}
     </button>
