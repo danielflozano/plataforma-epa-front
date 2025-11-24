@@ -175,6 +175,11 @@ export const useGetContracts = () => {
     }
   };
 
+  const handleReset = () => {
+    getAllContracts();
+    setFilterValue('');
+  }
+
   return {
     //Properties
     alertModal,
@@ -199,6 +204,7 @@ export const useGetContracts = () => {
     closeModals,
     handleKeyDown,
     handleOverride,
+    handleReset,
     handleSearch,
     handleSubmit,
     onSubmitUpdateContract,

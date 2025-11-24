@@ -14,6 +14,7 @@ import {
   Ban,
   StickyNote,
   ArrowLeft,
+  RotateCcw,
 } from 'lucide-react';
 import { useGetContracts } from '../hooks';
 import { DetailsContractModal, UpdateContractModal } from '../components';
@@ -41,6 +42,7 @@ export const GetContractsPage = () => {
     //Methods
     closeModals,
     handleOverride,
+    handleReset,
     handleSearch,
     handleSubmit,
     onSubmitUpdateContract,
@@ -88,35 +90,59 @@ export const GetContractsPage = () => {
         </div>
 
         {/*Filtros*/}
-        <input
-          type="text"
-          value={filterValue}
-          onChange={(e) => setFilterValue(e.target.value)}
-          placeholder="Escribe aquí…"
-          className='bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3'
-        />
+        <div className='flex gap-2 '>
+          <input
+            type="text"
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+            placeholder="Escribe aquí…"
+            className="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
+          />
+          <GlobalButton className='flex p-2 gap-2' onClick={handleReset}>
+            <RotateCcw />
+            Resetear Filtro
+          </GlobalButton>
+        </div>
 
-      <div className='flex gap-2'>
-        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('NombreContratista')}>
-          Buscar por Nombre
-        </button>
+        <div className="flex gap-2">
+          <GlobalButton className=''>
+            Buscar por Nombre
+          </GlobalButton>
+          <button
+            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+            onClick={() => handleSearch('NombreContratista')}
+          >
+            Buscar por Nombre
+          </button>
 
-        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('consecutivo')}>
-          Buscar por Consecutivo
-        </button>
+          <button
+            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+            onClick={() => handleSearch('consecutivo')}
+          >
+            Buscar por Consecutivo
+          </button>
 
-        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('identificacionOnit')}>
-          Buscar por Identificación
-        </button>
+          <button
+            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+            onClick={() => handleSearch('identificacionOnit')}
+          >
+            Buscar por Identificación
+          </button>
 
-        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('tipoContrato')}>
-          Buscar por Tipo de Contrato
-        </button>
+          <button
+            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+            onClick={() => handleSearch('tipoContrato')}
+          >
+            Buscar por Tipo de Contrato
+          </button>
 
-        <button className='bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out' onClick={() => handleSearch('vigencia')}>
-          Buscar por Vigencia
-        </button>
-      </div>
+          <button
+            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+            onClick={() => handleSearch('vigencia')}
+          >
+            Buscar por Vigencia
+          </button>
+        </div>
 
         {/*Tabla de Contratos*/}
         <section className="">

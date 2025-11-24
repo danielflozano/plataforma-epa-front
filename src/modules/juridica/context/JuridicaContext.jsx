@@ -51,10 +51,10 @@ export const JuridicaProvider = ({ children }) => {
     }
   };
 
-  const getAllContracts = async () => {
+  const getAllContracts = async (filters) => {
     setLoading(true);
     try {
-      const response = await contractsServices.getAllContracts();
+      const response = await contractsServices.getAllContracts(filters);
       console.log('📦 Contratos desde backend:', response);
       setContracts(response);
     } catch (error) {
