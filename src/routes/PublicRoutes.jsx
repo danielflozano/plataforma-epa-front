@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Outlet } from 'react-router-dom';
-import { aseoRoutesList } from './list';
+import { aseoRoutesList, juridicaRoutesList, superadminRoutesList } from './list';
 import { LoadSpinner } from '@/components';
 
 export const PublicRoutes = () => {
@@ -12,5 +12,15 @@ export const PublicRoutes = () => {
     );
   }
 
-  return !auth ? <Outlet /> : <Navigate to={ aseoRoutesList.aseoDashboard } replace />;
+  const userRole = auth?.user.rol;
+
+  const redirections = {
+    AdminAseo: aseoRoutesList.aseoDashboard,
+    UsuarioAseo: aseoRoutesList.aseoDashboard,
+    AdminJuridica: juridicaRoutesList.juridicaDashboard,
+    UsuarioJuridica: juridicaRoutesList.juridicaDashboard,
+    SuperAdministrador: superadminRoutesList.superadminDashboard,
+  };
+
+  return !auth ? <Outlet /> : <Navigate to={ redirections[userRole] || "/" } replace />;
 };

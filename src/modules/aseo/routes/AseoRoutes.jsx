@@ -9,7 +9,7 @@ import {
   ReportsPage,
   WorkersPage,
 } from '../features';
-import { AseoLayout } from '../aseoLayout';
+import { AseoLayout } from '../layout';
 
 export const AseoRoutes = [
   {

@@ -12,6 +12,6 @@ const aseoRoutesList = {
   createWorkers: `${workers}/create`,
   getWorkers: `${workers}/get`,
   reports: reports,
-}
+};
 
 export default aseoRoutesList;

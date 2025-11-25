@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/context';
-import { aseoRoutesList, authRoutesList, juridicaRoutesList } from './list';
+import { aseoRoutesList, authRoutesList, juridicaRoutesList, superadminRoutesList } from './list';
 
 export const RoleProtectedRoute = ({ allowedRoles }) => {
   const { auth } = useAuth();
@@ -16,8 +16,8 @@ export const RoleProtectedRoute = ({ allowedRoles }) => {
     UsuarioAseo: aseoRoutesList.aseoDashboard,
     AdminJuridica: juridicaRoutesList.juridicaDashboard,
     UsuarioJuridica: juridicaRoutesList.juridicaDashboard,
-    SuperAdministrador: aseoRoutesList.aseoDashboard,
+    SuperAdministrador: superadminRoutesList.superadminDashboard,
   };
 
-  return <Navigate to={redirections[userRole] || "/"} replace />;
+  return <Navigate to={ redirections[userRole] || "/" } replace />;
 };
