@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Outlet } from 'react-router-dom';
-import { authRoutesList } from './list';
 import { LoadSpinner } from '@/components';
+import { authRoutesList } from './list';
 
 export const ProtectedRoutes = () => {
   const { auth, loading } = useAuth();
