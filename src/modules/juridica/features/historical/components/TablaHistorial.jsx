@@ -57,7 +57,7 @@ const TablaHistorial = ({ contratos }) => {
                     )}
                   </td>
 
-                  {/* NOVEDADES */}
+               
                   <td className="pl-2 whitespace-normal break-words overflow-hidden">
                     {contrato.novedades}
                   </td>
