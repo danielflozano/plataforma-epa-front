@@ -15,9 +15,14 @@ import {
   StickyNote,
   ArrowLeft,
   RotateCcw,
+  CirclePlus,
 } from 'lucide-react';
 import { useGetContracts } from '../hooks';
-import { DetailsContractModal, UpdateContractModal } from '../components';
+import {
+  DetailsContractModal,
+  ModificationsContractModal,
+  UpdateContractModal,
+} from '../components';
 
 export const GetContractsPage = () => {
   const {
@@ -25,14 +30,20 @@ export const GetContractsPage = () => {
     alertModal,
     confirmModal,
     contractType,
+    currentPage,
     detailsContractModal,
     errors,
+    errorsModifications,
     filteredContracts,
     filterValue,
     hoverEye,
     lawyers,
     loading,
+    modificationsContractModal,
+    objetoExpandido,
     process,
+    totalPages,
+    totalRecords,
     selectedConsecutive,
     selectedContract,
     selectedContractType,
@@ -42,16 +53,22 @@ export const GetContractsPage = () => {
     //Methods
     closeModals,
     handleOverride,
+    handlePageChange,
     handleReset,
     handleSearch,
     handleSubmit,
+    handleSubmitModifications,
     onSubmitUpdateContract,
+    onSubmitModificationsContract,
     openConfirmModal,
     openDetailsContractModal,
     openEye,
+    openModificationsModal,
     openUpdateModal,
     register,
+    registerModifications,
     setFilterValue,
+    setObjetoExpandido,
   } = useGetContracts();
   const { onClickBack } = useBackNavigation();
 
@@ -90,7 +107,7 @@ export const GetContractsPage = () => {
         </div>
 
         {/*Filtros*/}
-        <div className='flex gap-2 '>
+        <div className="flex gap-2 ">
           <input
             type="text"
             value={filterValue}
@@ -98,50 +115,43 @@ export const GetContractsPage = () => {
             placeholder="Escribe aquí…"
             className="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
           />
-          <GlobalButton className='flex p-2 gap-2' onClick={handleReset}>
+          <GlobalButton className="flex p-2 gap-2" onClick={handleReset}>
             <RotateCcw />
             Resetear Filtro
           </GlobalButton>
         </div>
 
         <div className="flex gap-2">
-          <GlobalButton className=''>
-            Buscar por Nombre
-          </GlobalButton>
-          <button
-            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+          <GlobalButton
+            className="p-2"
             onClick={() => handleSearch('NombreContratista')}
           >
             Buscar por Nombre
-          </button>
-
-          <button
-            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+          </GlobalButton>
+          <GlobalButton
+            className="p-2"
             onClick={() => handleSearch('consecutivo')}
           >
             Buscar por Consecutivo
-          </button>
-
-          <button
-            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+          </GlobalButton>
+          <GlobalButton
+            className="p-2"
             onClick={() => handleSearch('identificacionOnit')}
           >
-            Buscar por Identificación
-          </button>
-
-          <button
-            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+            Buscar por Identificacion
+          </GlobalButton>
+          <GlobalButton
+            className="p-2"
             onClick={() => handleSearch('tipoContrato')}
           >
             Buscar por Tipo de Contrato
-          </button>
-
-          <button
-            className="bg-epaColor1 text-white font-semibold rounded-xl p-2  hover:border-epaColor1 hover:bg-blue-100 hover:text-epaColor1 transform transition duration-300 ease-in-out"
+          </GlobalButton>
+          <GlobalButton
+            className="p-2"
             onClick={() => handleSearch('vigencia')}
           >
             Buscar por Vigencia
-          </button>
+          </GlobalButton>
         </div>
 
         {/*Tabla de Contratos*/}
@@ -178,7 +188,7 @@ export const GetContractsPage = () => {
 
               <tbody>
                 {filteredContracts?.length > 0 ? (
-                  filteredContracts.map((c) => (
+                  filteredContracts.map((c, index) => (
                     <tr
                       key={c._id}
                       className="hover:bg-gray-100 transition-colors"
@@ -187,8 +197,34 @@ export const GetContractsPage = () => {
                       <td className="pl-2">{c.tipoContrato.nombre}</td>
                       <td className="pl-2">{c.consecutivo}</td>
                       <td className="pl-2">{c.NombreContratista}</td>
-                      <td className="pl-2 whitespace-normal break-words overflow-hidden">
-                        {c.objeto}
+                      <td className="pl-2 whitespace-normal break-words max-w-[200px]">
+                        {objetoExpandido === index ? (
+                          <>
+                            {c.objeto}
+                            <button
+                              className="text-blue-600 ml-2"
+                              onClick={() => setObjetoExpandido(null)}
+                            >
+                              Ver menos
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            {c.objeto.length > 60 ? (
+                              <>
+                                {c.objeto.substring(0, 60)}...
+                                <button
+                                  className="text-blue-600 ml-2"
+                                  onClick={() => setObjetoExpandido(index)}
+                                >
+                                  Ver más
+                                </button>
+                              </>
+                            ) : (
+                              c.objeto
+                            )}
+                          </>
+                        )}
                       </td>
                       <td className="pl-2">{c.ValorContrato}</td>
                       <td className="pl-2">{c.FechaInicio}</td>
@@ -225,7 +261,7 @@ export const GetContractsPage = () => {
                       </td>
 
                       <td className="">
-                        <div className="flex gap-2 pl-2">
+                        <div className="flex gap-1 pl-2">
                           <button
                             onMouseEnter={() => openEye(c._id)}
                             onMouseLeave={() => openEye(null)}
@@ -249,6 +285,14 @@ export const GetContractsPage = () => {
                           </button>
 
                           <button
+                            className="p-2 bg-green-200 rounded-full hover:bg-green-300 hover:scale-110 transition-transform"
+                            title="Agregar Modificaciones"
+                            onClick={() => openModificationsModal(c._id)}
+                          >
+                            <CirclePlus size={18} />
+                          </button>
+
+                          <button
                             className="p-2 bg-red-200 rounded-full hover:bg-red-300 hover:scale-110 transition-transform"
                             title="Eliminar"
                             onClick={() => openConfirmModal(c._id)}
@@ -269,12 +313,48 @@ export const GetContractsPage = () => {
               </tbody>
             </table>
           </div>
+          {/* PAGINACIÓN */}
+          <div className="flex justify-between items-center px-4 py-3">
+            <span>
+              Mostrando {filteredContracts.length} de {totalRecords} registros.
+            </span>
+            <div className="flex items-center gap-2">
+              <GlobalButton
+                variant="modalTwo"
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-3 py-1 disabled:bg-gray-400"
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </GlobalButton>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <GlobalButton
+                variant="modalTwo"
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-3 py-1 disabled:bg-gray-400"
+                disabled={currentPage === totalPages}
+              >
+                Siguiente
+              </GlobalButton>
+            </div>
+          </div>
         </section>
+        {/* AlertModal */}
+        <AlertModal
+          openAlertModal={alertModal.open}
+          closeAlertModal={closeModals}
+          modalTitle={alertModal.state}
+          modalDescription={alertModal.message}
+        />
+
         <DetailsContractModal
           isOpen={detailsContractModal}
           closeDetailsContractModal={closeModals}
           contractData={selectedContract}
         />
+
         <UpdateModal
           isOpen={updateModal}
           title="Editar Contrato"
@@ -298,13 +378,18 @@ export const GetContractsPage = () => {
           />
         </UpdateModal>
 
-        {/* AlertModal */}
-        <AlertModal
-          openAlertModal={alertModal.open}
-          closeAlertModal={closeModals}
-          modalTitle={alertModal.state}
-          modalDescription={alertModal.message}
-        />
+        <UpdateModal
+          isOpen={modificationsContractModal}
+          title="Modificaciones"
+          handleSubmit={handleSubmitModifications}
+          onSubmit={onSubmitModificationsContract}
+          closeModal={closeModals}
+        >
+          <ModificationsContractModal
+            register={registerModifications}
+            errors={errorsModifications}
+          />
+        </UpdateModal>
 
         <ConfirmModal
           isOpen={confirmModal}

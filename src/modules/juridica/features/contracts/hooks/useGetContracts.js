@@ -9,16 +9,24 @@ export const useGetContracts = () => {
     process,
     contractType,
     contracts,
-    getAllContracts,
     loading,
+    currentPage,
+    totalPages,
+    totalRecords,
+
+    getAllContracts,
+    handlePageChange,
     updateContracts,
   } = useJuridica();
 
   const [filteredContracts, setFilteredContracts] = useState([]);
   const [hoverEye, setHoverEye] = useState(false);
   const [detailsContractModal, setDetailsContractModal] = useState(false);
+  const [modificationsContractModal, setModificationsContractModal] =
+    useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
+  const [objetoExpandido, setObjetoExpandido] = useState(null);
   const [selectedContract, setSelectedContract] = useState(null);
   const [selectedContractId, setSelectedContractId] = useState('');
   const [selectedConsecutive, setSelectedConsecutive] = useState('');
@@ -38,9 +46,16 @@ export const useGetContracts = () => {
     formState: { errors },
   } = useForm();
 
+  const {
+    register: registerModifications,
+    handleSubmit: handleSubmitModifications,
+    reset: resetModifications,
+    formState: { errors: errorsModifications },
+  } = useForm();
+
   useEffect(() => {
-    getAllContracts(), getContractSummaries();
-  }, []);
+    getAllContracts(currentPage, false), getContractSummaries();
+  }, [currentPage]);
 
   useEffect(() => {
     setFilteredContracts(contracts);
@@ -65,6 +80,27 @@ export const useGetContracts = () => {
     }
   };
 
+  const onSubmitModificationsContract = async (modificationsData) => {
+    try {
+      await contractsServices.addModifications(
+        selectedContractId,
+        modificationsData
+      );
+      setAlertModal({
+        open: true,
+        message: 'La modificacion ha sido creada con Exito✅',
+        state: 'Modificacion Agregada',
+      });
+    } catch (error) {
+      console.log(error);
+      setAlertModal({
+        open: true,
+        message: error.message || 'Error al crear modificacion ❌',
+        state: 'Error',
+      });
+    }
+  };
+
   const openEye = (id) => {
     setHoverEye(id);
   };
@@ -80,6 +116,7 @@ export const useGetContracts = () => {
     setDetailsContractModal(false);
     setUpdateModal(false);
     setConfirmModal(false);
+    setModificationsContractModal(false);
     setAlertModal({
       open: false,
       message: '',
@@ -95,7 +132,7 @@ export const useGetContracts = () => {
 
     if (selectedContract) {
       setSelectedConsecutive(selectedContract.consecutivo);
-      setSelectedContractType(selectedContract.tipoContrato.tipoContrato);
+      setSelectedContractType(selectedContract.tipoContrato.nombre);
       reset({
         identificacionOnit: selectedContract.identificacionOnit || '',
         NombreContratista: selectedContract.NombreContratista || '',
@@ -111,6 +148,32 @@ export const useGetContracts = () => {
       });
     }
     setUpdateModal(true);
+  };
+
+  const openModificationsModal = (id) => {
+    setSelectedContractId(id);
+    const selectedContract = contracts.find((c) => c._id === id);
+
+    const formatDate = (dateString) => dateString?.split('T')[0] || '';
+
+    if (selectedContract) {
+      setSelectedConsecutive(selectedContract.consecutivo);
+      setSelectedContractType(selectedContract.tipoContrato.nombre);
+      resetModifications({
+        identificacionOnit: selectedContract.identificacionOnit || '',
+        NombreContratista: selectedContract.NombreContratista || '',
+        TelefonoContratista: selectedContract.TelefonoContratista || '',
+        proceso: selectedContract.proceso._id,
+        CorreoDependencia: selectedContract.CorreoDependencia || '',
+        tipoContrato: selectedContract.tipoContrato._id || '',
+        AbogadoAsignado: selectedContract.AbogadoAsignado._id || '',
+        objeto: selectedContract.objeto || '',
+        ValorContrato: selectedContract.ValorContrato || '',
+        FechaInicio: formatDate(selectedContract.FechaInicio),
+        FechaFinalizacion: formatDate(selectedContract.FechaFinalizacion),
+      });
+    }
+    setModificationsContractModal(true);
   };
 
   const openConfirmModal = (id) => {
@@ -157,43 +220,62 @@ export const useGetContracts = () => {
   };
 
   //Filter
-  const handleSearch = async (paramName) => {
-  if (!filterValue.trim()) return;
+  const handleSearch = (param) => {
 
-  const filtros = {
-    [paramName]: filterValue.trim()
-  };
-  console.log("🔥 FILTROS QUE ESTÁ MANDANDO EL FRONT:", filtros);
+  setTimeout(async () => {
+    // Si el input está vacío → recargar normal
+    if (!filterValue.trim()) {
+      getAllContracts({ page: currentPage, limit: 15 });
+      setFilteredContracts(contracts); 
+      return;
+    }
 
-  const data = await getAllContracts(filtros);
-  setFilteredContracts(data);
+    try {
+      // Armamos filtros + paginación (igual que tu back)
+      const filtros = {
+        [param]: filterValue.trim(),
+        page: currentPage,
+        limit: 15,
+      };
+
+      const response = await getAllContracts(filtros);
+
+      setFilteredContracts(response.data);
+
+
+      console.log("🔥 Sí funcionó handleSearch con filtros");
+    } catch (error) {
+      console.error(error);
+      setFilteredContracts([]);
+    } 
+  }, 600);
 };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
 
   const handleReset = () => {
     getAllContracts();
     setFilterValue('');
-  }
+  };
 
   return {
     //Properties
     alertModal,
     confirmModal,
-    contracts,
     contractType,
+    currentPage,
     detailsContractModal,
     errors,
+    errorsModifications,
     filteredContracts,
     filterValue,
     hoverEye,
     lawyers,
     loading,
+    modificationsContractModal,
+    objetoExpandido,
     process,
+    totalPages,
+    totalRecords,
     selectedConsecutive,
     selectedContract,
     selectedContractType,
@@ -202,17 +284,22 @@ export const useGetContracts = () => {
 
     //Methods
     closeModals,
-    handleKeyDown,
     handleOverride,
+    handlePageChange,
     handleReset,
     handleSearch,
     handleSubmit,
+    handleSubmitModifications,
     onSubmitUpdateContract,
+    onSubmitModificationsContract,
     openConfirmModal,
     openDetailsContractModal,
     openEye,
+    openModificationsModal,
     openUpdateModal,
     register,
+    registerModifications,
     setFilterValue,
+    setObjetoExpandido,
   };
 };

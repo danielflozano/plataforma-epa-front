@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { contractsServices, contractTypeServices } from '../features/contracts/services';
+import {
+  contractsServices,
+  contractTypeServices,
+} from '../features/contracts/services';
 import { lawyersServices } from '../features/lawyers/services';
 
 const JuridicaContext = createContext({
@@ -8,12 +11,16 @@ const JuridicaContext = createContext({
   process: [],
   contractType: [],
   loading: Boolean,
+  currentPage: null,
+  totalPages: null,
+  totalRecords: null,
 
   getAllContracts: () => {},
   getAllLawyers: () => {},
   getAllProcess: () => {},
   getAllContractType: () => {},
   updateLawyers: () => {},
+  handlePageChange: () => {},
 });
 
 export const JuridicaProvider = ({ children }) => {
@@ -23,6 +30,11 @@ export const JuridicaProvider = ({ children }) => {
   const [contractType, setContractType] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const limit = 15;
 
   const getAllLawyers = async () => {
     try {
@@ -51,12 +63,15 @@ export const JuridicaProvider = ({ children }) => {
     }
   };
 
-  const getAllContracts = async (filters) => {
+  const getAllContracts = async (page, filters) => {
     setLoading(true);
     try {
-      const response = await contractsServices.getAllContracts(filters);
+      const response = await contractsServices.getAllContracts(page, limit, filters);
       console.log('📦 Contratos desde backend:', response);
       setContracts(response);
+      setCurrentPage(response.page);
+      setTotalPages(response.totalPages || 1);
+      setTotalRecords(response.total);
     } catch (error) {
       console.error(error);
     } finally {
@@ -70,13 +85,24 @@ export const JuridicaProvider = ({ children }) => {
 
   const updateLawyers = (updateData) => {
     setLawyers(updateData);
-  }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await Promise.allSettled([getAllContracts(), getAllLawyers(), getAllProcess(), getAllContractType()]);
+        await Promise.allSettled([
+          getAllContracts(),
+          getAllLawyers(),
+          getAllProcess(),
+          getAllContractType(),
+        ]);
       } catch (error) {
         console.error(error);
       } finally {
@@ -94,15 +120,28 @@ export const JuridicaProvider = ({ children }) => {
       contracts,
       contractType,
       loading,
+      currentPage,
+      totalPages,
+      totalRecords,
 
       getAllLawyers,
       getAllProcess,
       getAllContractType,
       getAllContracts,
+      handlePageChange,
       updateLawyers,
       updateContracts,
     }),
-    [lawyers, process, contracts, contractType, loading]
+    [
+      lawyers,
+      process,
+      contracts,
+      contractType,
+      loading,
+      currentPage,
+      totalPages,
+      totalRecords,
+    ]
   );
 
   return (

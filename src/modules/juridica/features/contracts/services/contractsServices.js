@@ -54,6 +54,39 @@ export const contractsServices = {
     }
   },
 
+  // MODIFICACIONES
+  addModifications: async (id) => {
+    try {
+      const response = await apiClient.post(`/api/modificaciones/${id}`);
+      console.log(response.data.message);
+      return response.data;
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error creando modificacion ❌'));
+    }
+  },
+
+  getModifications: async (id) => {
+    try {
+      const response = await apiClient.get(`/api/modificaciones/listar/${id}`);
+      console.log(response.data.message);
+      return response.data
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error listando modificaciones ❌'));
+    }
+  },
+
+  updateModifications: async (id) => {
+    try {
+      const response = await apiClient.put(`/api/modificaciones/update/${id}`);
+      console.log(response.data.message);
+      return response.data
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error actualizando modificacion ❌'));
+    }
+  },
+
+
+  //PROCESOS
   getAllProcess: async () => {
     try {
       const response = await apiClient.get('/procesos/');
@@ -63,6 +96,7 @@ export const contractsServices = {
     }
   },
 
+  //CARDS DE RESUMEN
   getContractSummaries: async () => {
     try {
       const response = await apiClient.get('/contrato/resumen');
