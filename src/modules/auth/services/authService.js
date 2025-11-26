@@ -2,16 +2,6 @@ import { authClient } from '@/api';
 import { handleAxiosError } from '@/utils';
 
 export const authService = {
-  crearUsuario: async (userData) => {
-    try {
-      const response = await authClient.post('/auth/newUser', userData);
-      console.log(response.data.msg);
-      return response.data;
-    } catch (error) {
-      throw new Error(handleAxiosError(error, 'Error creando usuario ❌'));
-    }
-  },
-
   login: async (userData) => {
     try {
       const response = await authClient.post('/auth/login', userData);

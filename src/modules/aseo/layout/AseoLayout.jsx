@@ -6,10 +6,11 @@ import {
   UserCheck,
   Users,
   LogOut,
+  UserStar,
 } from 'lucide-react';
 import { useAuth } from '@/context';
 import { GlobalButton, LoadSpinner } from '@/components';
-import { aseoRoutesList } from '@/routes';
+import { aseoRoutesList, superadminRoutesList } from '@/routes';
 import logo from '@/assets/logoepa.png';
 import { AseoProvider, useAseo } from '../context';
 
@@ -86,12 +87,27 @@ export const AseoLayout = () => {
             <h2 className="text-white text-center font-bold text-3xl">
               Plataforma Horas Extra - EPA
             </h2>
-            <div className="flex text-white text-sm items-center justify-end gap-2">
-              <UserCheck />
-              <div className="text-right">
-                {auth.user.name} <br /> {auth.user.rol}
+            {auth.user.rol === 'SuperAdministrador' && (
+              <div className="flex text-white text-sm items-center justify-end gap-2">
+                <UserStar />
+                <div className="text-right">
+                  <p className="px-2">{auth.user.name}</p>
+                  <Link to={superadminRoutesList.superadminDashboard}>
+                    <p className="bg-white px-2 text-epaColor1 font-semibold underline rounded-sm">
+                      {auth.user.rol}
+                    </p>
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
+            {auth.user.rol != 'SuperAdministrador' && (
+              <div className="flex text-white text-sm items-center justify-end gap-2">
+                <UserCheck />
+                <div className="text-right">
+                  {auth.user.name} <br /> {auth.user.rol}
+                </div>
+              </div>
+            )}
           </header>
 
           <main className="relative bg-gray-200 flex-1 overflow-auto p-4">

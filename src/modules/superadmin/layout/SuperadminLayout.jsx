@@ -1,15 +1,16 @@
 import { Link, Outlet } from 'react-router-dom';
 import {
-  ClipboardClock,
   House,
-  NotebookPen,
   UserCheck,
   Users,
   LogOut,
+  BrushCleaning,
+  Scale,
+  UserStar,
 } from 'lucide-react';
 import { useAuth } from '@/context';
-import { GlobalButton, LoadSpinner } from '@/components';
-import { aseoRoutesList } from '@/routes';
+import { GlobalButton } from '@/components';
+import { aseoRoutesList, juridicaRoutesList, superadminRoutesList } from '@/routes';
 import logo from '@/assets/logoepa.png';
 
 const currentYear = new Date().getFullYear();
@@ -29,37 +30,37 @@ export const SuperadminLayout = () => {
           <div className="text-epaColor1 font-medium">
             <Link
               className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.aseoDashboard}
+              to={superadminRoutesList.superadminDashboard}
             >
               <House size={20} />
-              Inicio
+              Inicio Admin
             </Link>
           </div>
           <div className="text-epaColor1 font-medium">
             <Link
               className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.overtimes}
-            >
-              <ClipboardClock size={20} />
-              Horas Extra
-            </Link>
-          </div>
-          <div className="text-epaColor1 font-medium">
-            <Link
-              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.workers}
+              to={superadminRoutesList.users}
             >
               <Users size={20} />
-              Funcionarios
+              Usuarios
             </Link>
           </div>
           <div className="text-epaColor1 font-medium">
             <Link
               className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-              to={aseoRoutesList.reports}
+              to={aseoRoutesList.aseoDashboard}
             >
-              <NotebookPen size={20} />
-              Reportes
+              <BrushCleaning size={20} />
+              Modulo Aseo
+            </Link>
+          </div>
+          <div className="text-epaColor1 font-medium">
+            <Link
+              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+              to={juridicaRoutesList.juridicaDashboard}
+            >
+              <Scale size={20} />
+              Modulo Juridica
             </Link>
           </div>
         </nav>
@@ -77,12 +78,17 @@ export const SuperadminLayout = () => {
         <header className="bg-epaColor1 grid grid-cols-3 px-6 py-6">
           <div></div>
           <h2 className="text-white text-center font-bold text-3xl">
-            Plataforma Horas Extra - EPA
+            Plataforma Administrador - EPA
           </h2>
           <div className="flex text-white text-sm items-center justify-end gap-2">
-            <UserCheck />
+            <UserStar />
             <div className="text-right">
-              {auth.user.name} <br /> {auth.user.rol}
+              <p className='px-2'>{auth.user.name}</p>
+              <Link
+                to={superadminRoutesList.superadminDashboard}
+              >
+                <p className='bg-white px-2 text-epaColor1 font-semibold underline rounded-sm'>{auth.user.rol}</p>
+              </Link>
             </div>
           </div>
         </header>

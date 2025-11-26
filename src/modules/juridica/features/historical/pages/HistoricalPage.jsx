@@ -64,7 +64,7 @@ export const HistoricalPage = () => {
               {cleanContracts?.length > 0 ? (
                 cleanContracts.map((c, index) => (
                   <tr
-                    key={c.idcontrato}
+                    key={c.index}
                     className="hover:bg-gray-100 transition-colors"
                   >
                     <td className="pl-2 whitespace-normal break-words max-w-[200px]">

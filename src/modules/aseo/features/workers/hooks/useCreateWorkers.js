@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { workersService } from '../services';
 import { useAseo } from '@/modules/aseo/context';

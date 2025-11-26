@@ -13,7 +13,7 @@ export const useOvertimes = () => {
       case 'get':
         setCurrentPage(1);
         return navigate(`${aseoRoutesList.getOvertimes}`);
-    }    
+    }
   };
 
   return {

@@ -58,6 +58,7 @@ export const GetWorkersPage = () => {
             setFilterValue={setFilterValue}
             handleKeyDown={handleKeyDown}
             handleSearch={handleSearch}
+            placeholder='Buscar por identificación'
           />
           <button
             className='bg-green-300 w-30 text-epaColor1 font-semibold rounded-xl cursor-pointer border-2 border-transparent hover:bg-transparent hover:border-green-400'
