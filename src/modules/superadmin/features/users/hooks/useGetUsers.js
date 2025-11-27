@@ -1,0 +1,120 @@
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { usersService } from '../services';
+import { ROLES } from '@/constants';
+
+const roles = Object.values(ROLES);
+
+export const useGetUsers = () => {
+  const [filterValue, setFilterValue] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [alertModal, setAlertModal] = useState({
+    open: false,
+    message: '',
+    status: '',
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  useEffect(() => {
+    if (success) {
+      getUsers();
+      setSuccess(false);
+    }
+  }, [success]);
+
+  const getUsers = async () => {
+    try {
+      const response = await usersService.getAllUsers();
+      setUsers(response.usuarios);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleOpenUpdateModal = (user) => {
+    reset({ ...user });
+    setSelectedUserId(user._id);
+    setUpdateModal(true);
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await usersService.updateUser(selectedUserId, data);
+      setSuccess(true);
+      setAlertModal({
+        open: true,
+        message: response.msg,
+        status: 'Actualizacion Exitosa',
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      setAlertModal({
+        open: true,
+        message: error.message,
+        status: 'Error',
+      });
+    }
+  };
+
+  const handleSearch = () => {};
+
+  const handleKeyDown = () => {};
+
+  const closeAlertModal = () => {
+    if (alertModal.status === 'Error') {
+      setAlertModal({
+        open: false,
+        message: '',
+        status: '',
+      });
+
+      return;
+    }
+
+    closeModals();
+  };
+
+  const closeModals = () => {
+    setUpdateModal(false);
+    setAlertModal({
+      open: false,
+      message: '',
+      status: '',
+    });
+  };
+
+  return {
+    // Properties
+    alertModal,
+    errors,
+    filterValue,
+    roles,
+    updateModal,
+    users,
+
+    // Methods
+    closeAlertModal,
+    closeModals,
+    handleKeyDown,
+    handleOpenUpdateModal,
+    handleSearch,
+    handleSubmit,
+    onSubmit,
+    register,
+    setFilterValue,
+  };
+};

@@ -18,13 +18,13 @@ export const workersService = {
   updateWorker: async (id, workerData) => {
     try {
       const response = await apiClient.put(
-        `./funcionario/actualizar/${id}`,
+        `/funcionario/actualizar/${id}`,
         workerData
       );
       return response.data;
     } catch (error) {
       throw new Error(
-        handleAxiosError(error, 'Error actualizando funcionario ❌')
+        handleAxiosError(error, 'Error actualizando el funcionario ❌')
       );
     }
   },
@@ -103,11 +103,11 @@ export const workersService = {
 
   getAllLocations: async () => {
     try {
-      const response = await apiClient.get('/sede/listar');      
+      const response = await apiClient.get('/sede/listar');
       return response.data;
     } catch (error) {
       console.log(error);
-      
+
       throw new Error(error, 'Error obteniendo todas las sedes ❌');
     }
   },

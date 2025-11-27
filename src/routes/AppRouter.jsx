@@ -5,8 +5,8 @@ import {
   ProtectedRoutes,
   PublicRoutes,
   RoleProtectedRoute,
-  ROLES,
 } from '.';
+import { ROLES } from '@/constants';
 
 export const AppRouter = createBrowserRouter([
   {

@@ -100,12 +100,26 @@ export const useGetWorkers = () => {
   };
 
   const closeModals = () => {
+    setUpdateModal(false);
     setAlertModal({
       open: false,
       message: '',
       status: '',
     });
-    setUpdateModal(false);
+  };
+
+  const closeAlertModal = () => {
+    if (alertModal.status === 'Error') {
+      setAlertModal({
+        open: false,
+        message: '',
+        status: '',
+      });
+
+      return;
+    }
+
+    closeModals();
   };
 
   console.log(filteredWorkers);
@@ -126,6 +140,7 @@ export const useGetWorkers = () => {
     workers,
 
     // Methods
+    closeAlertModal,
     closeModals,
     getActiveWorkers,
     handleKeyDown,

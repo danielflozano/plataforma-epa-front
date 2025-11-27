@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { workersService } from '../services';
 import { useAseo } from '@/modules/aseo/context';
@@ -12,7 +12,13 @@ export const useCreateWorkers = () => {
     status: '',
   });
 
-  const { jobPositions, departaments, locations, getAllWorkers, getAllJobPositions } = useAseo();
+  const {
+    jobPositions,
+    departaments,
+    locations,
+    getAllWorkers,
+    getAllJobPositions,
+  } = useAseo();
 
   const {
     register,
@@ -69,21 +75,31 @@ export const useCreateWorkers = () => {
     }
   };
 
-  const closeModal = () => {
+  const closeModals = () => {
+    setUpdateModal(false);
     setAlertModal({
       open: false,
       message: '',
       status: '',
     });
-    setUpdateModal(false);
   };
 
   const openUpdateModal = () => {
     setUpdateModal(true);
   };
 
-  const closeUpdateModal = () => {
-    setUpdateModal(false);
+  const closeAlertModal = () => {
+    if (alertModal.status === 'Error') {
+      setAlertModal({
+        open: false,
+        message: '',
+        status: '',
+      });
+
+      return;
+    }
+
+    closeModals();
   };
 
   return {
@@ -98,8 +114,8 @@ export const useCreateWorkers = () => {
     updateModal,
 
     // Methods
-    closeModal,
-    closeUpdateModal,
+    closeAlertModal,
+    closeModals,
     handleSubmit,
     handleSubmitJobPosition,
     onSubmit,

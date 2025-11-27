@@ -1,9 +1,9 @@
 import { Link, Outlet } from 'react-router-dom';
-import { UserCheck, House, Folders, Users, NotebookPen, Building2, LogOut } from 'lucide-react';
+import { UserCheck, House, Folders, Users, NotebookPen, Building2, LogOut, UserStar } from 'lucide-react';
 import { GlobalButton } from '@/components';
 import { useAuth } from '@/context/AuthContext';
 import logo from '@/assets/logoepa.png';
-import { juridicaRoutesList } from '@/routes';
+import { juridicaRoutesList, superadminRoutesList } from '@/routes';
 import { JuridicaProvider } from '../context/JuridicaContext';
 
 const currentYear = new Date().getFullYear();
@@ -78,12 +78,27 @@ export const JuridicaLayout = () => {
             <h2 className="text-white text-center font-bold text-3xl">
               Plataforma Contratos - EPA
             </h2>
-            <div className="flex text-white text-sm items-center justify-end gap-2">
-              <UserCheck />
-              <div className="text-right">
-                {auth.user.name} <br /> {auth.user.rol}
+            {auth.user.rol === 'SuperAdministrador' && (
+              <div className="flex text-white text-sm items-center justify-end gap-2">
+                <UserStar />
+                <div className="text-right">
+                  <p className="px-2">{auth.user.name}</p>
+                  <Link to={superadminRoutesList.superadminDashboard}>
+                    <p className="bg-white px-2 text-epaColor1 font-semibold underline rounded-sm">
+                      {auth.user.rol}
+                    </p>
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
+            {auth.user.rol != 'SuperAdministrador' && (
+              <div className="flex text-white text-sm items-center justify-end gap-2">
+                <UserCheck />
+                <div className="text-right">
+                  {auth.user.name} <br /> {auth.user.rol}
+                </div>
+              </div>
+            )}
           </header>
 
           <main className="relative bg-gray-200 flex-1 overflow-auto p-4">
