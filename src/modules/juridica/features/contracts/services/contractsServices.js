@@ -15,16 +15,28 @@ export const contractsServices = {
     }
   },
 
-  getAllContracts: async (filters) => {
+  getAllContracts: async (page = 1, limit = 15) => {
+    try {
+      const response = await apiClient.get('/contrato/filtro', {
+        params: {
+          page,
+          limit,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error listando contratos ❌'));
+    }
+  },
+
+  getFilteredContracts: async (filters) => {
     try {
       const response = await apiClient.get('/contrato/filtro', {
         params: {
           ...filters, // Enviar solo el filtro que toque
         },
       });
-
-      console.log(response.data.message);
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error listando contratos ❌'));
     }

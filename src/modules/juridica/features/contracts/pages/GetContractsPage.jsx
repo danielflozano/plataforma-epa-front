@@ -332,7 +332,7 @@ export const GetContractsPage = () => {
               </span>
               <GlobalButton
                 variant="modalTwo"
-                onClick={() => handlePageChange(currentPage + 1)}
+                onClick={() => handlePageChange(2)}
                 className="px-3 py-1 disabled:bg-gray-400"
                 disabled={currentPage === totalPages}
               >

@@ -54,8 +54,12 @@ export const useGetContracts = () => {
   } = useForm();
 
   useEffect(() => {
-    getAllContracts(currentPage, false), getContractSummaries();
+    getAllContracts(currentPage)
   }, [currentPage]);
+  
+  useEffect(() => {
+    getContractSummaries();
+  }, []);
 
   useEffect(() => {
     setFilteredContracts(contracts);
@@ -238,7 +242,7 @@ export const useGetContracts = () => {
         limit: 15,
       };
 
-      const response = await getAllContracts(filtros);
+      const response = await contractsServices.getFilteredContracts(filtros);
 
       setFilteredContracts(response.data);
 

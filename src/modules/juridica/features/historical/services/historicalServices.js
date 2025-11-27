@@ -5,7 +5,6 @@ export const historicalServices = {
   getCleanContracts: async () => {
     try {
       const response = await apiClient.get('/datos/contratosLimpios');
-      console.log(response.data.message);
       return response.data;
     } catch (error) {
       throw new Error(

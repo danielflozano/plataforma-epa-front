@@ -68,7 +68,7 @@ export const JuridicaProvider = ({ children }) => {
     try {
       const response = await contractsServices.getAllContracts(page, limit, filters);
       console.log('📦 Contratos desde backend:', response);
-      setContracts(response);
+      setContracts(response.data);
       setCurrentPage(response.page);
       setTotalPages(response.totalPages || 1);
       setTotalRecords(response.total);
@@ -95,7 +95,7 @@ export const JuridicaProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         await Promise.allSettled([
           getAllContracts(),
@@ -106,7 +106,7 @@ export const JuridicaProvider = ({ children }) => {
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -131,6 +131,7 @@ export const JuridicaProvider = ({ children }) => {
       handlePageChange,
       updateLawyers,
       updateContracts,
+      setCurrentPage,
     }),
     [
       lawyers,
