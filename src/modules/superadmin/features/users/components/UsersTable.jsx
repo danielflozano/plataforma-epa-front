@@ -1,6 +1,6 @@
 import { GlobalButton } from "@/components";
 
-export const UsersTable = ({ users = [], handleOpenForm = () => {} }) => {
+export const UsersTable = ({ users = [], handleOpenUpdateModal = () => {} }) => {
   return (
     <div className="w-full bg-white shadow-md rounded-lg p-4 mx-auto">
       <table className="w-full divide-y divide-gray-200 text-sm">
@@ -23,7 +23,7 @@ export const UsersTable = ({ users = [], handleOpenForm = () => {} }) => {
               <td>
                 <GlobalButton
                   variant="modalTwo"
-                  onClick={() => handleOpenForm(user)}
+                  onClick={() => handleOpenUpdateModal(user)}
                   className="block mx-auto px-3 py-0.5"
                 >
                   Actualizar

@@ -1,18 +1,29 @@
-import { FilterInput, GlobalButton } from '@/components';
+import { AlertModal, FilterInput, GlobalButton } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { ArrowLeft } from 'lucide-react';
 import { useGetUsers } from '../hooks/useGetUsers';
-import { UsersTable } from '../components';
+import { UsersTable, UserUpdateModal } from '../components';
 
 export const GetUsersPage = () => {
   const { onClickBack } = useBackNavigation();
   const {
     // Properties
+    alertModal,
+    errors,
     filterValue,
+    roles,
+    updateModal,
+    users,
 
     // Methods
+    closeAlertModal,
+    closeModals,
     handleKeyDown,
+    handleOpenUpdateModal,
     handleSearch,
+    handleSubmit,
+    onSubmit,
+    register,
     setFilterValue,
   } = useGetUsers();
 
@@ -37,7 +48,22 @@ export const GetUsersPage = () => {
           handleSearch={handleSearch}
           placeholder="Buscar por identificación"
         />
-        <UsersTable/>
+        <UsersTable users={users} handleOpenUpdateModal={handleOpenUpdateModal} />
+        <UserUpdateModal
+          updateModal={updateModal}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          register={register}
+          errors={errors}
+          closeModal={closeModals}
+          roles={roles}
+        />
+        <AlertModal
+          openAlertModal={alertModal.open}
+          closeAlertModal={closeAlertModal}
+          modalTitle={alertModal.status}
+          modalDescription={alertModal.message}
+        />
       </div>
     </>
   );

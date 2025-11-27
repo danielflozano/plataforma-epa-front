@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { usersService } from '../services';
+import { ROLES } from '@/constants';
 
-const roles = [
-  'SuperAdministrador',
-  'AdminAseo',
-  'UsuarioAseo',
-  'AdminJuridica',
-  'UsuarioJuridica',
-];
+const roles = Object.values(ROLES);
+
 export const useCreateUsers = () => {
   const [alertModal, setAlertModal] = useState({
     open: false,

@@ -11,4 +11,25 @@ export const usersService = {
       throw new Error(handleAxiosError(error, 'Error creando usuario ❌'));
     }
   },
+  getAllUsers: async () => {
+    try {
+      const response = await apiClient.get('/auth/users');
+      console.log(response.data.ok);
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        handleAxiosError(error, 'Error listando todos los usuarios ❌')
+      );
+    }
+  },
+  updateUser: async (id, data) => {
+    try {
+      const response = await apiClient.put(`/auth/update/${id}`, data);
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        handleAxiosError(error, 'Error actualizando el usuario ❌')
+      );
+    }
+  },
 };

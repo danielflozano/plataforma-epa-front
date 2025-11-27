@@ -1,10 +1,21 @@
-import { GlobalButton, GlobalInput } from '@/components';
+import { GlobalInput, UpdateModal } from '@/components';
 
-export const UserForm = ({ roles, handleSubmit, onSubmit, register, errors }) => {
+export const UserUpdateModal = ({
+  updateModal,
+  handleSubmit,
+  onSubmit,
+  register,
+  errors,
+  closeModal,
+  roles,
+}) => {
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 bg-white p-4 w-1/2 rounded-xl shadow-2xl"
+    <UpdateModal
+      isOpen={updateModal}
+      title="Editar Usuario"
+      handleSubmit={handleSubmit}
+      onSubmit={onSubmit}
+      closeModal={closeModal}
     >
       <GlobalInput
         label="Nombre"
@@ -38,17 +49,6 @@ export const UserForm = ({ roles, handleSubmit, onSubmit, register, errors }) =>
         }}
       />
       <GlobalInput
-        label="Contraseña"
-        type='password'
-        data="password"
-        register={register}
-        errors={errors}
-        rules={{
-          required: 'Campo Obligatorio',
-          minLength: { value: 8, message: 'Minimo 8 caracteres' },
-        }}
-      />
-      <GlobalInput
         as="select"
         label="Rol"
         data="rol"
@@ -65,9 +65,6 @@ export const UserForm = ({ roles, handleSubmit, onSubmit, register, errors }) =>
           </option>
         ))}
       </GlobalInput>
-      <GlobalButton type="submit" className="p-1.5 w-1/2 block mx-auto">
-        Registrar
-      </GlobalButton>
-    </form>
+    </UpdateModal>
   );
 };
