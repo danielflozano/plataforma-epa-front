@@ -22,8 +22,8 @@ export const CreateWorkersPage = () => {
     updateModal,
 
     // Methods
-    closeModal,
-    closeUpdateModal,
+    closeAlertModal,
+    closeModals,
     handleSubmit,
     handleSubmitJobPosition,
     onSubmit,
@@ -155,7 +155,7 @@ export const CreateWorkersPage = () => {
         title="Crear Nuevo Cargo"
         handleSubmit={handleSubmitJobPosition}
         onSubmit={onSubmitJobPosition}
-        closeModal={closeUpdateModal}
+        closeModal={closeModals}
         formClassName="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]"
       >
         <GlobalInput
@@ -170,7 +170,7 @@ export const CreateWorkersPage = () => {
       </UpdateModal>
       <AlertModal
         openAlertModal={alertModal.open}
-        closeAlertModal={closeModal}
+        closeAlertModal={closeAlertModal}
         modalTitle={alertModal.status}
         modalDescription={alertModal.message}
       />

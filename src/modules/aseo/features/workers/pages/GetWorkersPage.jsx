@@ -27,6 +27,7 @@ export const GetWorkersPage = () => {
     updateModal,
 
     // Methods
+    closeAlertModal,
     closeModals,
     getActiveWorkers,
     handleKeyDown,
@@ -220,7 +221,7 @@ export const GetWorkersPage = () => {
         </UpdateModal>
         <AlertModal
           openAlertModal={alertModal.open}
-          closeAlertModal={closeModals}
+          closeAlertModal={closeAlertModal}
           modalTitle={alertModal.status}
           modalDescription={alertModal.message}
         />
