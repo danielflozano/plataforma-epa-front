@@ -1,2 +1,2 @@
-export * from './useCreateDepartaments';
+export * from './useGetDepartaments';
 export * from './useDepartamentsPage';

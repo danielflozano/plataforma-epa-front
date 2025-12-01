@@ -7,11 +7,11 @@ export const DepartamentsPage = () => {
     <div className="grid grid-cols-2 gap-10 h-full items-center">
       <GlobalCards
         title="Registrar Procesos"
-        onClick={() => onClickCard('createDepartament')}
+        onClick={() => onClickCard('getDepartaments')}
       />
       <GlobalCards
         title="Registrar Sedes"
-        onClick={() => onClickCard('createLocation')}
+        onClick={() => onClickCard('getLocations')}
       />
     </div>
   );

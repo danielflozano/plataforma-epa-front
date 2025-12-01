@@ -1,3 +1,3 @@
-export * from './CreateDepartaments';
-export * from './CreateLocations';
+export * from './GetDepartaments';
+export * from './GetLocations';
 export * from './DepartamentsPage';

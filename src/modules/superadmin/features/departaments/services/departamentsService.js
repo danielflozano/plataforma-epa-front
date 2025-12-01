@@ -5,7 +5,6 @@ export const departamentsService = {
   createDepartaments: async (data) => {
     try {
       const response = await apiClient.post('/procesos/crearProceso', data);
-      console.log('Proceso creado con exito', response.data);
       return response.data;
     } catch (error) {
       throw new Error(

@@ -6,9 +6,9 @@ export const useDepartamentsPage = () => {
 
   const onClickCard = (card) => {
     switch (card) {
-      case 'createDepartament':
+      case 'getDepartaments':
         return navigate(`${superadminRoutesList.getDepartaments}`);
-      case 'createLocation':
+      case 'getLocations':
         return navigate(`${superadminRoutesList.getLocations}`);
     }
   };
