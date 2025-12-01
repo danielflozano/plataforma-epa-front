@@ -19,11 +19,13 @@ export const GetWorkersPage = () => {
     control,
     departaments,
     errors,
+    estado,
     filteredWorkers,
     filterValue,
     jobPositions,
     loading,
     locations,
+    tipoOperario,
     updateModal,
 
     // Methods
@@ -53,16 +55,16 @@ export const GetWorkersPage = () => {
         <h2 className="text-epaColor1 text-center text-4xl font-extrabold">
           Funcionarios
         </h2>
-        <div className='flex gap-4'>
+        <div className="flex gap-4">
           <FilterInput
             filterValue={filterValue}
             setFilterValue={setFilterValue}
             handleKeyDown={handleKeyDown}
             handleSearch={handleSearch}
-            placeholder='Buscar por identificación'
+            placeholder="Buscar por identificación"
           />
           <button
-            className='bg-green-300 w-30 text-epaColor1 font-semibold rounded-xl cursor-pointer border-2 border-transparent hover:bg-transparent hover:border-green-400'
+            className="bg-green-300 w-30 text-epaColor1 font-semibold rounded-xl cursor-pointer border-2 border-transparent hover:bg-transparent hover:border-green-400"
             onClick={getActiveWorkers}
           >
             Activos
@@ -135,8 +137,12 @@ export const GetWorkersPage = () => {
                   {...field}
                   className="border border-gray-500 rounded-md p-1"
                 >
-                  <option value="Planta">Planta</option>
-                  <option value="Temporal">Temporal</option>
+                  <option value="">Seleccione el tipo de operario</option>
+                  {tipoOperario.map((to) => (
+                    <option key={to} value={to}>
+                      {to}
+                    </option>
+                  ))}
                 </select>
               )}
             />
@@ -209,8 +215,12 @@ export const GetWorkersPage = () => {
                   {...field}
                   className="border border-gray-500 rounded-md p-1"
                 >
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
+                  <option value="">Seleccione el estado</option>
+                  {estado.map((est) => (
+                    <option key={est} value={est}>
+                      {est}
+                    </option>
+                  ))}
                 </select>
               )}
             />
@@ -226,9 +236,7 @@ export const GetWorkersPage = () => {
           modalDescription={alertModal.message}
         />
       </div>
-      {(loading) && (
-        <LoadSpinner styles="fixed bg-gray-200/90" />
-      )}
+      {loading && <LoadSpinner styles="fixed bg-gray-200/90" />}
     </>
   );
 };

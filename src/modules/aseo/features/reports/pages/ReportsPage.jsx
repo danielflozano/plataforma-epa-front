@@ -16,8 +16,10 @@ export const ReportsPage = () => {
   } = useReports();
 
   return (
-    <div className='flex flex-col gap-4'>
-      <h2 className="text-epaColor1 text-4xl text-center font-extrabold">Reporte de Horas Extra</h2>
+    <div className="flex flex-col gap-4">
+      <h2 className="text-epaColor1 text-4xl text-center font-extrabold">
+        Reporte de Horas Extra
+      </h2>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-between">
           <GlobalInput
@@ -56,17 +58,27 @@ export const ReportsPage = () => {
               required: 'Campo Obligatorio',
             }}
           >
-            <option value="">Seleccione el cargo</option>
-            {tipoOperario.map((tipoOper) => (
-              <option key={tipoOper} value={tipoOper}>{tipoOper}</option>
+            <option value="">Seleccione el tipo de operario</option>
+            {tipoOperario.map((to) => (
+              <option key={to} value={to}>
+                {to}
+              </option>
             ))}
           </GlobalInput>
         </div>
         <div className="flex justify-center gap-4">
-          <GlobalButton className="w-[30%] max-w-150 p-1.5" type="submit" name="generar">
+          <GlobalButton
+            className="w-[30%] max-w-150 p-1.5"
+            type="submit"
+            name="generar"
+          >
             Generar Reporte
           </GlobalButton>
-          <GlobalButton className="w-[30%] max-w-150 p-1.5" type="submit" name="excel">
+          <GlobalButton
+            className="w-[30%] max-w-150 p-1.5"
+            type="submit"
+            name="excel"
+          >
             Generar Reporte Excel
           </GlobalButton>
         </div>

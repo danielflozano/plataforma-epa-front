@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { reportsService } from "../services/reportsService";
-
-const tipoOperario = [
-  'Planta',
-  'Temporal',
-];
+import { tipoOperario } from "@/constants";
 
 export const useReports = () => {
 

@@ -7,10 +7,15 @@ import {
   BrushCleaning,
   Scale,
   UserStar,
+  Blocks,
 } from 'lucide-react';
 import { useAuth } from '@/context';
 import { GlobalButton } from '@/components';
-import { aseoRoutesList, juridicaRoutesList, superadminRoutesList } from '@/routes';
+import {
+  aseoRoutesList,
+  juridicaRoutesList,
+  superadminRoutesList,
+} from '@/routes';
 import logo from '@/assets/logoepa.png';
 
 const currentYear = new Date().getFullYear();
@@ -48,6 +53,15 @@ export const SuperadminLayout = () => {
           <div className="text-epaColor1 font-medium">
             <Link
               className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
+              to={superadminRoutesList.departaments}
+            >
+              <Blocks size={20} />
+              Procesos
+            </Link>
+          </div>
+          <div className="text-epaColor1 font-medium">
+            <Link
+              className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
               to={aseoRoutesList.aseoDashboard}
             >
               <BrushCleaning size={20} />
@@ -75,19 +89,19 @@ export const SuperadminLayout = () => {
       </div>
 
       <div className="flex flex-col w-full">
-        <header className="bg-epaColor1 grid grid-cols-3 px-6 py-6">
-          <div></div>
-          <h2 className="text-white text-center font-bold text-3xl">
-            Plataforma Administrador - EPA
+        <header className="bg-epaColor1 flex p-6">
+          <div className='w-2/10'></div>
+          <h2 className="w-full text-white text-center font-bold text-3xl">
+            Plataforma EPA - Modulo Administrador
           </h2>
-          <div className="flex text-white text-sm items-center justify-end gap-2">
+          <div className="w-2/10 flex text-white text-sm items-center justify-end gap-2">
             <UserStar />
             <div className="text-right">
-              <p className='px-2'>{auth.user.name}</p>
-              <Link
-                to={superadminRoutesList.superadminDashboard}
-              >
-                <p className='bg-white px-2 text-epaColor1 font-semibold underline rounded-sm'>{auth.user.rol}</p>
+              <p className="px-2">{auth.user.name}</p>
+              <Link to={superadminRoutesList.superadminDashboard}>
+                <p className="bg-white px-2 text-epaColor1 font-semibold underline rounded-sm">
+                  {auth.user.rol}
+                </p>
               </Link>
             </div>
           </div>

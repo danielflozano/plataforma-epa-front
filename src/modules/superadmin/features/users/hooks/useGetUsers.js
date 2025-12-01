@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { usersService } from '../services';
-import { ROLES } from '@/constants';
+import { estado, ROLES } from '@/constants';
 
 const roles = Object.values(ROLES);
 
 export const useGetUsers = () => {
   const [filterValue, setFilterValue] = useState('');
   const [selectedUserId, setSelectedUserId] = useState('');
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [users, setUsers] = useState([]);
@@ -36,11 +37,14 @@ export const useGetUsers = () => {
   }, [success]);
 
   const getUsers = async () => {
+    setLoading(true);
     try {
       const response = await usersService.getAllUsers();
       setUsers(response.usuarios);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,7 +60,7 @@ export const useGetUsers = () => {
       setSuccess(true);
       setAlertModal({
         open: true,
-        message: response.msg,
+        message: response.message,
         status: 'Actualizacion Exitosa',
       });
       console.log(response);
@@ -101,7 +105,9 @@ export const useGetUsers = () => {
     // Properties
     alertModal,
     errors,
+    estado,
     filterValue,
+    loading,
     roles,
     updateModal,
     users,

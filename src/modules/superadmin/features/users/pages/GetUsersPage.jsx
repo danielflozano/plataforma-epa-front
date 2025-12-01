@@ -10,7 +10,9 @@ export const GetUsersPage = () => {
     // Properties
     alertModal,
     errors,
+    estado,
     filterValue,
+    loading,
     roles,
     updateModal,
     users,
@@ -31,7 +33,7 @@ export const GetUsersPage = () => {
     <>
       <GlobalButton
         variant="back"
-        className="flex w-30 p-1.5 mb-3"
+        className="flex w-30 p-1.5"
         onClick={onClickBack}
       >
         <ArrowLeft className="ml-0.5 mr-2 -left-0.5" />
@@ -48,7 +50,7 @@ export const GetUsersPage = () => {
           handleSearch={handleSearch}
           placeholder="Buscar por identificación"
         />
-        <UsersTable users={users} handleOpenUpdateModal={handleOpenUpdateModal} />
+        <UsersTable loading={loading} users={users} handleOpenUpdateModal={handleOpenUpdateModal} />
         <UserUpdateModal
           updateModal={updateModal}
           handleSubmit={handleSubmit}
@@ -57,6 +59,7 @@ export const GetUsersPage = () => {
           errors={errors}
           closeModal={closeModals}
           roles={roles}
+          estado={estado}
         />
         <AlertModal
           openAlertModal={alertModal.open}

@@ -1,7 +1,7 @@
 export const GlobalCards = ({
   title,
   onClick,
-  className = 'bg-white border-1 border-epaColor1 text-center text-epaColor1 font-bold text-2xl h-40 content-center rounded-2xl cursor-pointer shadow-2xl shadow-epaColor1',
+  className = 'bg-white text-center text-epaColor1 font-bold text-2xl h-40 content-center rounded-2xl cursor-pointer shadow-2xl shadow-epaColor1',
 }) => {
   return (
     <div className={className} onClick={onClick}>

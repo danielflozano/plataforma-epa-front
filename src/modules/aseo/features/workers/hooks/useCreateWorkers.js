@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { workersService } from '../services';
 import { useAseo } from '@/modules/aseo/context';
+import { tipoOperario } from '@/constants';
 
-const tipoOperario = ['Planta', 'Temporal'];
 export const useCreateWorkers = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const [alertModal, setAlertModal] = useState({

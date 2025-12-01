@@ -82,13 +82,13 @@ export const AseoLayout = () => {
         </div>
 
         <div className="flex flex-col w-full">
-          <header className="bg-epaColor1 grid grid-cols-3 px-6 py-6">
-            <div></div>
-            <h2 className="text-white text-center font-bold text-3xl">
-              Plataforma Horas Extra - EPA
+          <header className="bg-epaColor1 flex p-6">
+            <div className='w-2/10'></div>
+            <h2 className="w-full text-white text-center font-bold text-3xl">
+              Plataforma EPA - Modulo Aseo
             </h2>
             {auth.user.rol === 'SuperAdministrador' && (
-              <div className="flex text-white text-sm items-center justify-end gap-2">
+              <div className="w-2/10 flex text-white text-sm items-center justify-end gap-2">
                 <UserStar />
                 <div className="text-right">
                   <p className="px-2">{auth.user.name}</p>
@@ -101,7 +101,7 @@ export const AseoLayout = () => {
               </div>
             )}
             {auth.user.rol != 'SuperAdministrador' && (
-              <div className="flex text-white text-sm items-center justify-end gap-2">
+              <div className="w-2/10 flex text-white text-sm items-center justify-end gap-2">
                 <UserCheck />
                 <div className="text-right">
                   {auth.user.name} <br /> {auth.user.rol}

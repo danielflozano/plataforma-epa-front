@@ -1,7 +1,10 @@
 import { superadminRoutesList } from '@/routes';
 import { SuperadminLayout } from '../layout';
 import {
+  CreateDepartaments,
+  CreateLocations,
   CreateUsersPage,
+  DepartamentsPage,
   GetUsersPage,
   SuperadminDashboardPage,
   UsersPage,
@@ -27,6 +30,18 @@ export const SuperadminRoutes = [
       {
         path: superadminRoutesList.getUsers,
         element: <GetUsersPage />,
+      },
+      {
+        path: superadminRoutesList.departaments,
+        element: <DepartamentsPage/>,
+      },
+      {
+        path: superadminRoutesList.getDepartaments,
+        element: <CreateDepartaments/>,
+      },
+      {
+        path: superadminRoutesList.getLocations,
+        element: <CreateLocations/>,
       },
     ],
   },
