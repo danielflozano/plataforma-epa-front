@@ -55,5 +55,23 @@ export const historicalServices = {
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error listando los años ❌'));
     }
+  },
+
+  getContractsByName: async (name) => {
+    try {
+      const response = await apiClient.get(`/datos/contratista/${name}`);
+      return response.data.contratos;
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error filtrando contratos por nombre de contratista ❌'));
+    }
+  },
+
+  getCotractsByType: async (type) => {
+    try {
+      const response = await apiClient.get(`/datos/filtroCon/${type}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error filtrando contratos por tipo de contrato ❌'));
+    }
   }
 };

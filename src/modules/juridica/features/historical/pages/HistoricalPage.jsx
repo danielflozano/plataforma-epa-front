@@ -1,11 +1,13 @@
 import { FilterInput, GlobalButton, LoadSpinner } from '@/components';
 import { useHistorical } from '../hooks';
+import { RotateCcw } from 'lucide-react';
 
 export const HistoricalPage = () => {
   const {
     //Properties
     anios,
     filterValue,
+    filterValueAnio,
     filteredContracts,
     loading,
     loadingFilter,
@@ -16,12 +18,15 @@ export const HistoricalPage = () => {
     totalRecords,
 
     //Methods
-    // closeModal,
     handleKeyDown,
+    handleReset,
     handlePageChange,
-    handleSearch,
+    handleSearchAnio,
+    handleSearchName,
+    handleSearchType,
     setObjetoExpandido,
-    setFilterValue,
+    setFilterValueAnio,
+    setFilterValue
   } = useHistorical();
   return (
     <>
@@ -29,9 +34,12 @@ export const HistoricalPage = () => {
         <LoadSpinner name="Cargando Contratos" styles="fixed bg-gray-200/95" />
       )}
       {loadingFilter && (
-        <LoadSpinner name="Cargando Contratos" styles="absolute fixed bg-gray-200/95 z-51" />
+        <LoadSpinner
+          name="Cargando Contratos"
+          styles="absolute fixed bg-gray-200/95 z-51"
+        />
       )}
-      {modal && (              
+      {modal && (
         <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center z-50">
           <div className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[800px] justify-center items-center">
             <h2 className="text-2xl font-bold mb-4 text-epaColor1">
@@ -40,8 +48,8 @@ export const HistoricalPage = () => {
 
             <label className="font-semibold">Buscar contrato:</label>
             <select
-              value={filterValue}
-              onChange={(e) => setFilterValue(e.target.value)}
+              value={filterValueAnio}
+              onChange={(e) => setFilterValueAnio(e.target.value)}
               onKeyDown={handleKeyDown}
               className="border border-gray-500 rounded-md p-1"
             >
@@ -52,20 +60,47 @@ export const HistoricalPage = () => {
                 </option>
               ))}
             </select>
-            <GlobalButton onClick={handleSearch} className="p-4">Continuar</GlobalButton>
+            <GlobalButton onClick={handleSearchAnio} className="p-4">
+              Continuar
+            </GlobalButton>
           </div>
         </div>
       )}
 
       {/* Filtros */}
 
-      {/* <FilterInput
-        filterValue={filterValue}
-        setFilterValue={setFilterValue}
-        placeholder='Escriba aqui el nombre del contratista que  quiere buscar...'
-        handleKeyDown={handleKeyDown}
-        handleSearch={handleSearch}
-      /> */}
+      <div className="flex gap-2 ">
+        <input
+          type="text"
+          value={filterValue}
+          onChange={(e) => setFilterValue(e.target.value)}
+          placeholder="Escribe aquí…"
+          className="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
+        />
+        <GlobalButton
+          className="flex p-2 gap-2"
+          onClick={handleReset}
+        >
+          <RotateCcw />
+          Resetear Filtro
+        </GlobalButton>
+      </div>
+
+      <div className="flex gap-2 m-3">
+        <GlobalButton
+          className="p-2"
+          onClick={handleSearchName}
+        >
+          Buscar por Nombre
+        </GlobalButton>
+        <GlobalButton
+          className="p-2"
+          onClick={handleSearchType}
+        >
+          Buscar por Tipo de Contrato
+        </GlobalButton>
+      </div>
+
       {/* Tabla de Contratos */}
       <section className="">
         <div className="bg-white  shadow-md rounded-lg p-6 mx-auto mt-6">

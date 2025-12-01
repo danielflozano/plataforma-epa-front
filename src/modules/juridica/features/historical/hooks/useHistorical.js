@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { historicalServices } from '../services';
 
 export const useHistorical = () => {
-
   const [anios, setAnios] = useState([]);
   const [cleanContracts, setCleanContracts] = useState([]);
   const [filteredContracts, setFilteredContracts] = useState([]);
@@ -11,14 +10,13 @@ export const useHistorical = () => {
   const [loadingFilter, setLoadingFilter] = useState(false);
   const [modal, setModal] = useState(true);
   const [filterValue, setFilterValue] = useState('');
+  const [filterValueAnio, setFilterValueAnio] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
 
   const limit = 15;
-
-  const closeModal = () => setModal(false);
 
   useEffect(() => {
     getCleanContracts(currentPage);
@@ -59,9 +57,9 @@ export const useHistorical = () => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearchAnio = () => {
     setTimeout(async () => {
-      if (!filterValue.trim()) {
+      if (!filterValueAnio.trim()) {
         getCleanContracts({ page: currentPage, limit: 15 });
         setFilteredContracts(cleanContracts);
         return;
@@ -70,7 +68,7 @@ export const useHistorical = () => {
       setLoadingFilter(true);
       try {
         const response = await historicalServices.getContractsByAnio(
-          filterValue
+          filterValueAnio
         );
         setFilteredContracts(response);
         setModal(false);
@@ -83,9 +81,55 @@ export const useHistorical = () => {
     }, 600);
   };
 
+  const handleSearchName = () => {
+    setTimeout(async () => {
+      if (!filterValue.trim()) {
+        getCleanContracts({ page: currentPage, limit: 15 });
+        setFilteredContracts(cleanContracts);
+        return;
+      }
+
+      setLoadingFilter(true);
+      try {
+        const response = await historicalServices.getContractsByName(
+          filterValue
+        );
+        setFilteredContracts(response);
+      } catch (error) {
+        console.error(error);
+        setFilteredContracts([]);
+      } finally {
+        setLoadingFilter(false);
+      }
+    }, 600);
+  };
+
+  const handleSearchType = () => {
+    setTimeout(async () => {
+      if (!filterValue.trim()) {
+        getCleanContracts({ page: currentPage, limit: 15 });
+        setFilteredContracts(cleanContracts);
+        return;
+      }
+
+      setLoadingFilter(true);
+      try {
+        const response = await historicalServices.getContractsByType(
+          filterValue
+        );
+        setFilteredContracts(response);
+      } catch (error) {
+        console.error(error);
+        setFilteredContracts([]);
+      } finally {
+        setLoadingFilter(false);
+      }
+    }, 600);
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      handleSearch();
+      handleSearchAnio();
     }
   };
 
@@ -95,13 +139,18 @@ export const useHistorical = () => {
     }
   };
 
+  const handleReset = () => {
+    getCleanContracts();
+    setFilterValue('');
+  };
+
   console.log(filteredContracts);
-  
 
   return {
     //Properties
     anios,
     filterValue,
+    filterValueAnio,
     filteredContracts,
     loading,
     loadingFilter,
@@ -112,11 +161,14 @@ export const useHistorical = () => {
     totalRecords,
 
     //Methods
-    closeModal,
     handleKeyDown,
+    handleReset,
     handlePageChange,
-    handleSearch,
+    handleSearchAnio,
+    handleSearchName,
+    handleSearchType,
     setObjetoExpandido,
-    setFilterValue,
+    setFilterValueAnio,
+    setFilterValue
   };
 };
