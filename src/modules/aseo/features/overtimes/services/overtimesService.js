@@ -94,4 +94,13 @@ export const overtimesService = {
       throw new Error(handleAxiosError(error, 'Error obteniendo hojas de excel ❌'));
     }
   },
+
+  getOvertimesStats: async () => {
+    try {
+      const response = await apiClient.get('extras/reporteDosMeses');     
+      return response.data
+    } catch (error) {
+      throw new Error(handleAxiosError(error, 'Error obteniendo estadisticas de horas extra'));      
+    }
+  }
 };
