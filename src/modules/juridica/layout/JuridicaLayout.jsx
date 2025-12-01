@@ -76,7 +76,7 @@ export const JuridicaLayout = () => {
           <header className="bg-epaColor1 grid grid-cols-3 px-6 py-6">
             <div></div>
             <h2 className="text-white text-center font-bold text-3xl">
-              Plataforma Contratos - EPA
+              Plataforma EPA - Modulo Juridica
             </h2>
             {auth.user.rol === 'SuperAdministrador' && (
               <div className="flex text-white text-sm items-center justify-end gap-2">

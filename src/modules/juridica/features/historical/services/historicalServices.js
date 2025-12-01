@@ -18,29 +18,42 @@ export const historicalServices = {
     }
   },
 
-  getContractsByType: async (type) => {
+  getContractsByType: async (type, page = 1, limit = 15) => {
     try {
-      const response = await apiClient.get(`/datos/filtroCon/${type}`);
-      console.log(response.data.message);
+      const response = await apiClient.get(`/datos/filtroCon/${type}`, {
+        params: {
+          page,
+          limit,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error filtrando contratos por tipo de contrato ❌'));
     }
   },
 
-  getContractsByContractorName : async (name) => {
+  getContractsByContractorName : async (name, page = 1, limit = 15) => {
     try {
-      const response = await apiClient.get(`/datos/contratista/${name}`);
-      console.log(response.data.message);
+      const response = await apiClient.get(`/datos/contratista/${name}`, {
+        params: {
+          page,
+          limit,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error filtrando contratos por nombre del contratista ❌'));
     }
   },
 
-  getContractsByAnio: async (anio) => {
+  getContractsByAnio: async (anio, page = 1, limit = 15) => {
     try {
-      const response = await apiClient.get(`/datos/fecha/${anio}`);
+      const response = await apiClient.get(`/datos/fecha/${anio}`, {
+        params: {
+          page,
+          limit,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error filtrando contratos por año ❌'));
@@ -56,22 +69,4 @@ export const historicalServices = {
       throw new Error(handleAxiosError(error, 'Error listando los años ❌'));
     }
   },
-
-  getContractsByName: async (name) => {
-    try {
-      const response = await apiClient.get(`/datos/contratista/${name}`);
-      return response.data.contratos;
-    } catch (error) {
-      throw new Error(handleAxiosError(error, 'Error filtrando contratos por nombre de contratista ❌'));
-    }
-  },
-
-  getCotractsByType: async (type) => {
-    try {
-      const response = await apiClient.get(`/datos/filtroCon/${type}`);
-      return response.data;
-    } catch (error) {
-      throw new Error(handleAxiosError(error, 'Error filtrando contratos por tipo de contrato ❌'));
-    }
-  }
 };

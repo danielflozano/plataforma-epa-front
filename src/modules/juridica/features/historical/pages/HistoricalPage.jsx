@@ -6,9 +6,11 @@ export const HistoricalPage = () => {
   const {
     //Properties
     anios,
+    cleanContracts,
     filterValue,
     filterValueAnio,
     filteredContracts,
+    isFiltering,
     loading,
     loadingFilter,
     modal,
@@ -26,7 +28,8 @@ export const HistoricalPage = () => {
     handleSearchType,
     setObjetoExpandido,
     setFilterValueAnio,
-    setFilterValue
+    setFilterValue,
+    setActiveFilter,
   } = useHistorical();
   return (
     <>
@@ -55,7 +58,7 @@ export const HistoricalPage = () => {
             >
               <option value="">Seleccione un año</option>
               {anios.map((p) => (
-                <option key={p._id} value={p._id}>
+                <option key={p} value={p}>
                   {p}
                 </option>
               ))}
@@ -68,44 +71,74 @@ export const HistoricalPage = () => {
       )}
 
       {/* Filtros */}
+      <div className="flex flex-col gap-3 p-4">
+        {/* FILTRO POR AÑO */}
+        <div className="flex flex-col">
+          <label className="font-semibold text-sm">Filtrar por Año:</label>
+          <select
+            value={filterValueAnio}
+            onChange={(e) => setFilterValueAnio(e.target.value)}
+            className="bg-white w-50 p-1 mb-2 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
+          >
+            <option value="">Seleccione un año</option>
+            {anios.map((anio, index) => (
+              <option key={index} value={anio}>
+                {anio}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="flex gap-2 ">
-        <input
-          type="text"
-          value={filterValue}
-          onChange={(e) => setFilterValue(e.target.value)}
-          placeholder="Escribe aquí…"
-          className="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
-        />
-        <GlobalButton
-          className="flex p-2 gap-2"
-          onClick={handleReset}
-        >
-          <RotateCcw />
-          Resetear Filtro
-        </GlobalButton>
-      </div>
+        {/* FILTRO POR NOMBRE Y TIPO */}
+        <div className="flex ">
+          <div className="flex flex-col">
+            <label className="font-semibold text-sm">
+              Buscar por Nombre o Tipo:
+            </label>
+            <input
+              type="text"
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
+              placeholder="Escribe aquí…"
+              className="bg-white w-180 p-1 mb-2 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
+            />
+          </div>
+          <GlobalButton
+            className="flex p-2 items-center gap-2 mx-2"
+            onClick={handleReset}
+          >
+            <RotateCcw />
+            Resetear Filtro
+          </GlobalButton>
+        </div>
 
-      <div className="flex gap-2 m-3">
-        <GlobalButton
-          className="p-2"
-          onClick={handleSearchName}
-        >
-          Buscar por Nombre
-        </GlobalButton>
-        <GlobalButton
-          className="p-2"
-          onClick={handleSearchType}
-        >
-          Buscar por Tipo de Contrato
-        </GlobalButton>
+        {/* BOTONES */}
+        <div className="flex gap-2 items-center">
+          <GlobalButton className='p-2'
+            onClick={() => {
+              setActiveFilter('name');
+              handleSearchName();
+            }}
+          >
+            Buscar por Nombre Contratista
+          </GlobalButton>
+
+          <GlobalButton className='p-2'
+            onClick={() => {
+              setActiveFilter('type');
+              handleSearchType();
+            }}
+          >
+            Buscar por Tipo de Contrato
+          </GlobalButton>
+        </div>
       </div>
 
       {/* Tabla de Contratos */}
       <section className="">
         <div className="bg-white  shadow-md rounded-lg p-6 mx-auto mt-6">
           <table className="table-fixed w-full divide-y divide-gray-200 text-sm">
-            <thead className="bg-epaColor1 text-white uppercase">
+            <thead className="bg-epaColor1 text-white">
               <tr>
                 <th className="text-center border">Tipo de Contrato</th>
                 <th className="py-4 text-center border border-white">
@@ -119,8 +152,8 @@ export const HistoricalPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredContracts?.length > 0 ? (
-                filteredContracts.map((c, index) => (
+              {(isFiltering ? filteredContracts : cleanContracts)?.map(
+                (c, index) => (
                   <tr
                     key={index}
                     className="hover:bg-gray-100 transition-colors"
@@ -180,22 +213,19 @@ export const HistoricalPage = () => {
                       </span>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="9" className="text-center py-4 text-gray-500">
-                    No hay contratos disponibles
-                  </td>
-                </tr>
+                )
               )}
             </tbody>
           </table>
+          {filteredContracts?.length === 0 && (
+            <div className="p-5 text-center">No hay contratos disponibles</div>
+          )}
         </div>
 
         {/* PAGINACIÓN */}
         <div className="flex justify-between items-center px-4 py-3">
           <span>
-            Mostrando {filteredContracts.length} de {totalRecords} registros.
+            Mostrando {filteredContracts?.length} de {totalRecords} registros.
           </span>
           <div className="flex items-center gap-2">
             <GlobalButton

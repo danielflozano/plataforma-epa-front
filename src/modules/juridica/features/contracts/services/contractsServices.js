@@ -69,8 +69,7 @@ export const contractsServices = {
   // MODIFICACIONES
   addModifications: async (id) => {
     try {
-      const response = await apiClient.post(`/api/modificaciones/${id}`);
-      console.log(response.data.message);
+      const response = await apiClient.post(`/modificaciones/${id}`);
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error creando modificacion ❌'));
@@ -79,8 +78,7 @@ export const contractsServices = {
 
   getModifications: async (id) => {
     try {
-      const response = await apiClient.get(`/api/modificaciones/listar/${id}`);
-      console.log(response.data.message);
+      const response = await apiClient.get(`/modificaciones/listar/${id}`);
       return response.data
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error listando modificaciones ❌'));
@@ -89,8 +87,7 @@ export const contractsServices = {
 
   updateModifications: async (id) => {
     try {
-      const response = await apiClient.put(`/api/modificaciones/update/${id}`);
-      console.log(response.data.message);
+      const response = await apiClient.put(`/modificaciones/update/${id}`);
       return response.data
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error actualizando modificacion ❌'));

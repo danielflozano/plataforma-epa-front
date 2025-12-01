@@ -1,39 +1,73 @@
 import { GlobalInput } from '@/components';
+import { useGetContracts } from '../hooks';
 
 export const ModificationsContractModal = ({ register, errors }) => {
+  const {
+    showAdicion,
+    showProrroga,
+
+    setShowAdicion,
+    setShowProrroga,
+  } = useGetContracts();
+
   return (
     <div>
-      <div className="text-epaColor1 font-bold pt-4 text-2xl">
-        <h4>Modificaciones</h4>
-      </div>
-      <div className="flex gap-4">
+
+      {/* CHECKBOXES */}
+      <div className="flex gap-4 pt-2">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
-            // checked={mostrar}
-            // onChange={() => setMostrar(!mostrar)}
+            checked={showProrroga}
+            onChange={() => setShowProrroga(!showProrroga)}
           />
-          <span>Prorroga</span>
+          <span>Prórroga</span>
         </label>
+
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
-            // checked={mostrar}
-            // onChange={() => setMostrar(!mostrar)}
+            checked={showAdicion}
+            onChange={() => setShowAdicion(!showAdicion)}
           />
-          <span>Adicion</span>
+          <span>Adición</span>
         </label>
       </div>
-      <GlobalInput
-        type="text"
-        label="Identidad O Nit"
-        data="identificacionOnit"
-        register={register}
-        errors={errors}
-        rules={{
-          required: 'Este campo es obligatorio',
-        }}
-      />
+
+      {/* INPUTS PARA ADICIÓN */}
+      {showAdicion && (
+        <GlobalInput
+          type="text"
+          label="Valor Adición"
+          data="valorAdicion"
+          register={register}
+          errors={errors}
+          rules={{ required: 'Este campo es obligatorio' }}
+        />
+      )}
+
+      {/* INPUTS PARA PRÓRROGA */}
+      {showProrroga && (
+        <>
+          <GlobalInput
+            type="date"
+            label="Fecha Final"
+            data="fechaFinalProrroga"
+            register={register}
+            errors={errors}
+            rules={{ required: 'La fecha es obligatoria' }}
+          />
+
+          <GlobalInput
+            type="text"
+            label="Tiempo Prórroga (días/meses)"
+            data="tiempoProrroga"
+            register={register}
+            errors={errors}
+            rules={{ required: 'Este campo es obligatorio' }}
+          />
+        </>
+      )}
     </div>
   );
 };

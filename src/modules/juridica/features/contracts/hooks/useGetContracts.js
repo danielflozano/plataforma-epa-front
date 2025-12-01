@@ -23,8 +23,9 @@ export const useGetContracts = () => {
   const [hoverEye, setHoverEye] = useState(false);
   const [detailsContractModal, setDetailsContractModal] = useState(false);
   const [loadingFilter, setLoadingFilter] = useState(false);
-  const [modificationsContractModal, setModificationsContractModal] =
-    useState(false);
+  const [modificationsContractModal, setModificationsContractModal] = useState(false);
+  const [showProrroga, setShowProrroga] = useState(false);
+  const [showAdicion, setShowAdicion] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [objetoExpandido, setObjetoExpandido] = useState(null);
@@ -51,13 +52,15 @@ export const useGetContracts = () => {
     register: registerModifications,
     handleSubmit: handleSubmitModifications,
     reset: resetModifications,
+    watch: watchModifications,
     formState: { errors: errorsModifications },
   } = useForm();
 
+
   useEffect(() => {
-    getAllContracts(currentPage)
+    getAllContracts(currentPage);
   }, [currentPage]);
-  
+
   useEffect(() => {
     getContractSummaries();
   }, []);
@@ -226,35 +229,33 @@ export const useGetContracts = () => {
 
   //Filter
   const handleSearch = (param) => {
+    setTimeout(async () => {
+      // Si el input está vacío → recargar normal
+      if (!filterValue.trim()) {
+        getAllContracts({ page: currentPage, limit: 15 });
+        setFilteredContracts(contracts);
+        return;
+      }
 
-  setTimeout(async () => {
-    // Si el input está vacío → recargar normal
-    if (!filterValue.trim()) {
-      getAllContracts({ page: currentPage, limit: 15 });
-      setFilteredContracts(contracts); 
-      return;
-    }
+      setLoadingFilter(true);
+      try {
+        const filtros = {
+          [param]: filterValue.trim(),
+          page: currentPage,
+          limit: 15,
+        };
 
-    setLoadingFilter(true);
-    try {
-      const filtros = {
-        [param]: filterValue.trim(),
-        page: currentPage,
-        limit: 15,
-      };
+        const response = await contractsServices.getFilteredContracts(filtros);
 
-      const response = await contractsServices.getFilteredContracts(filtros);
-
-      setFilteredContracts(response.data);
-    } catch (error) {
-      console.error(error);
-      setFilteredContracts([]);
-    } finally {
-      setLoadingFilter(false);
-    }
-  }, 600);
-};
-
+        setFilteredContracts(response.data);
+      } catch (error) {
+        console.error(error);
+        setFilteredContracts([]);
+      } finally {
+        setLoadingFilter(false);
+      }
+    }, 600);
+  };
 
   const handleReset = () => {
     getAllContracts();
@@ -286,6 +287,8 @@ export const useGetContracts = () => {
     selectedContractType,
     summaries,
     updateModal,
+    showAdicion,
+    showProrroga,
 
     //Methods
     closeModals,
@@ -297,6 +300,7 @@ export const useGetContracts = () => {
     handleSubmitModifications,
     onSubmitUpdateContract,
     onSubmitModificationsContract,
+    watchModifications,
     openConfirmModal,
     openDetailsContractModal,
     openEye,
@@ -306,5 +310,7 @@ export const useGetContracts = () => {
     registerModifications,
     setFilterValue,
     setObjetoExpandido,
+    setShowAdicion,
+    setShowProrroga,
   };
 };

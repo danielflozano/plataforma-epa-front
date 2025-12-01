@@ -9,6 +9,8 @@ export const useHistorical = () => {
   const [loading, setLoading] = useState(false);
   const [loadingFilter, setLoadingFilter] = useState(false);
   const [modal, setModal] = useState(true);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(null);
   const [filterValue, setFilterValue] = useState('');
   const [filterValueAnio, setFilterValueAnio] = useState('');
 
@@ -19,8 +21,42 @@ export const useHistorical = () => {
   const limit = 15;
 
   useEffect(() => {
+  if (!isFiltering) {
     getCleanContracts(currentPage);
-  }, [currentPage]);
+    return;
+  }
+
+  // FILTRAR POR AÑO
+  if (filterValueAnio) {
+    historicalServices
+      .getContractsByAnio(filterValueAnio, currentPage, limit)
+      .then((res) => setFilteredContracts(res.data))
+      .catch(console.error);
+
+    return;
+  }
+
+  // FILTRAR POR NOMBRE
+  if (activeFilter === "name" && filterValue) {
+    historicalServices
+      .getContractsByContractorName(filterValue, currentPage, limit)
+      .then((res) => setFilteredContracts(res.data))
+      .catch(console.error);
+
+    return;
+  }
+
+  // FILTRAR POR TIPO
+  if (activeFilter === "type" && filterValue) {
+    historicalServices
+      .getContractsByType(filterValue, currentPage, limit)
+      .then((res) => setFilteredContracts(res.data))
+      .catch(console.error);
+
+    return;
+  }
+}, [currentPage, isFiltering, filterValue, filterValueAnio, activeFilter]);
+
 
   useEffect(() => {
     setFilteredContracts(cleanContracts);
@@ -29,8 +65,6 @@ export const useHistorical = () => {
   useEffect(() => {
     getAnios();
   }, []);
-
-  console.log(anios);
 
   const getCleanContracts = async (page) => {
     setLoading(true);
@@ -60,20 +94,27 @@ export const useHistorical = () => {
   const handleSearchAnio = () => {
     setTimeout(async () => {
       if (!filterValueAnio.trim()) {
-        getCleanContracts({ page: currentPage, limit: 15 });
-        setFilteredContracts(cleanContracts);
+        setIsFiltering(false);
+        getCleanContracts(1);
         return;
       }
 
+      setIsFiltering(true);
       setLoadingFilter(true);
+
       try {
         const response = await historicalServices.getContractsByAnio(
-          filterValueAnio
+          filterValueAnio,
+          1,
+          limit
         );
-        setFilteredContracts(response);
+        setFilteredContracts(response.data);
         setModal(false);
-      } catch (error) {
-        console.error(error);
+        setCurrentPage(response.page);
+        setTotalPages(response.totalPages || 1);
+        setTotalRecords(response.total);
+      } catch (e) {
+        console.error(e);
         setFilteredContracts([]);
       } finally {
         setLoadingFilter(false);
@@ -84,19 +125,26 @@ export const useHistorical = () => {
   const handleSearchName = () => {
     setTimeout(async () => {
       if (!filterValue.trim()) {
-        getCleanContracts({ page: currentPage, limit: 15 });
-        setFilteredContracts(cleanContracts);
+        setIsFiltering(false);
+        getCleanContracts(1);
         return;
       }
 
+      setIsFiltering(true);
       setLoadingFilter(true);
+
       try {
-        const response = await historicalServices.getContractsByName(
-          filterValue
+        const response = await historicalServices.getContractsByContractorName(
+          filterValue,
+          1,
+          limit
         );
-        setFilteredContracts(response);
-      } catch (error) {
-        console.error(error);
+        setFilteredContracts(response.data);
+        setCurrentPage(response.page);
+        setTotalPages(response.totalPages || 1);
+        setTotalRecords(response.total);
+      } catch (e) {
+        console.error(e);
         setFilteredContracts([]);
       } finally {
         setLoadingFilter(false);
@@ -107,19 +155,26 @@ export const useHistorical = () => {
   const handleSearchType = () => {
     setTimeout(async () => {
       if (!filterValue.trim()) {
-        getCleanContracts({ page: currentPage, limit: 15 });
-        setFilteredContracts(cleanContracts);
+        setIsFiltering(false);
+        getCleanContracts(1);
         return;
       }
 
+      setIsFiltering(true);
       setLoadingFilter(true);
+
       try {
         const response = await historicalServices.getContractsByType(
-          filterValue
+          filterValue,
+          1,
+          limit
         );
-        setFilteredContracts(response);
-      } catch (error) {
-        console.error(error);
+        setFilteredContracts(response.data);
+        setCurrentPage(response.page);
+        setTotalPages(response.totalPages || 1);
+        setTotalRecords(response.total);
+      } catch (e) {
+        console.error(e);
         setFilteredContracts([]);
       } finally {
         setLoadingFilter(false);
@@ -140,18 +195,21 @@ export const useHistorical = () => {
   };
 
   const handleReset = () => {
-    getCleanContracts();
     setFilterValue('');
+    setFilterValueAnio('');
+    setIsFiltering(false);
+    setCurrentPage(1);
+    getCleanContracts(1); // ✔ SIEMPRE RESETEAR DESDE LA PÁGINA 1
   };
-
-  console.log(filteredContracts);
 
   return {
     //Properties
     anios,
+    cleanContracts,
     filterValue,
     filterValueAnio,
     filteredContracts,
+    isFiltering,
     loading,
     loadingFilter,
     modal,
@@ -169,6 +227,7 @@ export const useHistorical = () => {
     handleSearchType,
     setObjetoExpandido,
     setFilterValueAnio,
-    setFilterValue
+    setFilterValue,
+    setActiveFilter,
   };
 };

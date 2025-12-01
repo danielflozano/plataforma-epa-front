@@ -61,6 +61,7 @@ export const GetContractsPage = () => {
     handleSubmitModifications,
     onSubmitUpdateContract,
     onSubmitModificationsContract,
+    watchModifications,
     openConfirmModal,
     openDetailsContractModal,
     openEye,
@@ -111,58 +112,60 @@ export const GetContractsPage = () => {
         </div>
 
         {/*Filtros*/}
-        <div className="flex gap-2 ">
-          <input
-            type="text"
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-            placeholder="Escribe aquí…"
-            className="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
-          />
-          <GlobalButton className="flex p-2 gap-2" onClick={handleReset}>
-            <RotateCcw />
-            Resetear Filtro
-          </GlobalButton>
-        </div>
+        <div className="flex flex-col gap-3 p-4">
+          <div className="flex gap-2 ">
+            <input
+              type="text"
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
+              placeholder="Escribe aquí…"
+              className="bg-white w-180 p-1 border-2 border-epaColor1 rounded-md text-epaColor1 focus:outline-none focus:ring focus:ring-epaColor3"
+            />
+            <GlobalButton className="flex p-2 gap-2" onClick={handleReset}>
+              <RotateCcw />
+              Resetear Filtro
+            </GlobalButton>
+          </div>
 
-        <div className="flex gap-2">
-          <GlobalButton
-            className="p-2"
-            onClick={() => handleSearch('NombreContratista')}
-          >
-            Buscar por Nombre
-          </GlobalButton>
-          <GlobalButton
-            className="p-2"
-            onClick={() => handleSearch('consecutivo')}
-          >
-            Buscar por Consecutivo
-          </GlobalButton>
-          <GlobalButton
-            className="p-2"
-            onClick={() => handleSearch('identificacionOnit')}
-          >
-            Buscar por Identificacion
-          </GlobalButton>
-          <GlobalButton
-            className="p-2"
-            onClick={() => handleSearch('tipoContrato')}
-          >
-            Buscar por Tipo de Contrato
-          </GlobalButton>
-          <GlobalButton
-            className="p-2"
-            onClick={() => handleSearch('vigencia')}
-          >
-            Buscar por Vigencia
-          </GlobalButton>
+          <div className="flex gap-2">
+            <GlobalButton
+              className="p-2"
+              onClick={() => handleSearch('NombreContratista')}
+            >
+              Buscar por Nombre
+            </GlobalButton>
+            <GlobalButton
+              className="p-2"
+              onClick={() => handleSearch('consecutivo')}
+            >
+              Buscar por Consecutivo
+            </GlobalButton>
+            <GlobalButton
+              className="p-2"
+              onClick={() => handleSearch('identificacionOnit')}
+            >
+              Buscar por Identificacion
+            </GlobalButton>
+            <GlobalButton
+              className="p-2"
+              onClick={() => handleSearch('tipoContrato')}
+            >
+              Buscar por Tipo de Contrato
+            </GlobalButton>
+            <GlobalButton
+              className="p-2"
+              onClick={() => handleSearch('vigencia')}
+            >
+              Buscar por Vigencia
+            </GlobalButton>
+          </div>
         </div>
 
         {/*Tabla de Contratos*/}
         <section className="">
           <div className="bg-white  shadow-md rounded-lg p-6 mx-auto mt-6">
             <table className="table-fixed w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-epaColor1 text-white uppercase">
+              <thead className="bg-epaColor1 text-white">
                 <tr>
                   <th className="py-4 text-center border border-white">
                     Proceso/ <br /> Dependencia <br /> del contrato
@@ -195,7 +198,7 @@ export const GetContractsPage = () => {
                   filteredContracts.map((c, index) => (
                     <tr
                       key={c._id}
-                      className="hover:bg-gray-100 transition-colors"
+                      className="hover:bg-gray-100 transition-colors my-2"
                     >
                       <td className="pl-2">{c.proceso.nombreProceso}</td>
                       <td className="pl-2">{c.tipoContrato.nombre}</td>
@@ -264,14 +267,12 @@ export const GetContractsPage = () => {
                         </span>
                       </td>
 
-                      <td className="">
-                        <div
-                          className="pl-2 flex gap-1 sm:grid sm:grid-cols-2 sm:gap-2"
-                        >
+                      <td>
+                        <div className="pl-2 grid grid-cols-2 gap-2 xl:gird xl:grid-cols-2 xl:gap-2 2xl:flex 2xl:flex-row 2xl:gap-2">
                           <button
                             onMouseEnter={() => openEye(c._id)}
                             onMouseLeave={() => openEye(null)}
-                            className="p-2 bg-sky-200 rounded-full hover:bg-sky-400 hover:scale-110 transition-transform"
+                            className="flex items-center justify-center p-2 bg-sky-200 rounded-full hover:bg-sky-400 hover:scale-110 transition-transform"
                             title="Ver detalles"
                             onClick={() => openDetailsContractModal(c._id)}
                           >
@@ -283,7 +284,7 @@ export const GetContractsPage = () => {
                           </button>
 
                           <button
-                            className="p-2 bg-yellow-200 rounded-full hover:bg-yellow-300 hover:scale-110 transition-transform"
+                            className="flex items-center justify-center p-2 bg-yellow-200 rounded-full hover:bg-yellow-300 hover:scale-110 transition-transform"
                             title="Editar"
                             onClick={() => openUpdateModal(c._id)}
                           >
@@ -291,7 +292,7 @@ export const GetContractsPage = () => {
                           </button>
 
                           <button
-                            className="p-2 bg-green-200 rounded-full hover:bg-green-300 hover:scale-110 transition-transform"
+                            className="flex items-center justify-center p-2 bg-green-200 rounded-full hover:bg-green-300 hover:scale-110 transition-transform"
                             title="Agregar Modificaciones"
                             onClick={() => openModificationsModal(c._id)}
                           >
@@ -299,7 +300,7 @@ export const GetContractsPage = () => {
                           </button>
 
                           <button
-                            className="p-2 bg-red-200 rounded-full hover:bg-red-300 hover:scale-110 transition-transform"
+                            className="flex items-center justify-center p-2 bg-red-200 rounded-full hover:bg-red-300 hover:scale-110 transition-transform"
                             title="Eliminar"
                             onClick={() => openConfirmModal(c._id)}
                           >
@@ -394,6 +395,7 @@ export const GetContractsPage = () => {
           <ModificationsContractModal
             register={registerModifications}
             errors={errorsModifications}
+            watch={watchModifications}
           />
         </UpdateModal>
 
