@@ -2,6 +2,7 @@ import { useAseo } from '@/modules/aseo/context';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { workersService } from '../services';
+import { estado, tipoOperario } from '@/constants';
 
 export const useGetWorkers = () => {
   const { workers, jobPositions, departaments, locations, getAllWorkers } =
@@ -130,12 +131,14 @@ export const useGetWorkers = () => {
     control,
     departaments,
     errors,
+    estado,
     filteredWorkers,
     filterValue,
     jobPositions,
     loading,
     locations,
     selectedWorker,
+    tipoOperario,
     updateModal,
     workers,
 

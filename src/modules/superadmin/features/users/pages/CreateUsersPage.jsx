@@ -20,7 +20,7 @@ export const CreateUsersPage = () => {
     <>
       <GlobalButton
         variant="back"
-        className="flex w-30 p-1.5 mb-3"
+        className="flex w-30 p-1.5"
         onClick={onClickBack}
       >
         <ArrowLeft className="ml-0.5 mr-2 -left-0.5" />

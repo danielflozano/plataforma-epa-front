@@ -8,6 +8,7 @@ export const UserUpdateModal = ({
   errors,
   closeModal,
   roles,
+  estado,
 }) => {
   return (
     <UpdateModal
@@ -62,6 +63,23 @@ export const UserUpdateModal = ({
         {roles.map((rol, index) => (
           <option key={index} value={rol}>
             {rol}
+          </option>
+        ))}
+      </GlobalInput>
+      <GlobalInput
+        as="select"
+        label="Estado"
+        data="estadoUsuario"
+        register={register}
+        errors={errors}
+        rules={{
+          required: 'Campo Obligatorio',
+        }}
+      >
+        <option value="">Seleccione el estado</option>
+        {estado.map((est) => (
+          <option key={est} value={est}>
+            {est}
           </option>
         ))}
       </GlobalInput>

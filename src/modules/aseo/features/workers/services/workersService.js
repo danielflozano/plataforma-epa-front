@@ -97,7 +97,9 @@ export const workersService = {
       const response = await apiClient.get('/procesos');
       return response.data;
     } catch (error) {
-      throw new Error(error, 'Error obteniendo todos los procesos ❌');
+      throw new Error(
+        handleAxiosError(error, 'Error obteniendo todos los procesos ❌')
+      );
     }
   },
 
@@ -107,8 +109,9 @@ export const workersService = {
       return response.data;
     } catch (error) {
       console.log(error);
-
-      throw new Error(error, 'Error obteniendo todas las sedes ❌');
+      throw new Error(
+        handleAxiosError(error, 'Error obteniendo todas las sedes ❌')
+      );
     }
   },
 };
