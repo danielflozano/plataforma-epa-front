@@ -71,8 +71,8 @@ export const LawyersPage = () => {
                       className={`px-3 py-1 rounded-full text-xs font-semibold
                         ${
                           l.EstadoAbogado?.toLowerCase() === 'activo'
-                            ? 'bg-green-500 text-white'
-                            : 'bg-gray-400 text-white'
+                            ? 'bg-green-500 text-black'
+                            : 'bg-gray-400 text-black'
                         }
                       `}
                     >

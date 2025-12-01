@@ -1,24 +1,37 @@
-import { GlobalButton, LoadSpinner } from '@/components';
+import { FilterInput, GlobalButton, LoadSpinner } from '@/components';
 import { useHistorical } from '../hooks';
 
 export const HistoricalPage = () => {
   const {
     //Properties
-    cleanContracts,
+    anios,
+    filterValue,
+    filteredContracts,
     loading,
+    loadingFilter,
     modal,
     objetoExpandido,
+    currentPage,
+    totalPages,
+    totalRecords,
 
     //Methods
-    closeModal,
+    // closeModal,
+    handleKeyDown,
+    handlePageChange,
+    handleSearch,
     setObjetoExpandido,
+    setFilterValue,
   } = useHistorical();
   return (
     <>
       {loading && (
         <LoadSpinner name="Cargando Contratos" styles="fixed bg-gray-200/95" />
       )}
-      {modal && (
+      {loadingFilter && (
+        <LoadSpinner name="Cargando Contratos" styles="absolute fixed bg-gray-200/95 z-51" />
+      )}
+      {modal && (              
         <div className="fixed inset-0 bg-epaColor1/50 flex items-center justify-center z-50">
           <div className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[800px] justify-center items-center">
             <h2 className="text-2xl font-bold mb-4 text-epaColor1">
@@ -26,23 +39,33 @@ export const HistoricalPage = () => {
             </h2>
 
             <label className="font-semibold">Buscar contrato:</label>
-            <input
-              type="text"
-              // value={filtro}
-              // onChange={(e) => setFiltro(e.target.value)}
-              placeholder="Escribe un año..."
-              className="border p-2 rounded w-full mt-1"
-            />
-
-            <GlobalButton onClick={() => closeModal()} className="p-4">
-              Continuar
-            </GlobalButton>
+            <select
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="border border-gray-500 rounded-md p-1"
+            >
+              <option value="">Seleccione un año</option>
+              {anios.map((p) => (
+                <option key={p._id} value={p._id}>
+                  {p}
+                </option>
+              ))}
+            </select>
+            <GlobalButton onClick={handleSearch} className="p-4">Continuar</GlobalButton>
           </div>
         </div>
       )}
 
       {/* Filtros */}
 
+      {/* <FilterInput
+        filterValue={filterValue}
+        setFilterValue={setFilterValue}
+        placeholder='Escriba aqui el nombre del contratista que  quiere buscar...'
+        handleKeyDown={handleKeyDown}
+        handleSearch={handleSearch}
+      /> */}
       {/* Tabla de Contratos */}
       <section className="">
         <div className="bg-white  shadow-md rounded-lg p-6 mx-auto mt-6">
@@ -61,8 +84,8 @@ export const HistoricalPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cleanContracts?.length > 0 ? (
-                cleanContracts.map((c, index) => (
+              {filteredContracts?.length > 0 ? (
+                filteredContracts.map((c, index) => (
                   <tr
                     key={index}
                     className="hover:bg-gray-100 transition-colors"
@@ -132,6 +155,34 @@ export const HistoricalPage = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* PAGINACIÓN */}
+        <div className="flex justify-between items-center px-4 py-3">
+          <span>
+            Mostrando {filteredContracts.length} de {totalRecords} registros.
+          </span>
+          <div className="flex items-center gap-2">
+            <GlobalButton
+              variant="modalTwo"
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="px-3 py-1 disabled:bg-gray-400"
+              disabled={currentPage === 1}
+            >
+              Anterior
+            </GlobalButton>
+            <span>
+              Página {currentPage} de {totalPages}
+            </span>
+            <GlobalButton
+              variant="modalTwo"
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="px-3 py-1 disabled:bg-gray-400"
+              disabled={currentPage === totalPages}
+            >
+              Siguiente
+            </GlobalButton>
+          </div>
         </div>
       </section>
     </>

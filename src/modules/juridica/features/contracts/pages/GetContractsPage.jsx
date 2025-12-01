@@ -39,6 +39,7 @@ export const GetContractsPage = () => {
     hoverEye,
     lawyers,
     loading,
+    loadingFilter,
     modificationsContractModal,
     objetoExpandido,
     process,
@@ -75,6 +76,9 @@ export const GetContractsPage = () => {
   return (
     <>
       {loading && (
+        <LoadSpinner name="Cargando Contratos" styles="fixed bg-gray-200/95" />
+      )}
+      {loadingFilter && (
         <LoadSpinner name="Cargando Contratos" styles="fixed bg-gray-200/95" />
       )}
       <GlobalButton
@@ -261,7 +265,9 @@ export const GetContractsPage = () => {
                       </td>
 
                       <td className="">
-                        <div className="flex gap-1 pl-2">
+                        <div
+                          className="pl-2 flex gap-1 sm:grid sm:grid-cols-2 sm:gap-2"
+                        >
                           <button
                             onMouseEnter={() => openEye(c._id)}
                             onMouseLeave={() => openEye(null)}
@@ -332,7 +338,7 @@ export const GetContractsPage = () => {
               </span>
               <GlobalButton
                 variant="modalTwo"
-                onClick={() => handlePageChange(2)}
+                onClick={() => handlePageChange(currentPage + 1)}
                 className="px-3 py-1 disabled:bg-gray-400"
                 disabled={currentPage === totalPages}
               >

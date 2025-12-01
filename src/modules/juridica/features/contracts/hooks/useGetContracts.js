@@ -22,6 +22,7 @@ export const useGetContracts = () => {
   const [filteredContracts, setFilteredContracts] = useState([]);
   const [hoverEye, setHoverEye] = useState(false);
   const [detailsContractModal, setDetailsContractModal] = useState(false);
+  const [loadingFilter, setLoadingFilter] = useState(false);
   const [modificationsContractModal, setModificationsContractModal] =
     useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -234,8 +235,8 @@ export const useGetContracts = () => {
       return;
     }
 
+    setLoadingFilter(true);
     try {
-      // Armamos filtros + paginación (igual que tu back)
       const filtros = {
         [param]: filterValue.trim(),
         page: currentPage,
@@ -245,13 +246,12 @@ export const useGetContracts = () => {
       const response = await contractsServices.getFilteredContracts(filtros);
 
       setFilteredContracts(response.data);
-
-
-      console.log("🔥 Sí funcionó handleSearch con filtros");
     } catch (error) {
       console.error(error);
       setFilteredContracts([]);
-    } 
+    } finally {
+      setLoadingFilter(false);
+    }
   }, 600);
 };
 
@@ -275,6 +275,7 @@ export const useGetContracts = () => {
     hoverEye,
     lawyers,
     loading,
+    loadingFilter,
     modificationsContractModal,
     objetoExpandido,
     process,
