@@ -9,14 +9,15 @@ export const GetDepartaments = () => {
   const {
      // Properties
     alertModal,
+    createModal,
     departaments,
     errors,
-    updateModal,
+    loading,
 
     // Methods
     closeAlertModal,
     closeModals,
-    handleOpenUpdateModal,
+    handleOpenCreateModal,
     handleSubmit,
     onSubmit,
     register,
@@ -34,7 +35,7 @@ export const GetDepartaments = () => {
       <GlobalButton
         variant="third"
         className="flex p-1.5 w-65"
-        onClick={handleOpenUpdateModal}
+        onClick={handleOpenCreateModal}
       >
         <FilePlus className="w-1/3" />
         Crear Proceso
@@ -43,19 +44,18 @@ export const GetDepartaments = () => {
         <h2 className="text-epaColor1 text-4xl font-extrabold">
           Procesos
         </h2>
-        <DepartamentsTable departaments={departaments} />
+        <DepartamentsTable loading={loading} departaments={departaments} />
       </div>
       <UpdateModal
-        isOpen={updateModal}
+        isOpen={createModal}
         title="Crear Nuevo Proceso"
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         closeModal={closeModals}
         formClassName="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]"
-
       >
         <GlobalInput
-          label="Proceso"
+          label="Nombre Proceso"
           data="nombreProceso"
           register={register}
           errors={errors}

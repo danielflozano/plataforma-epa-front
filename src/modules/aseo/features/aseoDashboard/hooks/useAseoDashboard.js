@@ -4,24 +4,34 @@ import { useEffect, useState } from 'react';
 
 export const useAseoDashboard = () => {
   const { totalRecords, workers } = useAseo();
-
-  const [stats, setStats] = useState();
+  const [stats, setStats] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getOvertimesStats();
+    setTimeout(() => {
+      setLoading(false);      
+    }, 1000);
   }, [])
 
   const getOvertimesStats = async () => {
     try {
       const response = await overtimesService.getOvertimesStats();
-      setStats(response.data);      
+      setStats(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const porcentaje = stats?.porcentajeCambio ? parseFloat(stats.porcentajeCambio) : 0;
+
+  console.log(stats);
+  
   
   return {
     // Properties
+    loading,
+    porcentaje,
     stats,
     totalRecords,
     workers,

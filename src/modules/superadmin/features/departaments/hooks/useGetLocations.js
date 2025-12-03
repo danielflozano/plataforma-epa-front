@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { departamentsService } from '../services';
 import { useForm } from 'react-hook-form';
+import { departamentsService } from '../services';
 
-export const useGetDepartaments = () => {
-  const [departaments, setDepartaments] = useState();
+export const useGetLocations = () => {
+  const [locations, setLocations] = useState();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [createModal, setCreateModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
-  const [selectedDepartament, setSelectedDepartament] = useState({});
   const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
@@ -23,21 +22,22 @@ export const useGetDepartaments = () => {
   } = useForm();
 
   useEffect(() => {
-    getDepartaments();
+    getLocations();
   }, []);
 
   useEffect(() => {
     if (success) {
-      getDepartaments();
+      getLocations();
       setSuccess(false);
     }
   }, [success]);
 
-  const getDepartaments = async () => {
+  const getLocations = async () => {
     setLoading(true);
     try {
-      const response = await departamentsService.getAllDepartaments();
-      setDepartaments(response.data);
+      const response = await departamentsService.getAllLocations();
+      console.log(response);
+      setLocations(response.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -47,13 +47,13 @@ export const useGetDepartaments = () => {
   
   const onSubmit = async (data) => {
     try {
-      const response = await departamentsService.createDepartaments(data);
-      console.log('Respuesta del servicio: ', response);
+      const response = await departamentsService.createLocations(data);
+      console.log('sede creada con exito', response?.data?.name);
       setSuccess(true);
       setAlertModal({
         open: true,
-        message: `El proceso ${response?.data?.nombreProceso} ha sido registrado con exito`,
-        status: 'Proceso Creado con Exito',
+        message: `La sede ${response?.data?.name} ha sido registrado con exito`,
+        status: 'Sede Creada con Exito',
       });
       reset();
     } catch (error) {
@@ -66,25 +66,8 @@ export const useGetDepartaments = () => {
     }
   };
 
-  // const onUpdateSubmit = async (data) => {
-  //   try {
-  //     const response = await departamentsService.
-  //   } catch (error) {
-      
-  //   }
-  // }
-
   const handleOpenCreateModal = () => {
     setCreateModal(true);
-  };
-
-  const handleOpenForm = (departament) => {
-    setSelectedDepartament(departament);
-    reset({
-      ...departament,
-      nombreProceso: departament.nombreProceso || '',
-    });
-    setUpdateModal(true);
   };
 
   const closeModals = () => {
@@ -113,10 +96,11 @@ export const useGetDepartaments = () => {
   return {
     // Properties
     alertModal,
-    departaments,
+    createModal,
     errors,
     loading,
-    createModal,
+    locations,
+    updateModal,
 
     // Methods
     closeAlertModal,

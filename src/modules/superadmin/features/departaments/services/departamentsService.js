@@ -25,7 +25,8 @@ export const departamentsService = {
   createLocations: async (data) => {
     try {
       const response = await apiClient.post('/sede/crearsede', data);
-      console.log('Sede creada con exito', response.data);
+      console.log('Respuesta del servicio', response.data);
+      return response.data;
     } catch (error) {
       throw new Error(
         handleAxiosError(error, 'Error creando sede ❌')
