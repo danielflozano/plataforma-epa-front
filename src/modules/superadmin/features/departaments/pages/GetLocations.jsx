@@ -11,6 +11,7 @@ export const GetLocations = () => {
     alertModal,
     createModal,
     errors,
+    errorsUpdate,
     loading,
     locations,
     updateModal,
@@ -19,9 +20,13 @@ export const GetLocations = () => {
     closeAlertModal,
     closeModals,
     handleOpenCreateModal,
+    handleOpenUpdateModal,
     handleSubmit,
+    handleSubmitUpdate,
     onSubmit,
+    onUpdateSubmit,
     register,
+    registerUpdate,
   } = useGetLocations();
   return (
     <>
@@ -43,7 +48,7 @@ export const GetLocations = () => {
       </GlobalButton>
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-epaColor1 text-4xl font-extrabold">Sedes</h2>
-        <LocationsTable loading={loading} locations={locations} />
+        <LocationsTable loading={loading} locations={locations} handleOpenUpdateModal={handleOpenUpdateModal} />
       </div>
       <UpdateModal
         isOpen={createModal}
@@ -58,6 +63,24 @@ export const GetLocations = () => {
           data="name"
           register={register}
           errors={errors}
+          rules={{
+            required: 'Campo Obligatorio',
+          }}
+        />
+      </UpdateModal>
+      <UpdateModal
+        isOpen={updateModal}
+        title="Editar Sede"
+        handleSubmit={handleSubmitUpdate}
+        onSubmit={onUpdateSubmit}
+        closeModal={closeModals}
+        formClassName="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]"
+      >
+        <GlobalInput
+          label="Nombre Sede"
+          data="name"
+          register={registerUpdate}
+          errors={errorsUpdate}
           rules={{
             required: 'Campo Obligatorio',
           }}

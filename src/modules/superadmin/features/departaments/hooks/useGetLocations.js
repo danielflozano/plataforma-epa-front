@@ -21,6 +21,13 @@ export const useGetLocations = () => {
     formState: { errors },
   } = useForm();
 
+  const {
+    register: registerUpdate,
+    handleSubmit: handleSubmitUpdate,
+    reset: resetUpdate,
+    formState: { errors: errorsUpdate },
+  } = useForm();
+
   useEffect(() => {
     getLocations();
   }, []);
@@ -44,7 +51,7 @@ export const useGetLocations = () => {
       setLoading(false);
     }
   };
-  
+
   const onSubmit = async (data) => {
     try {
       const response = await departamentsService.createLocations(data);
@@ -66,12 +73,42 @@ export const useGetLocations = () => {
     }
   };
 
+  const onUpdateSubmit = async (data) => {
+    try {
+      const response = await departamentsService.updateLocations(data);
+      console.log('Respuesta del servicio ', response);
+      setSuccess(true);
+      setAlertModal({
+        open: true,
+        message: 'Sede actualizada con exito',
+        status: 'Registro Exitoso',
+      });
+      resetUpdate();
+    } catch (error) {
+      console.error(error);
+      setAlertModal({
+        open: true,
+        message: error.message,
+        status: 'Error',
+      });      
+    }
+  };
+
   const handleOpenCreateModal = () => {
     setCreateModal(true);
   };
 
+  const handleOpenUpdateModal = (location) => {
+    resetUpdate({
+      ...location,
+      name: location.name || '',
+    });
+    setUpdateModal(true);
+  };
+
   const closeModals = () => {
     setCreateModal(false);
+    setUpdateModal(false);
     setAlertModal({
       open: false,
       message: '',
@@ -98,6 +135,7 @@ export const useGetLocations = () => {
     alertModal,
     createModal,
     errors,
+    errorsUpdate,
     loading,
     locations,
     updateModal,
@@ -106,8 +144,12 @@ export const useGetLocations = () => {
     closeAlertModal,
     closeModals,
     handleOpenCreateModal,
+    handleOpenUpdateModal,
     handleSubmit,
+    handleSubmitUpdate,
     onSubmit,
+    onUpdateSubmit,
     register,
+    registerUpdate,
   };
 };

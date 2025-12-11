@@ -8,7 +8,7 @@ export const useGetDepartaments = () => {
   const [success, setSuccess] = useState(false);
   const [createModal, setCreateModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
-  const [selectedDepartament, setSelectedDepartament] = useState({});
+  // const [selectedDepartament, setSelectedDepartament] = useState({});
   const [alertModal, setAlertModal] = useState({
     open: false,
     message: '',
@@ -20,6 +20,13 @@ export const useGetDepartaments = () => {
     handleSubmit,
     reset,
     formState: { errors },
+  } = useForm();
+
+  const {
+    register: registerUpdate,
+    handleSubmit: handleSubmitUpdate,
+    reset: resetUpdate,
+    formState: { errors: errorsUpdate },
   } = useForm();
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export const useGetDepartaments = () => {
       setLoading(false);
     }
   };
-  
+
   const onSubmit = async (data) => {
     try {
       const response = await departamentsService.createDepartaments(data);
@@ -66,21 +73,34 @@ export const useGetDepartaments = () => {
     }
   };
 
-  // const onUpdateSubmit = async (data) => {
-  //   try {
-  //     const response = await departamentsService.
-  //   } catch (error) {
-      
-  //   }
-  // }
+  const onUpdateSubmit = async (data) => {
+    try {
+      const response = await departamentsService.updateDepartaments(data);
+      console.log('Respuesta del servicio: ', response);
+      setSuccess(response.success);
+      setAlertModal({
+        open: response.success,
+        message: `Proceso actualizado con exito`,
+        status: 'Registro Exitoso',
+      });
+      resetUpdate();
+    } catch (error) {
+      console.error(error);
+      setAlertModal({
+        open: true,
+        message: error.message,
+        status: 'Error',
+      });
+    }
+  };
 
   const handleOpenCreateModal = () => {
     setCreateModal(true);
   };
 
-  const handleOpenForm = (departament) => {
-    setSelectedDepartament(departament);
-    reset({
+  const handleOpenUpdateModal = (departament) => {
+    // setSelectedDepartament(departament);
+    resetUpdate({
       ...departament,
       nombreProceso: departament.nombreProceso || '',
     });
@@ -89,6 +109,7 @@ export const useGetDepartaments = () => {
 
   const closeModals = () => {
     setCreateModal(false);
+    setUpdateModal(false);
     setAlertModal({
       open: false,
       message: '',
@@ -113,17 +134,23 @@ export const useGetDepartaments = () => {
   return {
     // Properties
     alertModal,
+    createModal,
     departaments,
     errors,
+    errorsUpdate,
     loading,
-    createModal,
+    updateModal,
 
     // Methods
     closeAlertModal,
     closeModals,
     handleOpenCreateModal,
+    handleOpenUpdateModal,
     handleSubmit,
+    handleSubmitUpdate,
     onSubmit,
+    onUpdateSubmit,
     register,
+    registerUpdate,
   };
 };

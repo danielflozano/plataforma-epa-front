@@ -75,7 +75,6 @@ export const useGetWorkers = () => {
         const response = await workersService.getWorkerById(filterValue);
         console.log(response.data);
         setFilteredWorkers([response.data]);
-        console.log('Si funcionó handleSearch');
       } catch (error) {
         console.error(error);
         setFilteredWorkers([]);

@@ -7,20 +7,26 @@ import { useGetDepartaments } from "../hooks";
 export const GetDepartaments = () => {
   const { onClickBack } = useBackNavigation();
   const {
-     // Properties
+    // Properties
     alertModal,
     createModal,
     departaments,
     errors,
+    errorsUpdate,
     loading,
+    updateModal,
 
     // Methods
     closeAlertModal,
     closeModals,
     handleOpenCreateModal,
+    handleOpenUpdateModal,
     handleSubmit,
+    handleSubmitUpdate,
     onSubmit,
+    onUpdateSubmit,
     register,
+    registerUpdate,
   } = useGetDepartaments();
   return (
     <>
@@ -44,7 +50,7 @@ export const GetDepartaments = () => {
         <h2 className="text-epaColor1 text-4xl font-extrabold">
           Procesos
         </h2>
-        <DepartamentsTable loading={loading} departaments={departaments} />
+        <DepartamentsTable loading={loading} departaments={departaments} handleOpenUpdateModal={handleOpenUpdateModal} />
       </div>
       <UpdateModal
         isOpen={createModal}
@@ -59,6 +65,24 @@ export const GetDepartaments = () => {
           data="nombreProceso"
           register={register}
           errors={errors}
+          rules={{
+            required: 'Campo Obligatorio'
+          }}
+        />
+      </UpdateModal>
+      <UpdateModal
+        isOpen={updateModal}
+        title="Editar Proceso"
+        handleSubmit={handleSubmitUpdate}
+        onSubmit={onUpdateSubmit}
+        closeModal={closeModals}
+        formClassName="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-[500px]"
+      >
+        <GlobalInput
+          label="Nombre Proceso"
+          data="nombreProceso"
+          register={registerUpdate}
+          errors={errorsUpdate}
           rules={{
             required: 'Campo Obligatorio'
           }}

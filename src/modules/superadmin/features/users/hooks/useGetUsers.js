@@ -9,6 +9,7 @@ export const useGetUsers = () => {
   const [filterValue, setFilterValue] = useState('');
   const [selectedUserId, setSelectedUserId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
   const [success, setSuccess] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [users, setUsers] = useState([]);
@@ -74,9 +75,33 @@ export const useGetUsers = () => {
     }
   };
 
-  const handleSearch = () => {};
+  const handleSearch = (showLoader = true) => {
+    if (showLoader) setLoadingSearch(true);
+    setTimeout(async () => {
+      if (!filterValue.trim()) {
+        getUsers();
+        if (showLoader) setLoadingSearch(false);
+        return;
+      }
+      try {
+        const response = await usersService.getUserById(filterValue);
+        console.log(response.data);
+        setUsers(response.data || []);
+        console.log('Funciona getUsersById');        
+      } catch (error) {
+        console.error(error);
+        setUsers([]);
+      } finally {
+        if (showLoader) setLoadingSearch(false);
+      }
+    }, 600);
+  };
 
-  const handleKeyDown = () => {};
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   const closeAlertModal = () => {
     if (alertModal.status === 'Error') {
@@ -108,6 +133,7 @@ export const useGetUsers = () => {
     estado,
     filterValue,
     loading,
+    loadingSearch,
     roles,
     updateModal,
     users,
