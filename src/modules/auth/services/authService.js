@@ -5,7 +5,6 @@ export const authService = {
   login: async (userData) => {
     try {
       const response = await authClient.post('/auth/login', userData);
-      console.log(response.data.msg);
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error iniciando sesión ❌'));
@@ -15,7 +14,6 @@ export const authService = {
   logout: async() => {
     try {
       const response = await authClient.post('/auth/logout');
-      console.log(response.data.msg);
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error cerrando sesión ❌'));
@@ -25,7 +23,6 @@ export const authService = {
   renewToken: async() => {
     try {
       const response = await authClient.post('/auth/renew');
-      console.log(response.data);
       return response.data;
     } catch (error) {
       throw new Error(handleAxiosError(error, 'Error renovando el accessToken ❌'));

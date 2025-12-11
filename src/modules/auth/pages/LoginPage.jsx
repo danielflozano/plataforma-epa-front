@@ -38,7 +38,7 @@ export const LoginPage = () => {
           </div>
         )}
 
-        <Profiler id="MiComponente" onRender={onRenderCallback}> {/* Se utiliza para medir el rendimiento de cada componente */}
+        {/* <Profiler id="MiComponente" onRender={onRenderCallback}> Se utiliza para medir el rendimiento de cada componente */}
           <GlobalInput
             label='Correo Electrónico'
             data='email'
@@ -54,7 +54,7 @@ export const LoginPage = () => {
               }
             }}
           />
-        </Profiler>
+        {/* </Profiler> */}
 
         <GlobalInput
           type='password'

@@ -23,10 +23,7 @@ export const useAseoDashboard = () => {
     }
   };
 
-  const porcentaje = stats?.porcentajeCambio ? parseFloat(stats.porcentajeCambio) : 0;
-
-  console.log(stats);
-  
+  const porcentaje = stats?.porcentajeCambio ? parseFloat(stats.porcentajeCambio) : 0;  
   
   return {
     // Properties
