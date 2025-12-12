@@ -13,7 +13,7 @@ import {
 import {
   AuthRoutes,
   GetAseoRoutesFor,
-  JuridicaRoutes,
+  GetJuridicaRoutesFor,
   SuperadminRoutes,
 } from '@/modules';
 import { ROLES } from '@/constants';
@@ -58,7 +58,7 @@ export const AppRouter = () => {
               ]}
             />
           ),
-          children: JuridicaRoutes,
+          children: GetJuridicaRoutesFor(auth?.user?.rol),
         },
       ],
     },

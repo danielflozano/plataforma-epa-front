@@ -1,6 +1,7 @@
 import { aseoRoutesList } from '@/routes';
 import { AseoLayout } from '../layout';
-import { AseoRoutes } from './AseoRoutes';
+import { AseoRoutes } from '.';
+import { AseoProvider } from '../context';
 
 export const GetAseoRoutesFor = (role) => {
   const filteredRoutes = AseoRoutes.filter((route) => {
@@ -11,7 +12,11 @@ export const GetAseoRoutesFor = (role) => {
   return [
     {
       path: aseoRoutesList.aseoDashboard,
-      element: <AseoLayout />,
+      element: (
+        <AseoProvider>
+          <AseoLayout/>
+        </AseoProvider>
+      ),
       children: filteredRoutes,
     },
   ];

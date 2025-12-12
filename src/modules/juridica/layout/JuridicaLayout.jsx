@@ -1,15 +1,28 @@
 import { Link, Outlet } from 'react-router-dom';
-import { UserCheck, House, Folders, Users, NotebookPen, Building2, LogOut, UserStar } from 'lucide-react';
+import {
+  UserCheck,
+  House,
+  Folders,
+  Users,
+  NotebookPen,
+  Building2,
+  LogOut,
+  UserStar,
+} from 'lucide-react';
 import { GlobalButton } from '@/components';
 import { useAuth } from '@/context/AuthContext';
 import logo from '@/assets/logoepa.png';
 import { juridicaRoutesList, superadminRoutesList } from '@/routes';
 import { JuridicaProvider } from '../context/JuridicaContext';
+import { ROLES } from '@/constants';
 
 const currentYear = new Date().getFullYear();
 
 export const JuridicaLayout = () => {
   const { auth, logout } = useAuth();
+
+  const isSuperAdmin = auth?.user?.rol === ROLES.SUPER_ADMIN;
+  const isNormalUser = auth?.user?.rol === ROLES.USER_JURIDICA;
 
   return (
     <JuridicaProvider>
@@ -35,7 +48,11 @@ export const JuridicaLayout = () => {
             <div className="text-epaColor1 font-medium">
               <Link
                 className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-2"
-                to={juridicaRoutesList.contracts}
+                to={
+                  isNormalUser
+                    ? juridicaRoutesList.listContracts
+                    : juridicaRoutesList.contracts
+                }
               >
                 <NotebookPen size={20} />
                 Contratos
@@ -73,32 +90,26 @@ export const JuridicaLayout = () => {
         </div>
 
         <div className="flex flex-col w-full">
-          <header className="bg-epaColor1 grid grid-cols-3 px-6 py-6">
-            <div></div>
-            <h2 className="text-white text-center font-bold text-3xl">
+          <header className="bg-epaColor1 flex p-6">
+            <div className="w-2/10"></div>
+            <h2 className="w-full text-white text-center font-bold text-3xl">
               Plataforma EPA - Modulo Juridica
             </h2>
-            {auth.user.rol === 'SuperAdministrador' && (
-              <div className="flex text-white text-sm items-center justify-end gap-2">
-                <UserStar />
-                <div className="text-right">
-                  <p className="px-2">{auth.user.name}</p>
+            <div className="w-2/10 flex text-white text-sm items-center justify-end gap-2">
+              {isSuperAdmin ? <UserStar /> : <UserCheck />}
+              <div>
+                <p className="text-center">{auth.user.name}</p>
+                {isSuperAdmin ? (
                   <Link to={superadminRoutesList.superadminDashboard}>
                     <p className="bg-white px-2 text-epaColor1 font-semibold underline rounded-sm">
                       {auth.user.rol}
                     </p>
                   </Link>
-                </div>
+                ) : (
+                  <p>{auth.user.rol}</p>
+                )}
               </div>
-            )}
-            {auth.user.rol != 'SuperAdministrador' && (
-              <div className="flex text-white text-sm items-center justify-end gap-2">
-                <UserCheck />
-                <div className="text-right">
-                  {auth.user.name} <br /> {auth.user.rol}
-                </div>
-              </div>
-            )}
+            </div>
           </header>
 
           <main className="relative bg-gray-200 flex-1 overflow-auto p-4">

@@ -11,7 +11,7 @@ export const useAseoDashboard = () => {
     getOvertimesStats();
     setTimeout(() => {
       setLoading(false);      
-    }, 1000);
+    }, 600);
   }, [])
 
   const getOvertimesStats = async () => {

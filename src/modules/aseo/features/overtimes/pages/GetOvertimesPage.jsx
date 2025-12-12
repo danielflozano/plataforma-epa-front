@@ -66,6 +66,7 @@ export const GetOvertimesPage = () => {
           setFilterValue={setFilterValue}
           handleKeyDown={handleKeyDown}
           handleSearch={handleSearch}
+          placeholder='Buscar por identificación'
         />
         <OvertimesRecordsSection
           overtimesFilter={overtimesFilter}
@@ -74,7 +75,11 @@ export const GetOvertimesPage = () => {
         />
         <div className="flex justify-between items-center px-4">
           <span>
-            Mostrando {overtimesFilter.length} de {totalRecords} registros.
+            Mostrando {overtimesFilter.length} de {
+              showPagination
+                ? totalRecords
+                : overtimesFilter.length
+            } registros.
           </span>
           {showPagination && (
             <div className="flex items-center gap-2">
