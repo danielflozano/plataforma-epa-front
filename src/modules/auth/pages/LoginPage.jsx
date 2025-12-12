@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
 import { GlobalButton, GlobalInput, LoadSpinner } from '@/components';
 import { AuthLayout } from '../components';
-import { Profiler } from 'react';
-import { onRenderCallback } from '@/profiler';
 import { authRoutesList } from '@/routes';
+// import { Profiler } from 'react';
+// import { onRenderCallback } from '@/profiler';
 
 export const LoginPage = () => {
   const { 

@@ -1,4 +1,3 @@
-export * from './AppRouter';
 export * from './list';
 export * from './ProtectedRoutes';
 export * from './PublicRoutes';

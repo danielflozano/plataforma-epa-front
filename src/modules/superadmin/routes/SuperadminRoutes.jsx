@@ -1,4 +1,3 @@
-import { superadminRoutesList } from '@/routes';
 import { SuperadminLayout } from '../layout';
 import {
   CreateUsersPage,
@@ -9,6 +8,7 @@ import {
   SuperadminDashboardPage,
   UsersPage,
 } from '../features';
+import { superadminRoutesList } from '@/routes';
 
 export const SuperadminRoutes = [
   {

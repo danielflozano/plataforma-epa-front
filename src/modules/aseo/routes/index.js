@@ -1,1 +1,1 @@
-export * from './AseoRoutes';
+export * from './GetAseoRoutesFor';

@@ -4,7 +4,9 @@ import { ROLE_REDIRECT } from './roleRedirects';
 import { authRoutesList } from './list';
 
 export const RoleProtectedRoute = ({ allowedRoles }) => {
-  const { auth } = useAuth();
+  const { auth, loading } = useAuth();
+
+  if (loading) return <LoadSpinner styles="fixed bg-gray-200/95" />
 
   if (!auth) return <Navigate to={authRoutesList.login} replace />;
 

@@ -13,6 +13,7 @@ import { GlobalButton, LoadSpinner } from '@/components';
 import { aseoRoutesList, superadminRoutesList } from '@/routes';
 import logo from '@/assets/logoepa.png';
 import { AseoProvider, useAseo } from '../context';
+import { ROLES } from '@/constants';
 
 const currentYear = new Date().getFullYear();
 
@@ -46,7 +47,11 @@ export const AseoLayout = () => {
             <div className="text-epaColor1 font-medium">
               <Link
                 className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-                to={aseoRoutesList.overtimes}
+                to={
+                  auth.user.rol === ROLES.USER_ASEO
+                    ? aseoRoutesList.getOvertimes
+                    : aseoRoutesList.overtimes
+                }
               >
                 <ClipboardClock size={20} />
                 Horas Extra
@@ -55,7 +60,11 @@ export const AseoLayout = () => {
             <div className="text-epaColor1 font-medium">
               <Link
                 className="flex gap-2 items-center transition-transform duration-300 hover:translate-x-4"
-                to={aseoRoutesList.workers}
+                to={
+                  auth.user.rol === ROLES.USER_ASEO
+                    ? aseoRoutesList.getWorkers
+                    : aseoRoutesList.workers
+                }
               >
                 <Users size={20} />
                 Funcionarios
@@ -68,7 +77,7 @@ export const AseoLayout = () => {
               >
                 <NotebookPen size={20} />
                 Reportes
-              </Link>
+              </Link>                                                    
             </div>
           </nav>
           <GlobalButton
@@ -83,11 +92,11 @@ export const AseoLayout = () => {
 
         <div className="flex flex-col w-full">
           <header className="bg-epaColor1 flex p-6">
-            <div className='w-2/10'></div>
+            <div className="w-2/10"></div>
             <h2 className="w-full text-white text-center font-bold text-3xl">
               Plataforma EPA - Modulo Aseo
             </h2>
-            {auth.user.rol === 'SuperAdministrador' && (
+            {auth.user.rol === ROLES.SUPER_ADMIN && (
               <div className="w-2/10 flex text-white text-sm items-center justify-end gap-2">
                 <UserStar />
                 <div className="text-right">
@@ -100,7 +109,7 @@ export const AseoLayout = () => {
                 </div>
               </div>
             )}
-            {auth.user.rol != 'SuperAdministrador' && (
+            {auth.user.rol != ROLES.SUPER_ADMIN && (
               <div className="w-2/10 flex text-white text-sm items-center justify-end gap-2">
                 <UserCheck />
                 <div className="text-right">

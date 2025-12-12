@@ -1,3 +1,4 @@
+import { juridicaRoutesList } from '@/routes';
 import {
   JuridicaDashboardPage,
   HistoricalPage,
@@ -7,7 +8,6 @@ import {
   LawyersPage,
 } from '../features';
 import { JuridicaLayout } from '../layout/JuridicaLayout';
-import { juridicaRoutesList } from '@/routes';
 
 export const JuridicaRoutes = [
   {
