@@ -22,10 +22,24 @@ export const departamentsService = {
       );
     }
   },
+
+  updateDepartaments: async (data) => {    
+    const { _id } = data
+    try {
+      const response = await apiClient.put(`/procesos/actualizarProceso/${ _id }`, data);
+      return response.data
+    } catch (error) {
+      throw new Error(
+        handleAxiosError(error, 'Error actualizando proceso ❌')
+      );      
+    }
+  },
+
   createLocations: async (data) => {
     try {
       const response = await apiClient.post('/sede/crearsede', data);
-      console.log('Sede creada con exito', response.data);
+      console.log('Respuesta del servicio', response.data);
+      return response.data;
     } catch (error) {
       throw new Error(
         handleAxiosError(error, 'Error creando sede ❌')
@@ -41,6 +55,18 @@ export const departamentsService = {
       throw new Error(
         handleAxiosError(error, 'Error obteniendo todas las sedes ❌')
       );
+    }
+  },
+
+  updateLocations: async (data) => {
+
+    try {
+      const response = await apiClient.put(`/sede/actualizarSede/${data._id}`, data);
+      return response.data
+    } catch (error) {
+      throw new Error(
+        handleAxiosError(error, 'Error actualizando sede ❌')
+      );      
     }
   },
 };

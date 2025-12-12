@@ -11,6 +11,7 @@ export const usersService = {
       throw new Error(handleAxiosError(error, 'Error creando usuario ❌'));
     }
   },
+
   getAllUsers: async () => {
     try {
       const response = await apiClient.get('/auth/users');
@@ -22,6 +23,19 @@ export const usersService = {
       );
     }
   },
+
+  getUserById: async (id) => {
+    try {
+      const response = await apiClient.get(`/auth/users/${id}`);
+      console.log(response.data);
+      return response.data;      
+    } catch (error) {
+      throw new Error(
+        handleAxiosError(error, `Error obteniendo el ususario con id: ${id} ❌`)
+      );
+    }
+  },
+
   updateUser: async (id, data) => {
     try {
       const response = await apiClient.put(`/auth/update/${id}`, data);

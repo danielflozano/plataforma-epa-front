@@ -16,7 +16,7 @@ export const useGetWorkers = () => {
     open: false,
     message: '',
     status: '',
-  });
+  });  
 
   useEffect(() => {
     setFilteredWorkers(workers);
@@ -73,9 +73,7 @@ export const useGetWorkers = () => {
       }
       try {
         const response = await workersService.getWorkerById(filterValue);
-        console.log(response.data);
         setFilteredWorkers([response.data]);
-        console.log('Si funcionó handleSearch');
       } catch (error) {
         console.error(error);
         setFilteredWorkers([]);
@@ -122,8 +120,6 @@ export const useGetWorkers = () => {
 
     closeModals();
   };
-
-  console.log(filteredWorkers);
 
   return {
     // Properties

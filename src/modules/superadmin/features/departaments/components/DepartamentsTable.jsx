@@ -34,10 +34,10 @@ export const DepartamentsTable = ({
           ))}
         </tbody>
       </table>
-      {!loading && <LoadSpinner styles="mt-4" />}
+      {loading && <LoadSpinner styles="mt-4" />}
       {!loading && departaments.length === 0 && (
         <div className="text-center text-xl text-gray-500 font-semibold py-8">
-          No se encontraron usuarios
+          No se encontraron procesos
         </div>
       )}
     </div>

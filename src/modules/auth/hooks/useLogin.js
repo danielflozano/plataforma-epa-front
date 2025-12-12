@@ -22,7 +22,6 @@ export const useLogin = () => {
     setLoading(true);
     try {
       const response = await authService.login(data);
-      console.log(response);
       login(response.token, response.user);
       navigate(aseoRoutesList.aseoDashboard);
     } catch (error) {

@@ -49,7 +49,7 @@ export const workersService = {
       throw new Error(
         handleAxiosError(
           error,
-          `Error obteniendo el funcionario con id:${id} ❌`
+          `Error obteniendo el funcionario con id: ${id} ❌`
         )
       );
     }

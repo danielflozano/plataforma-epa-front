@@ -9,45 +9,50 @@ import {
   ReportsPage,
   WorkersPage,
 } from '../features';
-import { AseoLayout } from '../layout';
+import { ROLES } from '@/constants';
+
+const ASEO_ADMIN = [ROLES.SUPER_ADMIN, ROLES.ADMIN_ASEO];
+const ASEO_ALL = [ROLES.SUPER_ADMIN, ROLES.ADMIN_ASEO, ROLES.USER_ASEO];
 
 export const AseoRoutes = [
   {
-    path: aseoRoutesList.aseoDashboard,
-    element: <AseoLayout />,
-    children: [
-      {
-        index: true,
-        element: <AseoDashboardPage />,
-      },
-      {
-        path: aseoRoutesList.overtimes,
-        element: <OvertimesPage />,
-      },
-      {
-        path: aseoRoutesList.createOvertimes,
-        element: <CreateOvertimesPage />,
-      },
-      {
-        path: aseoRoutesList.getOvertimes,
-        element: <GetOvertimesPage />,
-      },
-      {
-        path: aseoRoutesList.workers,
-        element: <WorkersPage />,
-      },
-      {
-        path: aseoRoutesList.createWorkers,
-        element: <CreateWorkersPage />,
-      },
-      {
-        path: aseoRoutesList.getWorkers,
-        element: <GetWorkersPage />
-      },
-      {
-        path: aseoRoutesList.reports,
-        element: <ReportsPage />,
-      },
-    ],
+    index: true,
+    element: <AseoDashboardPage />,
+    roles: ASEO_ALL,
+  },
+  {
+    path: aseoRoutesList.overtimes,
+    element: <OvertimesPage />,
+    roles: ASEO_ADMIN,
+  },
+  {
+    path: aseoRoutesList.createOvertimes,
+    element: <CreateOvertimesPage />,
+    roles: ASEO_ADMIN,
+  },
+  {
+    path: aseoRoutesList.getOvertimes,
+    element: <GetOvertimesPage />,
+    roles: ASEO_ALL,
+  },
+  {
+    path: aseoRoutesList.workers,
+    element: <WorkersPage />,
+    roles: ASEO_ADMIN,
+  },
+  {
+    path: aseoRoutesList.createWorkers,
+    element: <CreateWorkersPage />,
+    roles: ASEO_ADMIN,
+  },
+  {
+    path: aseoRoutesList.getWorkers,
+    element: <GetWorkersPage />,
+    roles: ASEO_ALL,
+  },
+  {
+    path: aseoRoutesList.reports,
+    element: <ReportsPage />,
+    roles: ASEO_ALL,
   },
 ];

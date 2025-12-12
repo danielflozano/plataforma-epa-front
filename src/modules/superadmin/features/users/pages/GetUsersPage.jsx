@@ -1,4 +1,4 @@
-import { AlertModal, FilterInput, GlobalButton } from '@/components';
+import { AlertModal, FilterInput, GlobalButton, LoadSpinner } from '@/components';
 import { useBackNavigation } from '@/hooks';
 import { ArrowLeft } from 'lucide-react';
 import { useGetUsers } from '../hooks/useGetUsers';
@@ -13,6 +13,7 @@ export const GetUsersPage = () => {
     estado,
     filterValue,
     loading,
+    loadingSearch,
     roles,
     updateModal,
     users,
@@ -68,6 +69,7 @@ export const GetUsersPage = () => {
           modalDescription={alertModal.message}
         />
       </div>
+      {loadingSearch && <LoadSpinner styles="fixed bg-gray-200/90" />}
     </>
   );
 };

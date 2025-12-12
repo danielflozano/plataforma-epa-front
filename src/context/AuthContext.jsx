@@ -52,7 +52,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(newUser));
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
     } catch (error) {
-      console.log('Error checkSession', error);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
       delete apiClient.defaults.headers.common['Authorization'];
@@ -80,7 +79,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await authService.logout();
-      console.log(response.msg);
     } catch (error) {
       console.log(error.message);
     } finally {
